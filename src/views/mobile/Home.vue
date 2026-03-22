@@ -13,9 +13,11 @@
               <div class="blocked-overlay">
                 <span class="blocked-text">{{ feature.blockedText || '即将上线' }}</span>
               </div>
+              <div class="title-box">
+                <span class="title-text">{{ feature.title }}</span>
+              </div>
             </div>
             <div class="card-info">
-              <h3 class="card-title">{{ feature.title }}</h3>
               <p class="card-desc">{{ feature.desc }}</p>
             </div>
           </div>
@@ -26,9 +28,11 @@
           >
             <div class="card-image">
               <img :src="feature.image" :alt="feature.title" />
+              <div class="title-box">
+                <span class="title-text">{{ feature.title }}</span>
+              </div>
             </div>
             <div class="card-info">
-              <h3 class="card-title">{{ feature.title }}</h3>
               <p class="card-desc">{{ feature.desc }}</p>
               <div class="card-action">
                 <span class="action-text">立即体验</span>
@@ -101,6 +105,7 @@ function goToLogin() {
 
 .feature-card {
   display: flex;
+  flex-direction: column;
   background: var(--color-bg-surface);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -108,7 +113,6 @@ function goToLogin() {
   color: inherit;
   transition: all var(--transition-normal);
   box-shadow: var(--shadow-sm);
-  min-height: 180px;
 }
 
 .feature-card:hover {
@@ -121,11 +125,10 @@ function goToLogin() {
 }
 
 .card-image {
-  width: 50%;
-  aspect-ratio: 6 / 3;
-  flex-shrink: 0;
-  overflow: hidden;
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
 }
 
 .card-image img {
@@ -137,6 +140,25 @@ function goToLogin() {
 
 .feature-card:hover .card-image img {
   transform: scale(1.05);
+}
+
+/* 标题盒子 - 位于图片左下角 */
+.title-box {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.title-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
 }
 
 /* blocked 状态 */
@@ -167,23 +189,12 @@ function goToLogin() {
 }
 
 .card-info {
+  padding: var(--space-md);
   flex: 1;
-  padding: var(--space-xl);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-}
-
-.card-title {
-  margin: 0 0 var(--space-xs);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
 }
 
 .card-desc {
-  margin: 0 0 var(--space-md);
+  margin: 0 0 var(--space-sm);
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
@@ -244,27 +255,27 @@ function goToLogin() {
     padding-top: var(--space-lg);
   }
 
-  .feature-card {
-    flex-direction: column;
+  .card-image {
+    aspect-ratio: 16 / 9;
   }
 
-  .card-image {
-    width: 100%;
-    aspect-ratio: 6 / 3;
+  .title-box {
+    bottom: 10px;
+    left: 10px;
+    padding: 5px 10px;
+  }
+
+  .title-text {
+    font-size: 13px;
   }
 
   .card-info {
-    padding: var(--space-md);
-  }
-
-  .card-title {
-    font-size: var(--font-size-base);
-    margin-bottom: var(--space-xs);
+    padding: var(--space-sm) var(--space-md) var(--space-md);
   }
 
   .card-desc {
-    font-size: var(--font-size-sm);
-    margin-bottom: var(--space-sm);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--space-xs);
   }
 }
 </style>
