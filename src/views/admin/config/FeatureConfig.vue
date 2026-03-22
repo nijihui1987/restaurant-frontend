@@ -91,6 +91,7 @@
               </div>
               <div class="col-title">
                 <el-input v-model="feature.title" size="small" placeholder="功能名称" />
+                <el-input v-model="feature.desc" size="small" placeholder="功能描述" class="desc-input" />
                 <el-input v-model="feature.path" size="small" placeholder="路由路径，如 /masterpiece" class="path-input" />
                 <el-input v-model="feature.image" size="small" placeholder="图片链接" class="image-url-input" />
               </div>
@@ -512,6 +513,10 @@ onMounted(() => {
 }
 
 .image-url-input {
+  margin-top: 6px;
+}
+
+.desc-input {
   margin-top: 6px;
 }
 
