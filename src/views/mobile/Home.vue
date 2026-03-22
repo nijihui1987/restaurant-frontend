@@ -145,17 +145,17 @@ function goToLogin() {
 /* 标题盒子 - 位于图片左下角 */
 .title-box {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: rgba(255, 255, 255, 0.95);
+  bottom: 8px;
+  left: 8px;
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
-  padding: 6px 12px;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .title-text {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #1a1a1a;
   white-space: nowrap;
