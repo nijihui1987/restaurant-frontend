@@ -1,5 +1,15 @@
 <template>
   <div class="mobile-layout">
+    <!-- 顶部通栏 -->
+    <header class="top-header">
+      <div class="header-logo">
+        <span class="logo-text">大师相机</span>
+      </div>
+      <div class="header-announcement" v-if="announcement">
+        <span class="announcement-text">{{ announcement }}</span>
+      </div>
+    </header>
+
     <main class="layout-content">
       <router-view />
     </main>
@@ -31,11 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
+import { getAnnouncement } from '@/api/config'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -45,13 +56,60 @@ const showBottomNav = computed(() => {
 })
 
 const showLoginTip = ref(false)
+const announcement = ref('')
 
+async function fetchAnnouncement() {
+  const config = await getAnnouncement()
+  if (config && config.enabled && config.content) {
+    announcement.value = config.content
+  }
+}
+
+onMounted(() => {
+  fetchAnnouncement()
+})
 </script>
 
 <style scoped>
 .mobile-layout {
   min-height: 100vh;
   background: #fafbfc;
+}
+
+/* 顶部通栏 */
+.top-header {
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-logo {
+  padding: 16px 20px 12px;
+  text-align: center;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: 1px;
+}
+
+.header-announcement {
+  background: #fafbfc;
+  padding: 6px 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.announcement-text {
+  font-size: 12px;
+  color: #8c8c8c;
+  line-height: 1.4;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .layout-content {
