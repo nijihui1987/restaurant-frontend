@@ -50,6 +50,10 @@ export const useFeatureStore = defineStore('feature', () => {
     const index = features.value.findIndex(f => f.id === id)
     if (index !== -1) {
       features.value.splice(index, 1)
+      // 删除后重新排序，确保 order 是连续的 1, 2, 3...
+      features.value.forEach((f, i) => {
+        f.order = i + 1
+      })
     }
   }
 
