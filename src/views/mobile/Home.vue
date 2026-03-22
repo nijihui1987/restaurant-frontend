@@ -169,16 +169,15 @@ function goToLogin() {
   position: absolute;
   top: 8px;
   left: 8px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.6) 100%);
   backdrop-filter: blur(12px);
   padding: 6px 12px;
   border-radius: 6px;
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.08),
-    0 4px 8px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255,255,255,1),
-    inset 0 -1px 0 rgba(0,0,0,0.05);
-  border: 1px solid rgba(255,255,255,0.8);
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255,255,255,0.9),
+    inset 0 0 0 1px rgba(255,255,255,0.3);
 }
 
 .title-text {

@@ -12,7 +12,6 @@
         />
         <div v-else class="register-brand">
           <span class="brand-name">主厨相机</span>
-          <span class="brand-tagline">专业菜品视觉呈现</span>
         </div>
       </div>
 
