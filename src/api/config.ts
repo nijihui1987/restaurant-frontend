@@ -97,6 +97,7 @@ export interface FeatureItem {
   showInVipList: boolean  // 是否在VIP功能列表显示
   blockedText?: string  // 遮挡时显示的文字
   actionText?: string  // 按钮文字，默认"进入"
+  coinCost?: number  // 消耗积分数
 }
 
 // 默认功能列表

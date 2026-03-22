@@ -14,6 +14,12 @@
               <div class="title-box">
                 <span class="title-text">{{ feature.title }}</span>
               </div>
+              <div class="coin-badge" v-if="feature.coinCost">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="coin-star">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                </svg>
+                <span class="coin-num">{{ feature.coinCost }}</span>
+              </div>
             </div>
             <div class="card-info">
               <p class="card-desc">{{ feature.desc }}</p>
@@ -47,6 +53,12 @@
               <img :src="feature.image" :alt="feature.title" />
               <div class="title-box">
                 <span class="title-text">{{ feature.title }}</span>
+              </div>
+              <div class="coin-badge" v-if="feature.coinCost">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="coin-star">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                </svg>
+                <span class="coin-num">{{ feature.coinCost }}</span>
               </div>
             </div>
             <div class="card-info">
@@ -186,6 +198,30 @@ function goToLogin() {
   color: #1a1a1a;
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* 积分徽章 */
+.coin-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+
+.coin-star {
+  color: #f59e0b;
+}
+
+.coin-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 /* blocked 状态 */

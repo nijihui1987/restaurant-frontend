@@ -71,6 +71,7 @@
           <div class="col-blocked">遮挡文字</div>
           <div class="col-user">用户</div>
           <div class="col-vip">VIP</div>
+          <div class="col-coin">积分</div>
           <div class="col-action">操作</div>
         </div>
 
@@ -119,6 +120,9 @@
               </div>
               <div class="col-vip">
                 <el-switch v-model="feature.showInVipList" size="small" />
+              </div>
+              <div class="col-coin">
+                <el-input-number v-model="feature.coinCost" size="small" :min="0" :controls="false" placeholder="0" />
               </div>
               <div class="col-action">
                 <el-button type="danger" size="small" circle @click="removeFeature(feature.id)">
@@ -481,6 +485,12 @@ onMounted(() => {
 
 .col-vip {
   width: 60px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.col-coin {
+  width: 70px;
   flex-shrink: 0;
   text-align: center;
 }
