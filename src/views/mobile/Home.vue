@@ -9,13 +9,13 @@
           :to="feature.path"
           class="feature-card"
         >
-          <div class="card-left">
+          <div class="card-image">
             <BeforeAfter
               :before-image="feature.beforeImage"
               :after-image="feature.afterImage"
             />
           </div>
-          <div class="card-right">
+          <div class="card-content">
             <div class="feature-icon">
               <el-icon :size="20"><component :is="feature.icon" /></el-icon>
             </div>
@@ -126,21 +126,22 @@ function goToLogin() {
 
 .home-content {
   padding: 0 var(--space-lg);
-  max-width: 640px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 /* ==================== 功能卡片 ==================== */
 
 .features-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl);
   padding-bottom: var(--space-2xl);
 }
 
 .feature-card {
   display: flex;
+  flex-direction: column;
   background: var(--color-bg-surface);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -151,27 +152,25 @@ function goToLogin() {
 }
 
 .feature-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
 }
 
 .feature-card:active {
-  transform: translateY(0);
+  transform: translateY(-2px);
 }
 
-.card-left {
-  width: 140px;
-  height: 140px;
+.card-image {
+  width: 100%;
+  height: 220px;
   flex-shrink: 0;
 }
 
-.card-right {
-  flex: 1;
+.card-content {
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-width: 0;
+  flex: 1;
 }
 
 .feature-icon {
@@ -229,5 +228,18 @@ function goToLogin() {
   border-color: var(--color-primary-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+}
+
+/* ==================== 响应式适配 ==================== */
+
+/* 移动端 - 单列 */
+@media (max-width: 640px) {
+  .features-section {
+    grid-template-columns: 1fr;
+  }
+
+  .card-image {
+    height: 160px;
+  }
 }
 </style>
