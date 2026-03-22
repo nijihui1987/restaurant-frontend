@@ -274,7 +274,7 @@ function goToLogin() {
   }
 
   .card-desc {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     margin-bottom: var(--space-xs);
   }
 }
