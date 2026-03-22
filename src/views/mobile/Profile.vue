@@ -1,9 +1,6 @@
 <template>
   <div class="mobile-profile">
     <header class="page-header">
-      <button class="back-btn" @click="goBack">
-        <el-icon :size="24"><ArrowLeft /></el-icon>
-      </button>
       <h1>个人信息</h1>
     </header>
 
@@ -92,7 +89,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowLeft, ArrowRight, Edit, Lock, Camera, Setting } from '@element-plus/icons-vue'
+import { ArrowRight, Edit, Lock, Camera, Setting } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -100,10 +97,6 @@ const userStore = useUserStore()
 const avatarUrl = computed(() => {
   return userStore.userInfo?.avatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle fill="%23e6e6e6" cx="50" cy="50" r="50"/></svg>'
 })
-
-function goBack() {
-  router.back()
-}
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'

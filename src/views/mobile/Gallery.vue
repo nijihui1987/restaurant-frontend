@@ -1,9 +1,6 @@
 <template>
   <div class="mobile-gallery">
     <header class="page-header">
-      <button class="back-btn" @click="goBack">
-        <el-icon :size="24"><ArrowLeft /></el-icon>
-      </button>
       <h1>我的图库</h1>
     </header>
 
@@ -62,7 +59,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowLeft, Download, Delete } from '@element-plus/icons-vue'
+import { Download, Delete } from '@element-plus/icons-vue'
 
 const router = useRouter()
 
@@ -78,10 +75,6 @@ interface GalleryImage {
 const allImages = ref<GalleryImage[]>([])
 const originalImages = ref<GalleryImage[]>([])
 const generatedImages = ref<GalleryImage[]>([])
-
-function goBack() {
-  router.back()
-}
 
 function goToMasterpiece() {
   router.push('/masterpiece')
