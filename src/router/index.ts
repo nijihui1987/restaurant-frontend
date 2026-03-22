@@ -81,6 +81,18 @@ const router = createRouter({
         },
         // ========== 新功能页面 ==========
         {
+          path: 'masterpiece',
+          name: 'masterpiece',
+          component: () => import('@/views/user/Masterpiece.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'masterpiece-tasks',
+          name: 'masterpiece-tasks',
+          component: () => import('@/views/user/MasterpieceTasks.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
           path: 'batch',
           name: 'batch',
           component: () => import('@/views/user/Batch.vue'),
@@ -152,6 +164,12 @@ const router = createRouter({
           path: 'features',
           name: 'features',
           component: () => import('@/views/admin/config/FeatureConfig.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'masterpiece-config',
+          name: 'masterpiece-config',
+          component: () => import('@/views/admin/config/MasterpieceConfig.vue'),
           meta: { requiresAuth: true, requiresAdmin: true }
         },
         {
