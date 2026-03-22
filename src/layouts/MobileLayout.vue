@@ -6,11 +6,11 @@
         <img
           v-if="logoUrl"
           :src="logoUrl"
-          alt="大师相机"
+          alt="主厨相机"
           class="brand-logo"
           @error="handleLogoError"
         />
-        <span v-else class="brand-text">大师相机</span>
+        <span v-else class="brand-text">主厨相机</span>
         <span class="brand-tagline">专业菜品视觉呈现</span>
       </div>
       <div class="header-announcement" v-if="announcement">

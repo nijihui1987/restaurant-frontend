@@ -17,7 +17,7 @@
   </g>
 
   <!-- 文字 -->
-  <text x="58" y="38" font-family="PingFang SC, SF Pro Display, -apple-system, sans-serif" font-size="24" font-weight="600" fill="url(#textGrad)" letter-spacing="-0.5">大师相机</text>
+  <text x="58" y="38" font-family="PingFang SC, SF Pro Display, -apple-system, sans-serif" font-size="24" font-weight="600" fill="url(#textGrad)" letter-spacing="-0.5">主厨相机</text>
 
   <!-- 副标题装饰线 -->
   <rect x="58" y="46" width="40" height="2" rx="1" fill="#8c8c8c" opacity="0.6"/>
