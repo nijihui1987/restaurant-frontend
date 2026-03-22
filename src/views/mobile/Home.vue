@@ -3,22 +3,23 @@
     <main class="home-content">
       <!-- 功能入口 -->
       <section class="features-section">
-        <div
+        <router-link
           v-for="feature in features"
           :key="feature.path"
+          :to="feature.path"
           class="feature-card"
         >
           <div class="card-image">
-            <BeforeAfter
-              :before-image="feature.beforeImage"
-              :after-image="feature.afterImage"
-            />
+            <img :src="feature.image" :alt="feature.title" />
+            <div class="card-title">{{ feature.title }}</div>
+            <div class="card-arrow">
+              <el-icon :size="20"><ArrowRight /></el-icon>
+            </div>
           </div>
-          <router-link :to="feature.path" class="card-content">
-            <h3 class="feature-title">{{ feature.title }}</h3>
-            <p class="feature-desc">{{ feature.desc }}</p>
-          </router-link>
-        </div>
+          <div class="card-content">
+            <p class="card-desc">{{ feature.desc }}</p>
+          </div>
+        </router-link>
       </section>
 
       <!-- 登录提示 -->
@@ -35,7 +36,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import BeforeAfter from '@/components/BeforeAfter.vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -45,50 +46,43 @@ const features = [
     path: '/masterpiece',
     title: '手机随拍成片',
     desc: 'AI 智能识别，菜品图秒变专业摄影作品',
-    beforeImage: 'https://picsum.photos/seed/dish1before/400/300',
-    afterImage: 'https://picsum.photos/seed/dish1after/400/300'
+    image: 'https://picsum.photos/seed/masterpiece/800/300'
   },
   {
     path: '/batch',
     title: '批量套图成片',
     desc: '一次上传多张，批量处理成专业素材',
-    beforeImage: 'https://picsum.photos/seed/batchbefore/400/300',
-    afterImage: 'https://picsum.photos/seed/batchafter/400/300'
+    image: 'https://picsum.photos/seed/batch/800/300'
   },
   {
     path: '/enhance',
     title: '智能高清优化',
     desc: 'AI 提升清晰度，还原图片细节',
-    beforeImage: 'https://picsum.photos/seed/enhancebefore/400/300',
-    afterImage: 'https://picsum.photos/seed/enhanceafter/400/300'
+    image: 'https://picsum.photos/seed/enhance/800/300'
   },
   {
     path: '/wechat',
     title: '微信营销出图',
     desc: '生成适合微信分享的高质量图片',
-    beforeImage: 'https://picsum.photos/seed/wechatbefore/400/300',
-    afterImage: 'https://picsum.photos/seed/wechatafter/400/300'
+    image: 'https://picsum.photos/seed/wechat/800/300'
   },
   {
     path: '/dianping',
     title: '大众点评装修',
     desc: '为店铺生成专业的头图和菜单',
-    beforeImage: 'https://picsum.photos/seed/dianpingbefore/400/300',
-    afterImage: 'https://picsum.photos/seed/dianpingafter/400/300'
+    image: 'https://picsum.photos/seed/dianping/800/300'
   },
   {
     path: '/douyin',
     title: '抖音门店装修',
     desc: '为抖音店铺生成吸睛视觉素材',
-    beforeImage: 'https://picsum.photos/seed/douyinbefore/400/300',
-    afterImage: 'https://picsum.photos/seed/douyifinal/400/300'
+    image: 'https://picsum.photos/seed/douyin/800/300'
   },
   {
     path: '/menu',
     title: '印刷菜单出图',
     desc: '生成适合印刷的高清菜单图片',
-    beforeImage: 'https://picsum.photos/seed/menubefore/400/300',
-    afterImage: 'https://picsum.photos/seed/menuafter/400/300'
+    image: 'https://picsum.photos/seed/menu/800/300'
   }
 ]
 
@@ -140,30 +134,65 @@ function goToLogin() {
 }
 
 .card-image {
+  position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  flex-shrink: 0;
+  aspect-ratio: 8 / 3;
   overflow: hidden;
 }
 
-.card-content {
-  padding: var(--space-lg);
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.feature-card:hover .card-image img {
+  transform: scale(1.03);
+}
+
+.card-title {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  padding: var(--space-xs) var(--space-sm);
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(4px);
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  width: 32px;
+  height: 32px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  color: var(--color-text-secondary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all var(--transition-fast);
 }
 
-.feature-title {
-  margin: 0 0 var(--space-sm);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+.feature-card:hover .card-arrow {
+  background: var(--color-primary);
+  color: #ffffff;
+  transform: translateX(4px);
 }
 
-.feature-desc {
+.card-content {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.card-desc {
   margin: 0;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
 }
