@@ -122,6 +122,7 @@ function goToLogin() {
   color: inherit;
   transition: all var(--transition-normal);
   box-shadow: var(--shadow-sm);
+  min-height: 180px;
 }
 
 .feature-card:hover {
@@ -153,7 +154,7 @@ function goToLogin() {
 
 .card-info {
   flex: 1;
-  padding: var(--space-lg);
+  padding: var(--space-xl);
   display: flex;
   flex-direction: column;
   justify-content: center;
