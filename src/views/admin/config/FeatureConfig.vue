@@ -65,7 +65,7 @@
         <div class="feature-table-header">
           <div class="col-drag"></div>
           <div class="col-preview">预览</div>
-          <div class="col-title">标题</div>
+          <div class="col-title">标题 / 图片链接</div>
           <div class="col-status">状态</div>
           <div class="col-blocked">遮挡文字</div>
           <div class="col-user">用户</div>
@@ -91,6 +91,7 @@
               </div>
               <div class="col-title">
                 <el-input v-model="feature.title" size="small" placeholder="功能名称" />
+                <el-input v-model="feature.image" size="small" placeholder="图片链接" class="image-url-input" />
               </div>
               <div class="col-status">
                 <el-select v-model="feature.status" size="small">
@@ -430,6 +431,10 @@ onMounted(() => {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid #f0f0f0;
+}
+
+.image-url-input {
+  margin-top: 6px;
 }
 
 :deep(.el-textarea__inner) {
