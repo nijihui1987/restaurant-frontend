@@ -162,8 +162,9 @@ function goToLogin() {
 
 .card-image {
   width: 100%;
-  height: 220px;
+  aspect-ratio: 4 / 3;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .card-content {
@@ -236,10 +237,6 @@ function goToLogin() {
 @media (max-width: 640px) {
   .features-section {
     grid-template-columns: 1fr;
-  }
-
-  .card-image {
-    height: 160px;
   }
 }
 </style>

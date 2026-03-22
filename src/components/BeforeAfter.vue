@@ -9,8 +9,12 @@
     <div class="slider-handle" :style="{ left: `${position}%` }">
       <div class="handle-line"></div>
       <div class="handle-circle">
-        <el-icon :size="16"><ArrowLeft /></el-icon>
-        <el-icon :size="16"><ArrowRight /></el-icon>
+        <span class="handle-arrow">
+          <el-icon :size="14"><ArrowLeft /></el-icon>
+        </span>
+        <span class="handle-arrow">
+          <el-icon :size="14"><ArrowRight /></el-icon>
+        </span>
       </div>
     </div>
     <div class="label before-label">处理前</div>
@@ -152,8 +156,11 @@ onUnmounted(() => {
   color: var(--color-primary);
 }
 
-.handle-circle .el-icon {
-  margin: 0 2px;
+.handle-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 .label {
