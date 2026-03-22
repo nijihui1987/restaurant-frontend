@@ -95,7 +95,8 @@ const route = useRoute()
 const userStore = useUserStore()
 
 const showBottomNav = computed(() => {
-  return !route.path.startsWith('/admin')
+  // 移动端始终显示底部导航（只显示基础功能，不显示管理功能）
+  return true
 })
 
 const showLoginTip = ref(false)

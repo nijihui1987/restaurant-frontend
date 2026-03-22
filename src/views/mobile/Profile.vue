@@ -111,7 +111,7 @@ function changePassword() {
 }
 
 function goToAdmin() {
-  router.push('/admin')
+  router.push('/dashboard')
 }
 
 async function handleLogout() {

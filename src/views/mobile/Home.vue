@@ -3,24 +3,40 @@
     <main class="home-content">
       <!-- 功能入口 -->
       <section class="features-section">
-        <router-link
-          v-for="feature in features"
-          :key="feature.path"
-          :to="feature.path"
-          class="feature-card"
-        >
-          <div class="card-image">
-            <img :src="feature.image" :alt="feature.title" />
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">{{ feature.title }}</h3>
-            <p class="card-desc">{{ feature.desc }}</p>
-            <div class="card-action">
-              <span class="action-text">立即体验</span>
-              <el-icon :size="16"><ArrowRight /></el-icon>
+        <template v-for="feature in featureStore.getVisibleFeatures()" :key="feature.id">
+          <div
+            v-if="feature.status === 'blocked'"
+            class="feature-card"
+          >
+            <div class="card-image blocked">
+              <img :src="feature.image" :alt="feature.title" />
+              <div class="blocked-overlay">
+                <span class="blocked-text">即将上线</span>
+              </div>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ feature.title }}</h3>
+              <p class="card-desc">{{ feature.desc }}</p>
             </div>
           </div>
-        </router-link>
+          <router-link
+            v-else
+            :to="feature.path"
+            class="feature-card"
+          >
+            <div class="card-image">
+              <img :src="feature.image" :alt="feature.title" />
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ feature.title }}</h3>
+              <p class="card-desc">{{ feature.desc }}</p>
+              <div class="card-action">
+                <span class="action-text">立即体验</span>
+                <el-icon :size="16"><ArrowRight /></el-icon>
+              </div>
+            </div>
+          </router-link>
+        </template>
       </section>
 
       <!-- 登录提示 -->
@@ -35,57 +51,19 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { useFeatureStore } from '@/stores/feature'
 import { ArrowRight } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
+const featureStore = useFeatureStore()
 
-const features = [
-  {
-    path: '/masterpiece',
-    title: '手机随拍成片',
-    desc: 'AI 智能识别，菜品图秒变专业摄影作品',
-    image: 'https://picsum.photos/seed/masterpiece/600/300'
-  },
-  {
-    path: '/batch',
-    title: '批量套图成片',
-    desc: '一次上传多张，批量处理成专业素材',
-    image: 'https://picsum.photos/seed/batch/600/300'
-  },
-  {
-    path: '/enhance',
-    title: '智能高清优化',
-    desc: 'AI 提升清晰度，还原图片细节',
-    image: 'https://picsum.photos/seed/enhance/600/300'
-  },
-  {
-    path: '/wechat',
-    title: '微信营销出图',
-    desc: '生成适合微信分享的高质量图片',
-    image: 'https://picsum.photos/seed/wechat/600/300'
-  },
-  {
-    path: '/dianping',
-    title: '大众点评装修',
-    desc: '为店铺生成专业的头图和菜单',
-    image: 'https://picsum.photos/seed/dianping/600/300'
-  },
-  {
-    path: '/douyin',
-    title: '抖音门店装修',
-    desc: '为抖音店铺生成吸睛视觉素材',
-    image: 'https://picsum.photos/seed/douyin/600/300'
-  },
-  {
-    path: '/menu',
-    title: '印刷菜单出图',
-    desc: '生成适合印刷的高清菜单图片',
-    image: 'https://picsum.photos/seed/menu/600/300'
-  }
-]
+onMounted(() => {
+  featureStore.loadFeatures()
+})
 
 function goToLogin() {
   router.push('/login')
@@ -139,6 +117,7 @@ function goToLogin() {
   aspect-ratio: 6 / 3;
   flex-shrink: 0;
   overflow: hidden;
+  position: relative;
 }
 
 .card-image img {
@@ -150,6 +129,33 @@ function goToLogin() {
 
 .feature-card:hover .card-image img {
   transform: scale(1.05);
+}
+
+/* blocked 状态 */
+.card-image.blocked img {
+  filter: grayscale(50%) brightness(0.8);
+}
+
+.card-image.blocked {
+  cursor: not-allowed;
+}
+
+.blocked-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blocked-text {
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(4px);
 }
 
 .card-info {

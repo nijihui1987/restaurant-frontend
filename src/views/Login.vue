@@ -113,7 +113,7 @@ async function handleLogin() {
     ElMessage.success('登录成功')
 
     if (userStore.canAccessAdmin) {
-      router.push('/admin')
+      router.push('/dashboard')
     } else {
       router.push('/')
     }

@@ -79,3 +79,100 @@ export async function getLogoConfig(): Promise<{ logo_url: string; logo_text: st
 export async function saveLogoConfig(config: { logo_url: string; logo_text: string }): Promise<boolean> {
   return saveConfig('system', 'logo', JSON.stringify(config))
 }
+
+// 功能选项卡接口
+export interface FeatureItem {
+  id: string
+  path: string
+  title: string
+  desc: string
+  image: string
+  status: 'enabled' | 'blocked' | 'hidden'
+  order: number
+}
+
+// 默认功能列表
+export const defaultFeatures: FeatureItem[] = [
+  {
+    id: 'masterpiece',
+    path: '/masterpiece',
+    title: '手机随拍成片',
+    desc: 'AI 智能识别，菜品图秒变专业摄影作品',
+    image: 'https://picsum.photos/seed/masterpiece/600/300',
+    status: 'enabled',
+    order: 1
+  },
+  {
+    id: 'batch',
+    path: '/batch',
+    title: '批量套图成片',
+    desc: '一次上传多张，批量处理成专业素材',
+    image: 'https://picsum.photos/seed/batch/600/300',
+    status: 'enabled',
+    order: 2
+  },
+  {
+    id: 'enhance',
+    path: '/enhance',
+    title: '智能高清优化',
+    desc: 'AI 提升清晰度，还原图片细节',
+    image: 'https://picsum.photos/seed/enhance/600/300',
+    status: 'enabled',
+    order: 3
+  },
+  {
+    id: 'wechat',
+    path: '/wechat',
+    title: '微信营销出图',
+    desc: '生成适合微信分享的高质量图片',
+    image: 'https://picsum.photos/seed/wechat/600/300',
+    status: 'enabled',
+    order: 4
+  },
+  {
+    id: 'dianping',
+    path: '/dianping',
+    title: '大众点评装修',
+    desc: '为店铺生成专业的头图和菜单',
+    image: 'https://picsum.photos/seed/dianping/600/300',
+    status: 'enabled',
+    order: 5
+  },
+  {
+    id: 'douyin',
+    path: '/douyin',
+    title: '抖音门店装修',
+    desc: '为抖音店铺生成吸睛视觉素材',
+    image: 'https://picsum.photos/seed/douyin/600/300',
+    status: 'enabled',
+    order: 6
+  },
+  {
+    id: 'menu',
+    path: '/menu',
+    title: '印刷菜单出图',
+    desc: '生成适合印刷的高清菜单图片',
+    image: 'https://picsum.photos/seed/menu/600/300',
+    status: 'enabled',
+    order: 7
+  }
+]
+
+// 获取首页功能配置
+export async function getFeatures(): Promise<FeatureItem[]> {
+  try {
+    const value = await getConfig('home', 'features')
+    if (!value) return defaultFeatures
+    const parsed = JSON.parse(value)
+    // 合并默认配置和保存的配置
+    return parsed.features || defaultFeatures
+  } catch (error) {
+    console.error('Failed to get features:', error)
+    return defaultFeatures
+  }
+}
+
+// 保存首页功能配置
+export async function saveFeatures(features: FeatureItem[]): Promise<boolean> {
+  return saveConfig('home', 'features', JSON.stringify({ features }))
+}

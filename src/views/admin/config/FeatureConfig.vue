@@ -41,55 +41,57 @@
         </el-form>
       </div>
 
-      <!-- 功能开关 -->
+      <!-- 首页功能管理 -->
       <div class="config-card">
-        <h2>功能开关</h2>
-        <el-form label-width="160px">
-          <el-form-item label="大师成相">
-            <el-switch v-model="features.masterpiece.enabled" />
-          </el-form-item>
-          <el-form-item label="默认审核模式">
-            <el-radio-group v-model="features.masterpiece.auditMode">
-              <el-radio label="auto">自动审核</el-radio>
-              <el-radio label="manual">手动审核</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="每次生成数量">
-            <el-input-number v-model="features.masterpiece.generateCount" :min="1" :max="9" />
-          </el-form-item>
-        </el-form>
-      </div>
+        <h2>首页功能管理</h2>
+        <p class="config-desc">拖拽排序，调整功能显示状态和内容</p>
 
-      <div class="config-card">
-        <h2>图片库</h2>
-        <el-form label-width="160px">
-          <el-form-item label="功能开关">
-            <el-switch v-model="features.gallery.enabled" />
-          </el-form-item>
-          <el-form-item label="允许删除">
-            <el-switch v-model="features.gallery.allowDelete" />
-          </el-form-item>
-          <el-form-item label="最大存储数量">
-            <el-input-number v-model="features.gallery.maxStorage" :min="0" />
-            <span class="form-tip">张（0 表示无限制）</span>
-          </el-form-item>
-        </el-form>
-      </div>
+        <div class="feature-list">
+          <div
+            v-for="(feature, index) in featureStore.features"
+            :key="feature.id"
+            class="feature-item"
+          >
+            <div class="feature-drag">
+              <el-icon :size="16"><Rank /></el-icon>
+            </div>
+            <div class="feature-preview">
+              <img :src="feature.image" :alt="feature.title" class="preview-img" />
+            </div>
+            <div class="feature-form">
+              <el-form label-width="80px" size="small">
+                <el-form-item label="状态">
+                  <el-select v-model="feature.status" style="width: 120px">
+                    <el-option label="正常" value="enabled" />
+                    <el-option label="遮挡" value="blocked" />
+                    <el-option label="隐藏" value="hidden" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="标题">
+                  <el-input v-model="feature.title" style="width: 160px" />
+                </el-form-item>
+                <el-form-item label="描述">
+                  <el-input v-model="feature.desc" type="textarea" :rows="2" style="width: 200px" />
+                </el-form-item>
+                <el-form-item label="图片URL">
+                  <el-input v-model="feature.image" style="width: 200px" />
+                </el-form-item>
+              </el-form>
+            </div>
+            <div class="feature-actions">
+              <el-button type="danger" size="small" circle @click="removeFeature(feature.id)">
+                <el-icon><Delete /></el-icon>
+              </el-button>
+            </div>
+          </div>
+        </div>
 
-      <div class="config-card">
-        <h2>VIP 功能</h2>
-        <el-form label-width="160px">
-          <el-form-item label="允许自助注册">
-            <el-switch v-model="features.vip.allowRegister" />
-          </el-form-item>
-          <el-form-item label="试用功能">
-            <el-switch v-model="features.vip.trialEnabled" />
-          </el-form-item>
-          <el-form-item label="试用时间">
-            <el-input-number v-model="features.vip.trialDays" :min="0" :max="30" />
-            <span class="form-tip">天</span>
-          </el-form-item>
-        </el-form>
+        <div class="add-feature">
+          <el-button type="primary" plain @click="addNewFeature">
+            <el-icon><Plus /></el-icon>
+            添加功能
+          </el-button>
+        </div>
       </div>
 
       <div class="config-actions">
@@ -103,9 +105,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial } from '@/api/config'
+import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial, defaultFeatures } from '@/api/config'
+import { useFeatureStore } from '@/stores/feature'
+import { Rank, Delete, Plus } from '@element-plus/icons-vue'
 
 const saving = ref(false)
+const featureStore = useFeatureStore()
 
 // 公告配置
 const announcement = ref({
@@ -115,25 +120,6 @@ const announcement = ref({
 
 // 教程内容
 const tutorialContent = ref('')
-
-// 功能开关配置
-const features = ref({
-  masterpiece: {
-    enabled: true,
-    auditMode: 'auto',
-    generateCount: 4
-  },
-  gallery: {
-    enabled: true,
-    allowDelete: true,
-    maxStorage: 0
-  },
-  vip: {
-    allowRegister: true,
-    trialEnabled: true,
-    trialDays: 7
-  }
-})
 
 async function loadConfig() {
   // 加载公告配置
@@ -147,6 +133,9 @@ async function loadConfig() {
   if (tutorial) {
     tutorialContent.value = tutorial
   }
+
+  // 加载功能配置
+  await featureStore.loadFeatures()
 }
 
 async function saveConfig() {
@@ -164,12 +153,35 @@ async function saveConfig() {
       throw new Error('教程内容保存失败')
     }
 
+    // 保存功能配置
+    const featureResult = await featureStore.saveFeatureConfig()
+    if (!featureResult) {
+      throw new Error('功能配置保存失败')
+    }
+
     ElMessage.success('配置保存成功')
   } catch (error: any) {
     ElMessage.error(error.message || '配置保存失败')
   } finally {
     saving.value = false
   }
+}
+
+function removeFeature(id: string) {
+  featureStore.removeFeature(id)
+}
+
+function addNewFeature() {
+  const newId = `feature_${Date.now()}`
+  featureStore.addFeature({
+    id: newId,
+    path: `/${newId}`,
+    title: '新功能',
+    desc: '功能描述',
+    image: 'https://picsum.photos/seed/new/600/300',
+    status: 'enabled',
+    order: featureStore.features.length + 1
+  })
 }
 
 onMounted(() => {
@@ -196,7 +208,7 @@ onMounted(() => {
 }
 
 .config-card h2 {
-  margin: 0 0 20px;
+  margin: 0 0 12px;
   font-size: 15px;
   font-weight: 600;
   color: #1a1a1a;
@@ -204,10 +216,79 @@ onMounted(() => {
   border-bottom: 1px solid #f0f0f0;
 }
 
+.config-desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
 .form-tip {
   margin-left: 8px;
   color: #8c8c8c;
   font-size: 13px;
+}
+
+/* 功能列表 */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.feature-drag {
+  padding: 8px 4px;
+  cursor: grab;
+  color: #999;
+}
+
+.feature-drag:active {
+  cursor: grabbing;
+}
+
+.feature-preview {
+  width: 80px;
+  height: 40px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feature-form {
+  flex: 1;
+}
+
+.feature-form :deep(.el-form-item) {
+  margin-bottom: 8px;
+}
+
+.feature-form :deep(.el-form-item__label) {
+  font-size: 12px;
+  color: #666;
+}
+
+.feature-actions {
+  padding: 8px 0;
+}
+
+.add-feature {
+  margin-top: 12px;
 }
 
 .config-actions {
