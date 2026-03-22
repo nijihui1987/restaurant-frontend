@@ -11,6 +11,12 @@
           @error="handleLogoError"
         />
         <span v-else class="brand-text">主厨相机</span>
+        <div class="header-balance" v-if="userStore.isLoggedIn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="balance-star">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          <span class="balance-num">{{ userBalance.toFixed(0) }}</span>
+        </div>
       </div>
       <div class="header-announcement" v-if="announcement">
         <span class="announcement-icon">
@@ -89,6 +95,7 @@ import { useUserStore } from '@/stores/user'
 import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
 import { getAnnouncement, getLogoConfig } from '@/api/config'
+import { getBalance } from '@/api/billing'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -101,6 +108,20 @@ const showBottomNav = computed(() => {
 const showLoginTip = ref(false)
 const announcement = ref('')
 const logoUrl = ref('/images/logo.png')
+const userBalance = ref(0)
+
+async function loadUserBalance() {
+  if (userStore.isLoggedIn) {
+    try {
+      const data = await getBalance()
+      if (data) {
+        userBalance.value = data.balance
+      }
+    } catch (error) {
+      console.error('Failed to fetch balance:', error)
+    }
+  }
+}
 
 async function fetchAnnouncement() {
   try {
@@ -130,6 +151,7 @@ function handleLogoError() {
 
 fetchAnnouncement()
 fetchLogo()
+loadUserBalance()
 </script>
 
 <style scoped>
@@ -153,6 +175,28 @@ fetchLogo()
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+}
+
+.header-balance {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.balance-star {
+  color: #f59e0b;
+}
+
+.balance-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 .brand-logo {
