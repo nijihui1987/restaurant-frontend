@@ -52,69 +52,75 @@
       </div>
 
       <!-- 功能显示管理 -->
-      <div class="config-card">
+      <div class="config-card feature-config-card">
         <div class="card-header">
           <h2>功能显示管理</h2>
           <el-button type="primary" size="small" :loading="savingFeaturesAll" @click="saveAllFeatures">
             保存全部
           </el-button>
         </div>
-        <p class="config-desc">拖拽排序，调整功能显示状态、内容及列表可见性</p>
+        <p class="config-desc">拖拽排序调整顺序，点击保存全部</p>
 
-        <div class="feature-list">
-          <draggable
-            v-model="featureStore.features"
-            item-key="id"
-            handle=".feature-drag"
-            @end="onDragEnd"
-            class="drag-wrapper"
-          >
-            <template #item="{ element: feature }">
-              <div class="feature-item">
-                <div class="feature-drag">
-                  <el-icon :size="16"><Rank /></el-icon>
-                </div>
-                <div class="feature-preview">
-                  <img :src="feature.image" :alt="feature.title" class="preview-img" />
-                </div>
-                <div class="feature-form">
-                  <el-form label-width="80px" size="small">
-                    <el-form-item label="标题">
-                      <el-input v-model="feature.title" style="width: 160px" />
-                    </el-form-item>
-                    <el-form-item label="状态">
-                      <el-select v-model="feature.status" style="width: 120px">
-                        <el-option label="正常" value="enabled" />
-                        <el-option label="遮挡" value="blocked" />
-                        <el-option label="隐藏" value="hidden" />
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="遮挡文字">
-                      <el-input v-model="feature.blockedText" style="width: 120px" placeholder="即将上线" />
-                    </el-form-item>
-                    <el-form-item label="描述">
-                      <el-input v-model="feature.desc" type="textarea" :rows="2" style="width: 200px" />
-                    </el-form-item>
-                    <el-form-item label="图片URL">
-                      <el-input v-model="feature.image" style="width: 200px" />
-                    </el-form-item>
-                    <el-form-item label="用户列表">
-                      <el-switch v-model="feature.showInUserList" />
-                    </el-form-item>
-                    <el-form-item label="VIP列表">
-                      <el-switch v-model="feature.showInVipList" />
-                    </el-form-item>
-                  </el-form>
-                </div>
-                <div class="feature-actions">
-                  <el-button type="danger" size="small" circle @click="removeFeature(feature.id)">
-                    <el-icon><Delete /></el-icon>
-                  </el-button>
-                </div>
-              </div>
-            </template>
-          </draggable>
+        <!-- 表头 -->
+        <div class="feature-table-header">
+          <div class="col-drag"></div>
+          <div class="col-preview">预览</div>
+          <div class="col-title">标题</div>
+          <div class="col-status">状态</div>
+          <div class="col-blocked">遮挡文字</div>
+          <div class="col-user">用户</div>
+          <div class="col-vip">VIP</div>
+          <div class="col-action">操作</div>
         </div>
+
+        <!-- 功能列表 -->
+        <draggable
+          v-model="featureStore.features"
+          item-key="id"
+          handle=".feature-drag"
+          @end="onDragEnd"
+          class="feature-table-body"
+        >
+          <template #item="{ element: feature }">
+            <div class="feature-row">
+              <div class="col-drag">
+                <el-icon class="drag-icon" :size="16"><Rank /></el-icon>
+              </div>
+              <div class="col-preview">
+                <img :src="feature.image" :alt="feature.title" class="preview-img" />
+              </div>
+              <div class="col-title">
+                <el-input v-model="feature.title" size="small" placeholder="功能名称" />
+              </div>
+              <div class="col-status">
+                <el-select v-model="feature.status" size="small">
+                  <el-option label="正常" value="enabled" />
+                  <el-option label="遮挡" value="blocked" />
+                  <el-option label="隐藏" value="hidden" />
+                </el-select>
+              </div>
+              <div class="col-blocked">
+                <el-input
+                  v-model="feature.blockedText"
+                  size="small"
+                  placeholder="即将上线"
+                  :disabled="feature.status !== 'blocked'"
+                />
+              </div>
+              <div class="col-user">
+                <el-switch v-model="feature.showInUserList" size="small" />
+              </div>
+              <div class="col-vip">
+                <el-switch v-model="feature.showInVipList" size="small" />
+              </div>
+              <div class="col-action">
+                <el-button type="danger" size="small" circle @click="removeFeature(feature.id)">
+                  <el-icon><Delete /></el-icon>
+                </el-button>
+              </div>
+            </div>
+          </template>
+        </draggable>
 
         <div class="add-feature">
           <el-button type="primary" plain @click="addNewFeature">
@@ -298,86 +304,132 @@ onMounted(() => {
   font-size: 13px;
 }
 
-/* 功能列表 */
-.feature-list {
-  margin-bottom: 16px;
+/* 功能列表 - 表格布局 */
+.feature-config-card {
+  overflow: visible;
 }
 
-.drag-wrapper {
+.feature-table-header {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px;
+  align-items: center;
+  padding: 12px 8px;
   background: #fafafa;
   border-radius: 8px;
-  border: 1px solid #f0f0f0;
-  transition: box-shadow 0.2s;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
 }
 
-.feature-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+.feature-table-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 8px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.feature-row:hover {
+  border-color: #dcdfe6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* 拖拽时的样式 */
 .sortable-ghost {
   opacity: 0.5;
   background: #e6f7ff;
-  border: 1px dashed #1890ff;
+  border: 1px dashed #1890ff !important;
 }
 
 .sortable-chosen {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.feature-drag {
-  padding: 8px 4px;
-  cursor: grab;
-  color: #999;
-}
-
-.feature-drag:active {
-  cursor: grabbing;
-}
-
-.feature-preview {
-  width: 80px;
-  height: 40px;
-  border-radius: 4px;
-  overflow: hidden;
+/* 列宽设置 */
+.col-drag {
+  width: 32px;
   flex-shrink: 0;
 }
 
-.preview-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.col-preview {
+  width: 80px;
+  flex-shrink: 0;
+  margin-right: 12px;
 }
 
-.feature-form {
+.col-title {
   flex: 1;
+  min-width: 120px;
+  margin-right: 12px;
 }
 
-.feature-form :deep(.el-form-item) {
-  margin-bottom: 8px;
+.col-status {
+  width: 100px;
+  flex-shrink: 0;
+  margin-right: 12px;
 }
 
-.feature-form :deep(.el-form-item__label) {
-  font-size: 12px;
+.col-blocked {
+  width: 100px;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.col-user {
+  width: 60px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.col-vip {
+  width: 60px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.col-action {
+  width: 40px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+/* 拖拽图标 */
+.drag-icon {
+  cursor: grab;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.drag-icon:hover {
   color: #666;
 }
 
-.feature-actions {
-  padding: 8px 0;
+.drag-icon:active {
+  cursor: grabbing;
 }
 
+/* 预览图 */
+.preview-img {
+  width: 80px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #f0f0f0;
+}
+
+/* 添加功能按钮 */
 .add-feature {
-  margin-top: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
 }
 
 :deep(.el-textarea__inner) {
