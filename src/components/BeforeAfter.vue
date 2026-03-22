@@ -1,13 +1,11 @@
 <template>
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
     <div class="image-wrapper">
-      <div class="image-container before">
+      <div class="image-container before" :style="{ clipPath: `inset(0 0 0 ${position}%)` }">
         <img :src="beforeImage" class="image" alt="Before" />
-        <div class="overlay" :style="{ clipPath: `inset(0 0 0 ${position}%)` }"></div>
       </div>
-      <div class="image-container after">
+      <div class="image-container after" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }">
         <img :src="afterImage" class="image" alt="After" />
-        <div class="overlay" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }"></div>
       </div>
     </div>
     <div class="slider-handle" :style="{ left: `${position}%` }">
@@ -80,46 +78,26 @@ function onLeave() {
   object-fit: cover;
 }
 
-.image-container.before {
-  z-index: 1;
-}
-
 .image-container.after {
   z-index: 2;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* 使用背景色遮挡 */
-}
-
-.image-container.before .overlay {
-  background: linear-gradient(90deg, transparent 0%, transparent 98%, rgba(255,255,255,0.1) 100%);
-}
-
-.image-container.after .overlay {
-  background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 2%, transparent 100%);
 }
 
 .slider-handle {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 3px;
-  transform: translateX(-50%);
+  width: 0;
   z-index: 10;
   pointer-events: none;
 }
 
 .handle-line {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: -5%;
+  bottom: -5%;
   width: 2px;
+  left: 50%;
+  margin-left: -1px;
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   transform: rotate(15deg);
