@@ -9,12 +9,10 @@
     <div class="slider-handle" :style="{ left: `${position}%` }">
       <div class="handle-line"></div>
       <div class="handle-circle">
-        <span class="handle-arrow">
-          <el-icon :size="14"><ArrowLeft /></el-icon>
-        </span>
-        <span class="handle-arrow">
-          <el-icon :size="14"><ArrowRight /></el-icon>
-        </span>
+        <div class="handle-grip">
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
     <div class="label before-label">处理前</div>
@@ -24,7 +22,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
 
 const props = withDefaults(defineProps<{
   beforeImage: string
@@ -129,7 +126,7 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 3px;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -140,32 +137,47 @@ onUnmounted(() => {
 
 .handle-line {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 8px;
+  bottom: 8px;
   width: 2px;
-  background: #ffffff;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.9) 20%, rgba(255,255,255,0.9) 80%, transparent);
+  border-radius: 1px;
 }
 
 .handle-circle {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  cursor: ew-resize;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.handle-arrow {
+.handle-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.handle-grip {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  gap: 3px;
+}
+
+.handle-grip span {
+  width: 2px;
+  height: 12px;
+  background: #d0d0d0;
+  border-radius: 1px;
+  transition: background 0.2s;
+}
+
+.handle-circle:hover .handle-grip span {
+  background: #a0a0a0;
 }
 
 .label {
