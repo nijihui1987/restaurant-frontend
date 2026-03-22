@@ -29,7 +29,6 @@ export interface CreateUserData {
   company_name?: string
   vip_id?: number
   anonymous_name?: string
-  nickname?: string
   real_name?: string
   position?: string
 }
@@ -42,7 +41,6 @@ export interface UpdateUserData {
   vip_id?: number
   is_active?: boolean
   anonymous_name?: string
-  nickname?: string
   real_name?: string
   position?: string
 }

@@ -12,7 +12,6 @@ export interface VipInfo {
   is_active: boolean
   created_at: string
   anonymous_name?: string
-  nickname?: string
   position?: string
 }
 
@@ -28,7 +27,6 @@ export interface CreateVipData {
   email?: string
   company_name?: string
   anonymous_name?: string
-  nickname?: string
   position?: string
 }
 
@@ -38,7 +36,6 @@ export interface UpdateVipData {
   company_name?: string
   is_active?: boolean
   anonymous_name?: string
-  nickname?: string
   position?: string
 }
 

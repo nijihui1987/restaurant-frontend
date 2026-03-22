@@ -54,11 +54,8 @@
         <el-form-item label="密码" :prop="isEdit ? '' : 'password'" v-if="!isEdit">
           <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
-        <el-form-item label="匿名名称" prop="anonymous_name">
-          <el-input v-model="form.anonymous_name" placeholder="请输入匿名名称" />
-        </el-form-item>
-        <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="form.nickname" placeholder="请输入昵称" />
+        <el-form-item label="显示名称" prop="anonymous_name">
+          <el-input v-model="form.anonymous_name" placeholder="请输入显示名称" />
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
@@ -84,8 +81,7 @@
       <el-table :data="vipUsers" style="width: 100%" max-height="400">
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="username" label="用户名" width="100" />
-        <el-table-column prop="anonymous_name" label="匿名名称" width="100" />
-        <el-table-column prop="nickname" label="昵称" width="90" />
+        <el-table-column prop="anonymous_name" label="显示名称" width="100" />
         <el-table-column prop="real_name" label="真实姓名" width="90" />
         <el-table-column prop="phone" label="手机号" width="120" />
         <el-table-column prop="company_name" label="公司" min-width="100" />
@@ -122,7 +118,6 @@ const form = reactive({
   username: '',
   password: '',
   anonymous_name: '',
-  nickname: '',
   phone: '',
   email: '',
   company_name: '',
@@ -161,7 +156,6 @@ function openEditDialog(row: VipInfo) {
   currentVipId.value = row.id
   form.username = row.username
   form.anonymous_name = row.anonymous_name || ''
-  form.nickname = row.nickname || ''
   form.phone = row.phone || ''
   form.email = row.email || ''
   form.company_name = row.company_name || ''
@@ -174,7 +168,6 @@ function resetForm() {
   form.username = ''
   form.password = ''
   form.anonymous_name = ''
-  form.nickname = ''
   form.phone = ''
   form.email = ''
   form.company_name = ''
@@ -196,7 +189,6 @@ async function handleSubmit() {
           email: form.email || undefined,
           company_name: form.company_name || undefined,
           anonymous_name: form.anonymous_name || undefined,
-          nickname: form.nickname || undefined,
           position: form.position || undefined
         })
         ElMessage.success('更新成功')
@@ -208,7 +200,6 @@ async function handleSubmit() {
           email: form.email || undefined,
           company_name: form.company_name || undefined,
           anonymous_name: form.anonymous_name || undefined,
-          nickname: form.nickname || undefined,
           position: form.position || undefined
         })
         ElMessage.success('创建成功')

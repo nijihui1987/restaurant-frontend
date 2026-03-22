@@ -24,12 +24,8 @@
 
         <div class="info-section">
           <div class="info-item">
-            <span class="info-label">匿名名称</span>
+            <span class="info-label">显示名称</span>
             <span class="info-value">{{ userStore.userInfo?.anonymous_name || '未设置' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">昵称</span>
-            <span class="info-value">{{ userStore.userInfo?.nickname || '未设置' }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">真实姓名</span>
