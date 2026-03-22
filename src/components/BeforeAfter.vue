@@ -7,12 +7,9 @@
       </div>
     </div>
     <div class="slider-handle" :style="{ left: `${position}%` }">
-      <div class="handle-line"></div>
-      <div class="handle-circle">
-        <div class="handle-grip">
-          <span></span>
-          <span></span>
-        </div>
+      <div class="handle-line">
+        <div class="handle-arrow handle-arrow-top">‹</div>
+        <div class="handle-arrow handle-arrow-bottom">›</div>
       </div>
     </div>
     <div class="label before-label">处理前</div>
@@ -126,58 +123,61 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 24px;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 10;
+  cursor: ew-resize;
 }
 
 .handle-line {
-  position: absolute;
-  top: 8px;
-  bottom: 8px;
+  position: relative;
   width: 2px;
-  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.9) 20%, rgba(255,255,255,0.9) 80%, transparent);
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 1px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
-.handle-circle {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  background: #ffffff;
+.handle-arrow {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
-  cursor: ew-resize;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #666;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.handle-circle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+.handle-arrow-top {
+  top: 50%;
+  transform: translateY(-100%) translateY(-16px);
 }
 
-.handle-grip {
-  display: flex;
-  gap: 3px;
+.handle-arrow-bottom {
+  bottom: 50%;
+  transform: translateY(100%) translateY(16px);
 }
 
-.handle-grip span {
-  width: 2px;
-  height: 12px;
-  background: #d0d0d0;
-  border-radius: 1px;
-  transition: background 0.2s;
+.slider-handle:hover .handle-arrow {
+  color: #333;
 }
 
-.handle-circle:hover .handle-grip span {
-  background: #a0a0a0;
+.slider-handle:hover .handle-arrow-top {
+  transform: translateY(-100%) translateY(-16px) scale(1.1);
+}
+
+.slider-handle:hover .handle-arrow-bottom {
+  transform: translateY(100%) translateY(16px) scale(1.1);
 }
 
 .label {
