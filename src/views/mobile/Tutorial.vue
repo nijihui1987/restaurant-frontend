@@ -13,6 +13,12 @@
       <p>加载中...</p>
     </div>
 
+    <div class="empty-state" v-else-if="isEmpty">
+      <el-icon :size="48"><Document /></el-icon>
+      <p class="empty-title">教程内容待配置</p>
+      <p class="empty-desc">请联系管理员在后台配置使用教程内容</p>
+    </div>
+
     <div class="error-state" v-else>
       <el-icon :size="48"><Warning /></el-icon>
       <p>教程内容加载失败</p>
@@ -22,22 +28,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { marked } from 'marked'
-import { Loading, Warning } from '@element-plus/icons-vue'
+import { Loading, Warning, Document } from '@element-plus/icons-vue'
 import { getTutorial } from '@/api/config'
 
 const content = ref('')
 const loading = ref(true)
+const loadError = ref(false)
 
 const renderedContent = ref('')
 
+const isEmpty = computed(() => !content.value && !loading.value && !loadError.value)
+
 async function fetchTutorial() {
   loading.value = true
+  loadError.value = false
   try {
     // 优先从API获取教程内容
     const apiContent = await getTutorial()
-    if (apiContent) {
+    if (apiContent && apiContent.trim()) {
       content.value = apiContent
       renderedContent.value = await marked.parse(content.value)
       return
@@ -46,17 +56,30 @@ async function fetchTutorial() {
     // API没有内容时使用静态文件作为后备
     const response = await fetch('/tutorials/tutorial.md')
     if (response.ok) {
-      content.value = await response.text()
-      renderedContent.value = await marked.parse(content.value)
+      const text = await response.text()
+      if (text && text.trim()) {
+        content.value = text
+        renderedContent.value = await marked.parse(content.value)
+        return
+      }
     }
+
+    // 内容和静态文件都为空
+    content.value = ''
   } catch (error) {
     console.error('Failed to load tutorial:', error)
-    // 尝试加载静态文件
+    loadError.value = true
+    // 尝试加载静态文件作为后备
     try {
       const response = await fetch('/tutorials/tutorial.md')
       if (response.ok) {
-        content.value = await response.text()
-        renderedContent.value = await marked.parse(content.value)
+        const text = await response.text()
+        if (text && text.trim()) {
+          content.value = text
+          renderedContent.value = await marked.parse(content.value)
+          loadError.value = false
+          return
+        }
       }
     } catch (e) {
       console.error('Failed to load static tutorial:', e)
@@ -101,7 +124,8 @@ onMounted(() => {
 }
 
 .loading-state,
-.error-state {
+.error-state,
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,6 +133,23 @@ onMounted(() => {
   padding: 80px 20px;
   color: #8c8c8c;
   gap: 12px;
+}
+
+.empty-state {
+  color: #666;
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.empty-desc {
+  margin: 0;
+  font-size: 14px;
+  color: #8c8c8c;
 }
 
 .loading-icon {
