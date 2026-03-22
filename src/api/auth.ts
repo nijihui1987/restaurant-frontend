@@ -25,6 +25,10 @@ export interface User {
   created_at: string
   updated_at: string
   vip_id?: number  // 所属 VIP 分组ID，user 角色特有
+  anonymous_name?: string  // 匿名名称
+  nickname?: string  // 昵称
+  real_name?: string  // 真实姓名
+  position?: string  // 职位
 }
 
 export async function login(data: LoginRequest): Promise<LoginResponse> {

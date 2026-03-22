@@ -28,6 +28,10 @@ export interface CreateUserData {
   role: UserRole
   company_name?: string
   vip_id?: number
+  anonymous_name?: string
+  nickname?: string
+  real_name?: string
+  position?: string
 }
 
 export interface UpdateUserData {
@@ -37,6 +41,10 @@ export interface UpdateUserData {
   company_name?: string
   vip_id?: number
   is_active?: boolean
+  anonymous_name?: string
+  nickname?: string
+  real_name?: string
+  position?: string
 }
 
 /**
@@ -82,6 +90,6 @@ export async function deleteUser(id: number): Promise<void> {
  * 更新用户状态 (admin) - 启用/禁用
  */
 export async function updateUserStatus(id: number, is_active: boolean): Promise<User> {
-  const res = await api.put<User>(`/users/${id}/status`, { is_active })
+  const res = await api.put<User>(`/users/${id}/disable`, { is_active })
   return res.data
 }

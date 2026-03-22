@@ -54,6 +54,12 @@
         <el-form-item label="密码" :prop="isEdit ? '' : 'password'" v-if="!isEdit">
           <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
+        <el-form-item label="匿名名称" prop="anonymous_name">
+          <el-input v-model="form.anonymous_name" placeholder="请输入匿名名称" />
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="form.nickname" placeholder="请输入昵称" />
+        </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
@@ -63,6 +69,9 @@
         <el-form-item label="公司名称" prop="company_name">
           <el-input v-model="form.company_name" placeholder="请输入公司名称" />
         </el-form-item>
+        <el-form-item label="职位" prop="position">
+          <el-input v-model="form.position" placeholder="请输入职位" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -71,13 +80,16 @@
     </el-dialog>
 
     <!-- 下属用户弹窗 -->
-    <el-dialog v-model="usersDialogVisible" title="下属用户" width="600px">
+    <el-dialog v-model="usersDialogVisible" title="下属用户" width="700px">
       <el-table :data="vipUsers" style="width: 100%" max-height="400">
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="phone" label="手机号" />
-        <el-table-column prop="company_name" label="公司" />
-        <el-table-column prop="is_active" label="状态" width="80">
+        <el-table-column prop="username" label="用户名" width="100" />
+        <el-table-column prop="anonymous_name" label="匿名名称" width="100" />
+        <el-table-column prop="nickname" label="昵称" width="90" />
+        <el-table-column prop="real_name" label="真实姓名" width="90" />
+        <el-table-column prop="phone" label="手机号" width="120" />
+        <el-table-column prop="company_name" label="公司" min-width="100" />
+        <el-table-column prop="is_active" label="状态" width="70">
           <template #default="{ row }">
             <el-tag :type="row.is_active ? 'success' : 'info'" size="small">
               {{ row.is_active ? '启用' : '禁用' }}
@@ -109,9 +121,12 @@ const currentVipId = ref<number | null>(null)
 const form = reactive({
   username: '',
   password: '',
+  anonymous_name: '',
+  nickname: '',
   phone: '',
   email: '',
-  company_name: ''
+  company_name: '',
+  position: ''
 })
 
 const rules: FormRules = {
@@ -145,9 +160,12 @@ function openEditDialog(row: VipInfo) {
   isEdit.value = true
   currentVipId.value = row.id
   form.username = row.username
+  form.anonymous_name = row.anonymous_name || ''
+  form.nickname = row.nickname || ''
   form.phone = row.phone || ''
   form.email = row.email || ''
   form.company_name = row.company_name || ''
+  form.position = row.position || ''
   dialogVisible.value = true
 }
 
@@ -155,9 +173,12 @@ function resetForm() {
   formRef.value?.resetFields()
   form.username = ''
   form.password = ''
+  form.anonymous_name = ''
+  form.nickname = ''
   form.phone = ''
   form.email = ''
   form.company_name = ''
+  form.position = ''
   currentVipId.value = null
 }
 
@@ -173,7 +194,10 @@ async function handleSubmit() {
         await updateVip(currentVipId.value, {
           phone: form.phone || undefined,
           email: form.email || undefined,
-          company_name: form.company_name || undefined
+          company_name: form.company_name || undefined,
+          anonymous_name: form.anonymous_name || undefined,
+          nickname: form.nickname || undefined,
+          position: form.position || undefined
         })
         ElMessage.success('更新成功')
       } else {
@@ -182,7 +206,10 @@ async function handleSubmit() {
           password: form.password,
           phone: form.phone || undefined,
           email: form.email || undefined,
-          company_name: form.company_name || undefined
+          company_name: form.company_name || undefined,
+          anonymous_name: form.anonymous_name || undefined,
+          nickname: form.nickname || undefined,
+          position: form.position || undefined
         })
         ElMessage.success('创建成功')
       }

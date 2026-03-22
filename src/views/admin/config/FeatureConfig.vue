@@ -65,7 +65,7 @@
         <div class="feature-table-header">
           <div class="col-drag"></div>
           <div class="col-preview">预览</div>
-          <div class="col-title">标题 / 图片链接</div>
+          <div class="col-title">标题 / 路径 / 图片链接</div>
           <div class="col-status">状态</div>
           <div class="col-blocked">遮挡文字</div>
           <div class="col-user">用户</div>
@@ -91,6 +91,7 @@
               </div>
               <div class="col-title">
                 <el-input v-model="feature.title" size="small" placeholder="功能名称" />
+                <el-input v-model="feature.path" size="small" placeholder="路由路径，如 /masterpiece" class="path-input" />
                 <el-input v-model="feature.image" size="small" placeholder="图片链接" class="image-url-input" />
               </div>
               <div class="col-status">
@@ -124,13 +125,46 @@
         </draggable>
 
         <div class="add-feature">
-          <el-button type="primary" plain @click="addNewFeature">
+          <el-button type="primary" plain @click="showAddDialog">
             <el-icon><Plus /></el-icon>
             添加功能
           </el-button>
         </div>
       </div>
     </div>
+
+    <!-- 添加功能弹窗 -->
+    <el-dialog
+      v-model="addDialogVisible"
+      title="添加功能"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <el-form :model="newFeatureForm" label-width="100px">
+        <el-form-item label="功能标题" required>
+          <el-input v-model="newFeatureForm.title" placeholder="如：手机随拍成片" />
+        </el-form-item>
+        <el-form-item label="功能描述">
+          <el-input v-model="newFeatureForm.desc" type="textarea" :rows="2" placeholder="功能简短描述" />
+        </el-form-item>
+        <el-form-item label="路由路径" required>
+          <el-input v-model="newFeatureForm.path" placeholder="如：/masterpiece" />
+          <div class="path-tips">
+            <span class="path-tips-title">已有路由：</span>
+            <span class="path-tag" v-for="route in availableRoutes" :key="route.path" @click="newFeatureForm.path = route.path">
+              {{ route.path }}
+            </span>
+          </div>
+        </el-form-item>
+        <el-form-item label="图片链接">
+          <el-input v-model="newFeatureForm.image" placeholder="https://..." />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="addDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmAddFeature">确定添加</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -146,6 +180,66 @@ const savingAnnouncement = ref(false)
 const savingTutorial = ref(false)
 const savingFeaturesAll = ref(false)
 const featureStore = useFeatureStore()
+
+// 添加功能弹窗
+const addDialogVisible = ref(false)
+const newFeatureForm = ref({
+  title: '',
+  desc: '',
+  path: '',
+  image: 'https://picsum.photos/seed/new/600/300'
+})
+
+// 可用的路由列表（供管理员参考）
+const availableRoutes = [
+  { path: '/masterpiece', name: '手机随拍成片' },
+  { path: '/batch', name: '批量套图成片' },
+  { path: '/enhance', name: '智能高清优化' },
+  { path: '/wechat', name: '微信营销出图' },
+  { path: '/dianping', name: '大众点评装修' },
+  { path: '/douyin', name: '抖音门店装修' },
+  { path: '/menu', name: '印刷菜单出图' }
+]
+
+function showAddDialog() {
+  newFeatureForm.value = {
+    title: '',
+    desc: '',
+    path: '',
+    image: 'https://picsum.photos/seed/new/600/300'
+  }
+  addDialogVisible.value = true
+}
+
+function confirmAddFeature() {
+  if (!newFeatureForm.value.title.trim()) {
+    ElMessage.warning('请输入功能标题')
+    return
+  }
+  if (!newFeatureForm.value.path.trim()) {
+    ElMessage.warning('请输入路由路径')
+    return
+  }
+  if (!newFeatureForm.value.path.startsWith('/')) {
+    ElMessage.warning('路由路径必须以 / 开头')
+    return
+  }
+  const newId = `feature_${Date.now()}`
+  featureStore.addFeature({
+    id: newId,
+    path: newFeatureForm.value.path,
+    title: newFeatureForm.value.title,
+    desc: newFeatureForm.value.desc || '功能描述',
+    image: newFeatureForm.value.image,
+    status: 'enabled',
+    order: featureStore.features.length + 1,
+    showInUserList: true,
+    showInVipList: true,
+    blockedText: '即将上线'
+  })
+  addDialogVisible.value = false
+  ElMessage.success('功能添加成功，请点击"保存全部"提交')
+}
 
 function onDragEnd() {
   // 更新排序号
@@ -232,22 +326,6 @@ async function saveAllFeatures() {
 
 function removeFeature(id: string) {
   featureStore.removeFeature(id)
-}
-
-function addNewFeature() {
-  const newId = `feature_${Date.now()}`
-  featureStore.addFeature({
-    id: newId,
-    path: `/${newId}`,
-    title: '新功能',
-    desc: '功能描述',
-    image: 'https://picsum.photos/seed/new/600/300',
-    status: 'enabled',
-    order: featureStore.features.length + 1,
-    showInUserList: true,
-    showInVipList: true,
-    blockedText: '即将上线'
-  })
 }
 
 onMounted(() => {
@@ -435,6 +513,38 @@ onMounted(() => {
 
 .image-url-input {
   margin-top: 6px;
+}
+
+.path-input {
+  margin-top: 6px;
+}
+
+.path-tips {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.path-tips-title {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.path-tag {
+  padding: 2px 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.path-tag:hover {
+  background: #e6f7ff;
+  color: #1890ff;
 }
 
 :deep(.el-textarea__inner) {

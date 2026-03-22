@@ -164,7 +164,7 @@ const router = createRouter({
           path: 'query',
           name: 'query',
           component: () => import('@/views/admin/query/DataQuery.vue'),
-          meta: { requiresAuth: true, requiresAdmin: true }
+          meta: { requiresAuth: true, requiresAdminOrVip: true }
         },
         {
           path: 'audit',
@@ -223,6 +223,12 @@ router.beforeEach(async (to, _from) => {
   // 需要 admin/vip 权限的页面
   if (to.meta.requiresAdmin && !userStore.canAccessAdmin) {
     // 非 admin/vip 用户重定向到首页
+    return '/'
+  }
+
+  // 需要 admin 或 vip 权限的页面
+  if (to.meta.requiresAdminOrVip && !userStore.canAccessAdmin && !userStore.isVip) {
+    // 非 admin 且非 vip 用户重定向到首页
     return '/'
   }
 

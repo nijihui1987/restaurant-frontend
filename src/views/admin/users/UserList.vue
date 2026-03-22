@@ -26,9 +26,13 @@
     <div class="content-card">
       <el-table v-loading="loading" :data="users" style="width: 100%">
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="phone" label="手机号" />
-        <el-table-column prop="company_name" label="公司" />
+        <el-table-column prop="username" label="用户名" width="120" />
+        <el-table-column prop="anonymous_name" label="匿名名称" width="120" />
+        <el-table-column prop="nickname" label="昵称" width="100" />
+        <el-table-column prop="real_name" label="真实姓名" width="100" />
+        <el-table-column prop="phone" label="手机号" width="130" />
+        <el-table-column prop="company_name" label="公司" min-width="120" />
+        <el-table-column prop="position" label="职位" width="100" />
         <el-table-column prop="role" label="角色" width="100">
           <template #default="{ row }">
             <el-tag :type="getRoleTagType(row.role)" size="small">
@@ -36,19 +40,14 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="is_active" label="状态" width="100">
+        <el-table-column prop="is_active" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.is_active ? 'success' : 'info'" size="small">
               {{ row.is_active ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="created_at" label="注册时间" width="120">
-          <template #default="{ row }">
-            {{ formatDate(row.created_at) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="操作" width="180" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" text size="small" @click="openEditDialog(row)">编辑</el-button>
             <el-button
@@ -91,11 +90,26 @@
         <el-form-item label="密码" :prop="isEdit ? '' : 'password'" v-if="!isEdit">
           <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
+        <el-form-item label="匿名名称" prop="anonymous_name">
+          <el-input v-model="form.anonymous_name" placeholder="请输入匿名名称" />
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="form.nickname" placeholder="请输入昵称" />
+        </el-form-item>
+        <el-form-item label="真实姓名" prop="real_name">
+          <el-input v-model="form.real_name" placeholder="请输入真实姓名" />
+        </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" />
+        </el-form-item>
+        <el-form-item label="公司名称" prop="company_name">
+          <el-input v-model="form.company_name" placeholder="请输入公司名称" />
+        </el-form-item>
+        <el-form-item label="职位" prop="position">
+          <el-input v-model="form.position" placeholder="请输入职位" />
         </el-form-item>
         <el-form-item label="角色" prop="role">
           <el-select v-model="form.role" placeholder="请选择角色" style="width: 100%">
@@ -103,9 +117,6 @@
             <el-option label="专业组" value="vip" />
             <el-option label="普通用户" value="user" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="公司名称" prop="company_name">
-          <el-input v-model="form.company_name" placeholder="请输入公司名称" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -140,10 +151,14 @@ const currentUserId = ref<number | null>(null)
 const form = reactive({
   username: '',
   password: '',
+  anonymous_name: '',
+  nickname: '',
+  real_name: '',
   phone: '',
   email: '',
   role: 'user' as UserRole,
-  company_name: ''
+  company_name: '',
+  position: ''
 })
 
 const rules: FormRules = {
@@ -168,11 +183,6 @@ function getRoleTagType(role: string): string {
     user: 'info'
   }
   return types[role] || 'info'
-}
-
-function formatDate(dateStr: string): string {
-  if (!dateStr) return '-'
-  return dateStr.split('T')[0]
 }
 
 async function fetchUsers() {
@@ -211,10 +221,14 @@ function openEditDialog(row: UserListItem) {
   isEdit.value = true
   currentUserId.value = row.id
   form.username = row.username
+  form.anonymous_name = row.anonymous_name || ''
+  form.nickname = row.nickname || ''
+  form.real_name = row.real_name || ''
   form.phone = row.phone || ''
   form.email = row.email || ''
   form.role = row.role
   form.company_name = row.company_name || ''
+  form.position = row.position || ''
   dialogVisible.value = true
 }
 
@@ -222,10 +236,14 @@ function resetForm() {
   formRef.value?.resetFields()
   form.username = ''
   form.password = ''
+  form.anonymous_name = ''
+  form.nickname = ''
+  form.real_name = ''
   form.phone = ''
   form.email = ''
   form.role = 'user'
   form.company_name = ''
+  form.position = ''
   currentUserId.value = null
 }
 
@@ -242,7 +260,11 @@ async function handleSubmit() {
           phone: form.phone || undefined,
           email: form.email || undefined,
           role: form.role,
-          company_name: form.company_name || undefined
+          company_name: form.company_name || undefined,
+          anonymous_name: form.anonymous_name || undefined,
+          nickname: form.nickname || undefined,
+          real_name: form.real_name || undefined,
+          position: form.position || undefined
         })
         ElMessage.success('更新成功')
       } else {
@@ -252,7 +274,11 @@ async function handleSubmit() {
           phone: form.phone || undefined,
           email: form.email || undefined,
           role: form.role,
-          company_name: form.company_name || undefined
+          company_name: form.company_name || undefined,
+          anonymous_name: form.anonymous_name || undefined,
+          nickname: form.nickname || undefined,
+          real_name: form.real_name || undefined,
+          position: form.position || undefined
         })
         ElMessage.success('创建成功')
       }

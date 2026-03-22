@@ -24,16 +24,32 @@
 
         <div class="info-section">
           <div class="info-item">
+            <span class="info-label">匿名名称</span>
+            <span class="info-value">{{ userStore.userInfo?.anonymous_name || '未设置' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">昵称</span>
+            <span class="info-value">{{ userStore.userInfo?.nickname || '未设置' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">真实姓名</span>
+            <span class="info-value">{{ userStore.userInfo?.real_name || '未设置' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">公司名称</span>
+            <span class="info-value">{{ userStore.userInfo?.company_name || '未设置' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">职位</span>
+            <span class="info-value">{{ userStore.userInfo?.position || '未设置' }}</span>
+          </div>
+          <div class="info-item">
             <span class="info-label">手机号</span>
             <span class="info-value">{{ userStore.userInfo?.phone || '未设置' }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">邮箱</span>
             <span class="info-value">{{ userStore.userInfo?.email || '未设置' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">公司名称</span>
-            <span class="info-value">{{ userStore.userInfo?.company_name || '未设置' }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">注册时间</span>

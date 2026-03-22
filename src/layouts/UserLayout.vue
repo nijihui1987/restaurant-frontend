@@ -23,6 +23,19 @@
         </span>
         <span class="announcement-text">{{ announcement }}</span>
       </div>
+      <div class="header-user" v-if="userStore.isLoggedIn">
+        <div class="user-balance">
+          <span class="balance-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+          </span>
+          <span class="balance-amount">{{ userBalance.toFixed(0) }}</span>
+        </div>
+        <div class="user-info">
+          <span class="username">{{ userStore.userInfo?.username }}</span>
+        </div>
+      </div>
     </header>
 
     <div class="layout-body">
@@ -95,7 +108,7 @@
             </router-link>
             <router-link to="/vip" class="nav-item" :class="{ active: isActive('/vip') }">
               <el-icon :size="18"><UserFilled /></el-icon>
-              <span class="nav-label">VIP 管理</span>
+              <span class="nav-label">专业组管理</span>
             </router-link>
             <router-link to="/config" class="nav-item" :class="{ active: isActive('/config') }">
               <el-icon :size="18"><Setting /></el-icon>
@@ -177,11 +190,23 @@ import {
   Tickets
 } from '@element-plus/icons-vue'
 import { getAnnouncement, getLogoConfig } from '@/api/config'
+import { getBalance } from '@/api/billing'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 const featureStore = useFeatureStore()
+
+const userBalance = ref(0)
+
+async function loadUserBalance() {
+  if (userStore.isLoggedIn) {
+    const data = await getBalance()
+    if (data) {
+      userBalance.value = data.balance
+    }
+  }
+}
 
 const announcement = ref('')
 const logoUrl = ref('/images/logo.png')
@@ -251,6 +276,7 @@ async function handleLogout() {
 
 fetchAnnouncement()
 fetchLogo()
+loadUserBalance()
 featureStore.loadFeatures()
 </script>
 
@@ -264,7 +290,6 @@ featureStore.loadFeatures()
 
 .top-header {
   background: var(--color-bg-surface);
-  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: var(--z-index-sticky);
@@ -278,8 +303,8 @@ featureStore.loadFeatures()
   align-items: center;
   gap: var(--space-lg);
   padding: 0 var(--space-2xl);
+  width: 240px;
   flex-shrink: 0;
-  border-right: 1px solid var(--color-border);
 }
 
 .brand-logo {
@@ -307,7 +332,6 @@ featureStore.loadFeatures()
   align-items: center;
   gap: var(--space-sm);
   padding: 0 var(--space-2xl);
-  background: var(--color-bg-elevated);
   flex: 1;
 }
 
@@ -324,6 +348,52 @@ featureStore.loadFeatures()
   line-height: var(--line-height-normal);
 }
 
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: 0 var(--space-2xl);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.user-balance {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+}
+
+.balance-icon {
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+}
+
+.balance-amount {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.balance-unit {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.username {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
 /* ==================== 主体布局 ==================== */
 
 .layout-body {
@@ -336,7 +406,6 @@ featureStore.loadFeatures()
 .sidebar {
   width: 240px;
   background: var(--color-bg-surface);
-  border-right: 1px solid var(--color-border);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -356,7 +425,6 @@ featureStore.loadFeatures()
 
 .nav-section-bottom {
   padding: var(--space-md) var(--space-sm);
-  border-top: 1px solid var(--color-border);
   background: var(--color-bg-surface);
   position: absolute;
   bottom: 0;

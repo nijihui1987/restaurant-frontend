@@ -11,6 +11,9 @@ export interface VipInfo {
   task_count: number
   is_active: boolean
   created_at: string
+  anonymous_name?: string
+  nickname?: string
+  position?: string
 }
 
 export interface VipListResponse {
@@ -24,6 +27,9 @@ export interface CreateVipData {
   phone?: string
   email?: string
   company_name?: string
+  anonymous_name?: string
+  nickname?: string
+  position?: string
 }
 
 export interface UpdateVipData {
@@ -31,6 +37,9 @@ export interface UpdateVipData {
   email?: string
   company_name?: string
   is_active?: boolean
+  anonymous_name?: string
+  nickname?: string
+  position?: string
 }
 
 /**
