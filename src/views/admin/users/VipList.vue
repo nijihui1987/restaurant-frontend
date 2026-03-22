@@ -1,6 +1,10 @@
 <template>
   <div class="vip-management">
+    <!-- 页面标题 -->
     <div class="page-header">
+      <div class="header-left">
+        <h2>专业组管理</h2>
+      </div>
       <div class="header-right">
         <el-button type="primary" @click="openCreateDialog">
           <el-icon><Plus /></el-icon>
@@ -9,32 +13,76 @@
       </div>
     </div>
 
+    <!-- 统计卡片 -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <el-icon :size="24"><OfficeBuilding /></el-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-value">{{ vipList.length }}</p>
+          <p class="stat-label">专业组数量</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <el-icon :size="24"><User /></el-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-value">{{ totalUsers }}</p>
+          <p class="stat-label">下属用户总数</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 专业组列表卡片 -->
     <div class="content-card">
       <el-table v-loading="loading" :data="vipList" style="width: 100%">
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="VIP 名称" />
-        <el-table-column prop="company_name" label="公司" />
-        <el-table-column prop="phone" label="手机号" />
-        <el-table-column prop="user_count" label="下属用户" width="100" />
-        <el-table-column prop="image_count" label="图片数量" width="100" />
-        <el-table-column prop="task_count" label="任务数量" width="100" />
-        <el-table-column prop="is_active" label="状态" width="100">
+        <el-table-column prop="id" label="ID" width="70" />
+        <el-table-column label="专业组信息" min-width="200">
+          <template #default="{ row }">
+            <div class="vip-info">
+              <div class="vip-name">{{ row.username }}</div>
+              <div class="vip-detail">{{ row.anonymous_name || '-' }}</div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="phone" label="手机号" width="130" />
+        <el-table-column prop="user_count" label="下属用户" width="100">
+          <template #default="{ row }">
+            <span class="count-badge">{{ row.user_count }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="业务数据" min-width="150">
+          <template #default="{ row }">
+            <div class="biz-stats">
+              <div class="biz-stat">
+                <span class="biz-label">图片</span>
+                <span class="biz-value">{{ row.image_count || 0 }}</span>
+              </div>
+              <div class="biz-stat">
+                <span class="biz-label">任务</span>
+                <span class="biz-value">{{ row.task_count || 0 }}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="is_active" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.is_active ? 'success' : 'info'" size="small">
               {{ row.is_active ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="created_at" label="创建时间" width="120">
+        <el-table-column prop="created_at" label="创建时间" width="100">
           <template #default="{ row }">
-            {{ formatDate(row.created_at) }}
+            <span class="date-text">{{ formatDate(row.created_at) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="操作" width="140" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" text size="small" @click="openEditDialog(row)">编辑</el-button>
             <el-button type="primary" text size="small" @click="viewUsers(row)">下属用户</el-button>
-            <el-button type="danger" text size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,7 +92,7 @@
     <el-dialog
       v-model="dialogVisible"
       :title="isEdit ? '编辑专业组' : '新增专业组'"
-      width="500px"
+      width="480px"
       @closed="resetForm"
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
@@ -60,14 +108,8 @@
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
-        </el-form-item>
         <el-form-item label="公司名称" prop="company_name">
           <el-input v-model="form.company_name" placeholder="请输入公司名称" />
-        </el-form-item>
-        <el-form-item label="职位" prop="position">
-          <el-input v-model="form.position" placeholder="请输入职位" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -79,13 +121,16 @@
     <!-- 下属用户弹窗 -->
     <el-dialog v-model="usersDialogVisible" title="下属用户" width="700px">
       <el-table :data="vipUsers" style="width: 100%" max-height="400">
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" width="100" />
-        <el-table-column prop="anonymous_name" label="显示名称" width="100" />
-        <el-table-column prop="real_name" label="真实姓名" width="90" />
-        <el-table-column prop="phone" label="手机号" width="120" />
-        <el-table-column prop="company_name" label="公司" min-width="100" />
-        <el-table-column prop="is_active" label="状态" width="70">
+        <el-table-column prop="id" label="ID" width="70" />
+        <el-table-column prop="username" label="用户名" width="120" />
+        <el-table-column prop="anonymous_name" label="显示名称" width="120">
+          <template #default="{ row }">
+            <span class="anonymous-name">{{ row.anonymous_name || '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="phone" label="手机号" width="130" />
+        <el-table-column prop="company_name" label="公司" min-width="120" />
+        <el-table-column prop="is_active" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.is_active ? 'success' : 'info'" size="small">
               {{ row.is_active ? '启用' : '禁用' }}
@@ -98,10 +143,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
-import { getVipList, createVip, updateVip, deleteVip, getVipUsers, type VipInfo } from '@/api/vip'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { Plus, OfficeBuilding, User } from '@element-plus/icons-vue'
+import { getVipList, createVip, updateVip, getVipUsers, type VipInfo } from '@/api/vip'
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -114,14 +159,17 @@ const vipList = ref<VipInfo[]>([])
 const vipUsers = ref<any[]>([])
 const currentVipId = ref<number | null>(null)
 
+// 计算下属用户总数
+const totalUsers = computed(() => {
+  return vipList.value.reduce((sum, vip) => sum + (vip.user_count || 0), 0)
+})
+
 const form = reactive({
   username: '',
   password: '',
   anonymous_name: '',
   phone: '',
-  email: '',
-  company_name: '',
-  position: ''
+  company_name: ''
 })
 
 const rules: FormRules = {
@@ -157,9 +205,7 @@ function openEditDialog(row: VipInfo) {
   form.username = row.username
   form.anonymous_name = row.anonymous_name || ''
   form.phone = row.phone || ''
-  form.email = row.email || ''
   form.company_name = row.company_name || ''
-  form.position = row.position || ''
   dialogVisible.value = true
 }
 
@@ -169,9 +215,7 @@ function resetForm() {
   form.password = ''
   form.anonymous_name = ''
   form.phone = ''
-  form.email = ''
   form.company_name = ''
-  form.position = ''
   currentVipId.value = null
 }
 
@@ -186,10 +230,8 @@ async function handleSubmit() {
       if (isEdit.value && currentVipId.value) {
         await updateVip(currentVipId.value, {
           phone: form.phone || undefined,
-          email: form.email || undefined,
           company_name: form.company_name || undefined,
-          anonymous_name: form.anonymous_name || undefined,
-          position: form.position || undefined
+          anonymous_name: form.anonymous_name || undefined
         })
         ElMessage.success('更新成功')
       } else {
@@ -197,10 +239,8 @@ async function handleSubmit() {
           username: form.username,
           password: form.password,
           phone: form.phone || undefined,
-          email: form.email || undefined,
           company_name: form.company_name || undefined,
-          anonymous_name: form.anonymous_name || undefined,
-          position: form.position || undefined
+          anonymous_name: form.anonymous_name || undefined
         })
         ElMessage.success('创建成功')
       }
@@ -212,21 +252,6 @@ async function handleSubmit() {
       submitLoading.value = false
     }
   })
-}
-
-async function handleDelete(row: VipInfo) {
-  try {
-    await ElMessageBox.confirm(`确定删除专业组 ${row.username}？`, '警告', {
-      type: 'warning',
-      confirmButtonText: '删除',
-      cancelButtonText: '取消'
-    })
-    await deleteVip(row.id)
-    ElMessage.success('删除成功')
-    fetchVipList()
-  } catch {
-    // 取消
-  }
 }
 
 async function viewUsers(row: VipInfo) {
@@ -252,21 +277,135 @@ onMounted(() => {
 
 .page-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-.page-header :deep(.el-button) {
+.header-left h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.header-right :deep(.el-button) {
   background: #1a1a1a;
   border-color: #1a1a1a;
 }
 
+/* 统计卡片 */
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 200px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f0f4ff;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+/* 列表卡片 */
 .content-card {
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
-  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.vip-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.vip-name {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.vip-detail {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 2px;
+}
+
+.count-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #f0f4ff;
+  color: #1a1a1a;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.biz-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.biz-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.biz-label {
+  font-size: 11px;
+  color: #8c8c8c;
+}
+
+.biz-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.date-text {
+  font-size: 13px;
+  color: #595959;
+}
+
+.anonymous-name {
+  color: #595959;
+  font-size: 13px;
 }
 
 .content-card :deep(.el-table th) {
@@ -274,11 +413,11 @@ onMounted(() => {
   color: #595959;
   font-weight: 500;
   font-size: 13px;
-  padding: 14px 0;
+  padding: 12px 0;
 }
 
 .content-card :deep(.el-table td) {
-  padding: 14px 0;
+  padding: 12px 0;
   font-size: 14px;
   color: #1a1a1a;
 }
