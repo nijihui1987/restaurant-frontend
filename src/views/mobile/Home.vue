@@ -11,13 +11,14 @@
         >
           <div class="card-image">
             <img :src="feature.image" :alt="feature.title" />
-            <div class="card-title">{{ feature.title }}</div>
-            <div class="card-arrow">
-              <el-icon :size="20"><ArrowRight /></el-icon>
-            </div>
           </div>
-          <div class="card-content">
+          <div class="card-info">
+            <h3 class="card-title">{{ feature.title }}</h3>
             <p class="card-desc">{{ feature.desc }}</p>
+            <div class="card-action">
+              <span class="action-text">立即体验</span>
+              <el-icon :size="16"><ArrowRight /></el-icon>
+            </div>
           </div>
         </router-link>
       </section>
@@ -46,43 +47,43 @@ const features = [
     path: '/masterpiece',
     title: '手机随拍成片',
     desc: 'AI 智能识别，菜品图秒变专业摄影作品',
-    image: 'https://picsum.photos/seed/masterpiece/800/300'
+    image: 'https://picsum.photos/seed/masterpiece/600/300'
   },
   {
     path: '/batch',
     title: '批量套图成片',
     desc: '一次上传多张，批量处理成专业素材',
-    image: 'https://picsum.photos/seed/batch/800/300'
+    image: 'https://picsum.photos/seed/batch/600/300'
   },
   {
     path: '/enhance',
     title: '智能高清优化',
     desc: 'AI 提升清晰度，还原图片细节',
-    image: 'https://picsum.photos/seed/enhance/800/300'
+    image: 'https://picsum.photos/seed/enhance/600/300'
   },
   {
     path: '/wechat',
     title: '微信营销出图',
     desc: '生成适合微信分享的高质量图片',
-    image: 'https://picsum.photos/seed/wechat/800/300'
+    image: 'https://picsum.photos/seed/wechat/600/300'
   },
   {
     path: '/dianping',
     title: '大众点评装修',
     desc: '为店铺生成专业的头图和菜单',
-    image: 'https://picsum.photos/seed/dianping/800/300'
+    image: 'https://picsum.photos/seed/dianping/600/300'
   },
   {
     path: '/douyin',
     title: '抖音门店装修',
     desc: '为抖音店铺生成吸睛视觉素材',
-    image: 'https://picsum.photos/seed/douyin/800/300'
+    image: 'https://picsum.photos/seed/douyin/600/300'
   },
   {
     path: '/menu',
     title: '印刷菜单出图',
     desc: '生成适合印刷的高清菜单图片',
-    image: 'https://picsum.photos/seed/menu/800/300'
+    image: 'https://picsum.photos/seed/menu/600/300'
   }
 ]
 
@@ -114,7 +115,6 @@ function goToLogin() {
 
 .feature-card {
   display: flex;
-  flex-direction: column;
   background: var(--color-bg-surface);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -134,9 +134,9 @@ function goToLogin() {
 }
 
 .card-image {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 8 / 3;
+  width: 50%;
+  aspect-ratio: 6 / 3;
+  flex-shrink: 0;
   overflow: hidden;
 }
 
@@ -148,53 +148,44 @@ function goToLogin() {
 }
 
 .feature-card:hover .card-image img {
-  transform: scale(1.03);
+  transform: scale(1.05);
+}
+
+.card-info {
+  flex: 1;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
 }
 
 .card-title {
-  position: absolute;
-  top: var(--space-md);
-  left: var(--space-md);
-  padding: var(--space-xs) var(--space-sm);
-  background: rgba(0, 0, 0, 0.6);
-  color: #ffffff;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-sm);
-  backdrop-filter: blur(4px);
-}
-
-.card-arrow {
-  position: absolute;
-  bottom: var(--space-md);
-  right: var(--space-md);
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 50%;
-  color: var(--color-text-secondary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: all var(--transition-fast);
-}
-
-.feature-card:hover .card-arrow {
-  background: var(--color-primary);
-  color: #ffffff;
-  transform: translateX(4px);
-}
-
-.card-content {
-  padding: var(--space-md) var(--space-lg);
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
 .card-desc {
-  margin: 0;
+  margin: 0 0 var(--space-md);
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
+}
+
+.card-action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: gap var(--transition-fast);
+}
+
+.feature-card:hover .card-action {
+  gap: var(--space-sm);
 }
 
 /* ==================== 登录提示 ==================== */
@@ -234,6 +225,19 @@ function goToLogin() {
 @media (max-width: 640px) {
   .features-section {
     grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    flex-direction: column;
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 6 / 3;
+  }
+
+  .card-info {
+    padding: var(--space-md);
   }
 }
 </style>
