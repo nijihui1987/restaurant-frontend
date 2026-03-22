@@ -19,18 +19,18 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
 
-    // ========== 用户端路由（响应式：PC 左侧导航 / 移动端底部导航） ==========
+    // ========== 用户端路由 + 管理后台路由（统一使用 ResponsiveLayout） ==========
     {
       path: '/',
       component: () => import('@/layouts/ResponsiveLayout.vue'),
       meta: { requiresAuth: false },
       children: [
+        // ========== 公开页面 ==========
         {
           path: '',
           name: 'home',
           component: () => import('@/views/mobile/Home.vue')
         },
-        // 教程
         {
           path: 'tutorial',
           name: 'tutorial',
@@ -60,73 +60,125 @@ const router = createRouter({
           component: () => import('@/views/mobile/masterpiece/Queue.vue'),
           meta: { requiresAuth: true }
         },
-        // 我的图库
+        // 用户页面（需登录）
         {
           path: 'gallery',
           name: 'gallery',
           component: () => import('@/views/mobile/Gallery.vue'),
           meta: { requiresAuth: true }
         },
-        // 个人信息
         {
           path: 'profile',
           name: 'profile',
           component: () => import('@/views/mobile/Profile.vue'),
           meta: { requiresAuth: true }
+        },
+        {
+          path: 'billing',
+          name: 'billing',
+          component: () => import('@/views/user/Billing.vue'),
+          meta: { requiresAuth: true }
+        },
+        // ========== 新功能页面 ==========
+        {
+          path: 'batch',
+          name: 'batch',
+          component: () => import('@/views/user/Batch.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'enhance',
+          name: 'enhance',
+          component: () => import('@/views/user/Enhance.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'wechat',
+          name: 'wechat',
+          component: () => import('@/views/user/Wechat.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'dianping',
+          name: 'dianping',
+          component: () => import('@/views/user/Dianping.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'douyin',
+          name: 'douyin',
+          component: () => import('@/views/user/Douyin.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'menu',
+          name: 'menu',
+          component: () => import('@/views/user/Menu.vue'),
+          meta: { requiresAuth: true }
+        },
+        // ========== 专业组页面（VIP）==========
+        {
+          path: 'customers',
+          name: 'customers',
+          component: () => import('@/views/vip/Customers.vue'),
+          meta: { requiresAuth: true, requiresVip: true }
+        },
+        // ========== 管理页面（admin）==========
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: () => import('@/views/admin/Dashboard.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'users',
+          name: 'users',
+          component: () => import('@/views/admin/users/UserList.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'vip',
+          name: 'vip',
+          component: () => import('@/views/admin/users/VipList.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'config',
+          name: 'config',
+          component: () => import('@/views/admin/config/SystemConfig.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'features',
+          name: 'features',
+          component: () => import('@/views/admin/config/FeatureConfig.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'maintenance',
+          name: 'maintenance',
+          component: () => import('@/views/admin/system/Maintenance.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'query',
+          name: 'query',
+          component: () => import('@/views/admin/query/DataQuery.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
+        },
+        {
+          path: 'audit',
+          name: 'audit',
+          component: () => import('@/views/admin/audit/TaskAudit.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true }
         }
       ]
     },
 
-    // ========== PC 管理后台路由 (admin/vip) ==========
+    // ========== 兼容旧路径 /admin ==========
     {
       path: '/admin',
-      component: () => import('@/layouts/AdminLayout.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true },
-      children: [
-        {
-          path: '',
-          name: 'admin-dashboard',
-          component: () => import('@/views/admin/Dashboard.vue')
-        },
-        {
-          path: 'users',
-          name: 'admin-users',
-          component: () => import('@/views/admin/users/UserList.vue')
-        },
-        {
-          path: 'vip',
-          name: 'admin-vip',
-          component: () => import('@/views/admin/users/VipList.vue')
-        },
-        {
-          path: 'config',
-          name: 'admin-config',
-          component: () => import('@/views/admin/config/SystemConfig.vue'),
-          meta: { requiresAdmin: true }
-        },
-        {
-          path: 'features',
-          name: 'admin-features',
-          component: () => import('@/views/admin/config/FeatureConfig.vue'),
-          meta: { requiresAdmin: true }
-        },
-        {
-          path: 'maintenance',
-          name: 'admin-maintenance',
-          component: () => import('@/views/admin/system/Maintenance.vue'),
-          meta: { requiresAdmin: true }
-        },
-        {
-          path: 'query',
-          name: 'admin-query',
-          component: () => import('@/views/admin/query/DataQuery.vue')
-        },
-        {
-          path: 'audit',
-          name: 'admin-audit',
-          component: () => import('@/views/admin/audit/TaskAudit.vue')
-        }
-      ]
+      redirect: '/dashboard'
     },
 
     // ========== 404 ==========
@@ -170,7 +222,13 @@ router.beforeEach(async (to, _from) => {
 
   // 需要 admin/vip 权限的页面
   if (to.meta.requiresAdmin && !userStore.canAccessAdmin) {
-    // 非 admin/vip 用户重定向到移动端首页
+    // 非 admin/vip 用户重定向到首页
+    return '/'
+  }
+
+  // 需要 VIP 权限的页面
+  if (to.meta.requiresVip && !userStore.isVip) {
+    // 非 VIP 用户重定向到首页
     return '/'
   }
 

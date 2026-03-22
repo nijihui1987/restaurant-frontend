@@ -29,69 +29,126 @@
       <!-- 左侧导航 -->
       <aside class="sidebar">
         <nav class="nav-menu">
-          <!-- 全部功能（可折叠） -->
-          <div class="nav-group">
-            <div
-              class="nav-parent"
-              @click="toggleFeatureMenu"
-              :class="{ active: isFeatureMenuActive }"
-            >
-              <el-icon :size="20"><Operation /></el-icon>
-              <span class="nav-label">全部功能</span>
-              <el-icon :size="14" class="nav-arrow" :class="{ expanded: featureMenuExpanded }">
-                <ArrowRight />
-              </el-icon>
-            </div>
-            <div class="nav-children" v-show="featureMenuExpanded">
-              <router-link
-                to="/masterpiece"
-                class="nav-child"
-                :class="{ active: isActive('/masterpiece') }"
-              >
-                <span class="child-dot"></span>
-                <span class="child-label">大师成相</span>
+          <!-- ========== 公开区域（无需登录可见）========== -->
+          <div class="nav-section">
+            <span class="nav-section-title">导航</span>
+            <router-link to="/" class="nav-item" :class="{ active: isActive('/') }">
+              <el-icon :size="18"><HomeFilled /></el-icon>
+              <span class="nav-label">首页</span>
+            </router-link>
+            <router-link to="/tutorial" class="nav-item" :class="{ active: isActive('/tutorial') }">
+              <el-icon :size="18"><Reading /></el-icon>
+              <span class="nav-label">使用教程</span>
+            </router-link>
+          </div>
+
+          <!-- ========== 用户功能（登录后可见，与导航同级）========== -->
+          <div class="nav-section" v-if="userStore.isLoggedIn">
+            <span class="nav-section-title">用户功能</span>
+            <router-link to="/masterpiece" class="nav-item" :class="{ active: isActive('/masterpiece') }">
+              <el-icon :size="18"><MagicStick /></el-icon>
+              <span class="nav-label">手机随拍成片</span>
+            </router-link>
+            <router-link to="/batch" class="nav-item" :class="{ active: isActive('/batch') }">
+              <el-icon :size="18"><Collection /></el-icon>
+              <span class="nav-label">批量套图成片</span>
+            </router-link>
+            <router-link to="/enhance" class="nav-item" :class="{ active: isActive('/enhance') }">
+              <el-icon :size="18"><Aim /></el-icon>
+              <span class="nav-label">智能高清优化</span>
+            </router-link>
+            <router-link to="/wechat" class="nav-item" :class="{ active: isActive('/wechat') }">
+              <el-icon :size="18"><ChatDotRound /></el-icon>
+              <span class="nav-label">微信营销出图</span>
+            </router-link>
+            <router-link to="/dianping" class="nav-item" :class="{ active: isActive('/dianping') }">
+              <el-icon :size="18"><Shop /></el-icon>
+              <span class="nav-label">大众点评装修</span>
+            </router-link>
+            <router-link to="/douyin" class="nav-item" :class="{ active: isActive('/douyin') }">
+              <el-icon :size="18"><VideoCamera /></el-icon>
+              <span class="nav-label">抖音门店装修</span>
+            </router-link>
+            <router-link to="/menu" class="nav-item" :class="{ active: isActive('/menu') }">
+              <el-icon :size="18"><Tickets /></el-icon>
+              <span class="nav-label">印刷菜单出图</span>
+            </router-link>
+            <router-link to="/gallery" class="nav-item" :class="{ active: isActive('/gallery') }">
+              <el-icon :size="18"><Picture /></el-icon>
+              <span class="nav-label">我的图库</span>
+            </router-link>
+            <router-link to="/billing" class="nav-item" :class="{ active: isActive('/billing') }">
+              <el-icon :size="18"><Document /></el-icon>
+              <span class="nav-label">账单查询</span>
+            </router-link>
+          </div>
+
+          <!-- ========== 专业组功能（VIP 可见）========== -->
+          <div class="nav-section" v-if="userStore.isVip">
+            <span class="nav-section-title">专业组功能</span>
+            <router-link to="/customers" class="nav-item" :class="{ active: isActive('/customers') }">
+              <el-icon :size="18"><OfficeBuilding /></el-icon>
+              <span class="nav-label">客户管理</span>
+            </router-link>
+            <router-link to="/query" class="nav-item" :class="{ active: isActive('/query') }">
+              <el-icon :size="18"><Search /></el-icon>
+              <span class="nav-label">数据查询</span>
+            </router-link>
+            <router-link to="/audit" class="nav-item" :class="{ active: isActive('/audit') }">
+              <el-icon :size="18"><CircleCheck /></el-icon>
+              <span class="nav-label">任务审核</span>
+            </router-link>
+          </div>
+
+          <!-- ========== 系统管理（仅 Admin 可见）========== -->
+          <div class="nav-section" v-if="userStore.isAdmin">
+            <span class="nav-section-title">系统管理</span>
+            <router-link to="/dashboard" class="nav-item" :class="{ active: isActive('/dashboard') }">
+              <el-icon :size="18"><DataLine /></el-icon>
+              <span class="nav-label">仪表盘</span>
+            </router-link>
+            <router-link to="/users" class="nav-item" :class="{ active: isActive('/users') }">
+              <el-icon :size="18"><User /></el-icon>
+              <span class="nav-label">用户管理</span>
+            </router-link>
+            <router-link to="/vip" class="nav-item" :class="{ active: isActive('/vip') }">
+              <el-icon :size="18"><UserFilled /></el-icon>
+              <span class="nav-label">VIP 管理</span>
+            </router-link>
+            <router-link to="/config" class="nav-item" :class="{ active: isActive('/config') }">
+              <el-icon :size="18"><Setting /></el-icon>
+              <span class="nav-label">系统配置</span>
+            </router-link>
+            <router-link to="/features" class="nav-item" :class="{ active: isActive('/features') }">
+              <el-icon :size="18"><Operation /></el-icon>
+              <span class="nav-label">功能配置</span>
+            </router-link>
+            <router-link to="/maintenance" class="nav-item" :class="{ active: isActive('/maintenance') }">
+              <el-icon :size="18"><Tools /></el-icon>
+              <span class="nav-label">系统运维</span>
+            </router-link>
+          </div>
+
+          <!-- ========== 个人设置（登录后显示在最下面）========== -->
+          <div class="nav-section nav-section-bottom" v-if="userStore.isLoggedIn">
+            <div class="nav-item-group">
+              <router-link to="/profile" class="nav-item" :class="{ active: isActive('/profile') }">
+                <el-icon :size="18"><User /></el-icon>
+                <span class="nav-label">个人设置</span>
               </router-link>
+              <div class="nav-item logout-icon" @click="handleLogout" title="退出登录">
+                <el-icon :size="18"><SwitchButton /></el-icon>
+              </div>
             </div>
           </div>
 
-          <router-link
-            to="/tutorial"
-            class="nav-item"
-            :class="{ active: isActive('/tutorial') }"
-          >
-            <el-icon :size="20"><Reading /></el-icon>
-            <span class="nav-label">使用教程</span>
-          </router-link>
-
-          <router-link
-            to="/gallery"
-            class="nav-item"
-            v-if="userStore.isLoggedIn"
-            :class="{ active: isActive('/gallery') }"
-          >
-            <el-icon :size="20"><Picture /></el-icon>
-            <span class="nav-label">我的图库</span>
-          </router-link>
-
-          <router-link
-            to="/profile"
-            class="nav-item"
-            v-if="userStore.isLoggedIn"
-            :class="{ active: isActive('/profile') }"
-          >
-            <el-icon :size="20"><User /></el-icon>
-            <span class="nav-label">个人设置</span>
-          </router-link>
-
-          <router-link
-            to="/login"
-            class="nav-item"
-            v-if="!userStore.isLoggedIn"
-            :class="{ active: isActive('/login') }"
-          >
-            <el-icon :size="20"><Key /></el-icon>
-            <span class="nav-label">登录</span>
-          </router-link>
+          <!-- ========== 登录入口（未登录显示）========== -->
+          <div class="nav-section" v-if="!userStore.isLoggedIn">
+            <router-link to="/login" class="nav-item" :class="{ active: isActive('/login') }">
+              <el-icon :size="18"><Key /></el-icon>
+              <span class="nav-label">登录</span>
+            </router-link>
+          </div>
         </nav>
       </aside>
 
@@ -108,26 +165,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
-import { Operation, Reading, Picture, User, Key, ArrowRight } from '@element-plus/icons-vue'
+import {
+  HomeFilled,
+  Reading,
+  Picture,
+  User,
+  UserFilled,
+  Key,
+  MagicStick,
+  Search,
+  CircleCheck,
+  DataLine,
+  Setting,
+  Operation,
+  Tools,
+  Document,
+  OfficeBuilding,
+  SwitchButton,
+  Collection,
+  Aim,
+  ChatDotRound,
+  Shop,
+  VideoCamera,
+  Tickets
+} from '@element-plus/icons-vue'
 import { getAnnouncement, getLogoConfig } from '@/api/config'
 
 const route = useRoute()
+const router = useRouter()
 const userStore = useUserStore()
 
 const announcement = ref('')
 const logoUrl = ref('/images/logo.svg')
-const featureMenuExpanded = ref(true) // 默认全部展开
-
-const isFeatureMenuActive = computed(() => {
-  return route.path.startsWith('/masterpiece')
-})
-
-function toggleFeatureMenu() {
-  featureMenuExpanded.value = !featureMenuExpanded.value
-}
 
 function isActive(path: string) {
   if (path === '/') {
@@ -162,6 +235,13 @@ function handleLogoError() {
   logoUrl.value = ''
 }
 
+async function handleLogout() {
+  await ElMessageBox.confirm('确定退出登录？', '提示', { type: 'warning' })
+  await userStore.logout()
+  ElMessage.success('已退出')
+  router.push('/login')
+}
+
 fetchAnnouncement()
 fetchLogo()
 </script>
@@ -180,31 +260,36 @@ fetchLogo()
   position: sticky;
   top: 0;
   z-index: var(--z-index-sticky);
+  display: flex;
+  align-items: stretch;
+  height: 64px;
 }
 
 .header-brand {
-  padding: var(--space-md) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-lg);
+  padding: 0 var(--space-2xl);
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border);
 }
 
 .brand-logo {
-  height: 32px;
+  height: 40px;
   width: auto;
   object-fit: contain;
 }
 
 .brand-text {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-tight);
 }
 
 .brand-tagline {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   letter-spacing: var(--letter-spacing-wide);
 }
@@ -213,9 +298,9 @@ fetchLogo()
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-xl);
+  padding: 0 var(--space-2xl);
   background: var(--color-bg-elevated);
-  border-top: 1px solid var(--color-border);
+  flex: 1;
 }
 
 .announcement-icon {
@@ -235,119 +320,50 @@ fetchLogo()
 
 .layout-body {
   display: flex;
-  min-height: calc(100vh - 73px);
+  height: calc(100vh - 64px);
 }
 
 /* ==================== 左侧导航 ==================== */
 
 .sidebar {
-  width: 220px;
+  width: 240px;
   background: var(--color-bg-surface);
   border-right: 1px solid var(--color-border);
-  position: sticky;
-  top: 73px;
-  height: calc(100vh - 73px);
-  overflow-y: auto;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
 }
 
 .nav-menu {
   padding: var(--space-md) var(--space-sm);
+  flex: 1;
+  overflow-y: auto;
 }
 
-.nav-group {
-  margin-bottom: var(--space-xs);
+.nav-section {
+  margin-bottom: var(--space-lg);
 }
 
-.nav-parent {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  color: var(--color-text-regular);
-  font-size: var(--font-size-base);
-  transition: all var(--transition-fast);
-  margin: 2px var(--space-xs);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  position: relative;
-}
-
-.nav-parent::before {
-  content: '';
+.nav-section-bottom {
+  padding: var(--space-md) var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
   position: absolute;
+  bottom: 0;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%) scaleY(0);
-  width: 3px;
-  height: 16px;
-  background: var(--color-primary);
-  border-radius: 0 2px 2px 0;
-  transition: transform var(--transition-fast) var(--ease-out-quart);
+  right: 0;
 }
 
-.nav-parent:hover {
-  background: var(--color-bg-hover);
-  color: var(--color-text-primary);
-}
-
-.nav-parent.active {
-  background: var(--color-bg-elevated);
-  color: var(--color-text-primary);
+.nav-section-title {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-}
-
-.nav-parent.active::before {
-  transform: translateY(-50%) scaleY(1);
-}
-
-.nav-arrow {
-  margin-left: auto;
-  transition: transform var(--transition-fast);
-}
-
-.nav-arrow.expanded {
-  transform: rotate(90deg);
-}
-
-.nav-children {
-  padding-left: var(--space-lg);
-}
-
-.nav-child {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-xs) var(--space-md);
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  font-size: var(--font-size-sm);
-  transition: all var(--transition-fast);
-  margin: 2px var(--space-xs);
-  border-radius: var(--radius-sm);
-}
-
-.nav-child:hover {
-  color: var(--color-text-primary);
-  background: var(--color-bg-hover);
-}
-
-.nav-child.active {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
-}
-
-.child-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.5;
-}
-
-.nav-child.active .child-dot {
-  opacity: 1;
-  background: var(--color-primary);
+  color: var(--color-text-placeholder);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
 }
 
 .nav-item {
@@ -362,6 +378,7 @@ fetchLogo()
   margin: 2px var(--space-xs);
   border-radius: var(--radius-md);
   position: relative;
+  cursor: pointer;
 }
 
 .nav-item::before {
@@ -398,6 +415,42 @@ fetchLogo()
 
 .nav-label {
   white-space: nowrap;
+}
+
+.logout-item {
+  color: var(--color-text-secondary);
+}
+
+.logout-item:hover {
+  color: var(--color-error);
+  background: var(--color-bg-hover);
+}
+
+.nav-item-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.nav-item-group .nav-item {
+  flex: 1;
+}
+
+.logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.logout-icon:hover {
+  color: var(--color-error);
+  background: var(--color-bg-hover);
 }
 
 /* ==================== 主内容区 ==================== */

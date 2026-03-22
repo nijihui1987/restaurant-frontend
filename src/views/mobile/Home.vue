@@ -8,7 +8,7 @@
             <el-icon :size="24"><MagicStick /></el-icon>
           </div>
           <div class="feature-text">
-            <h3>大师成相</h3>
+            <h3>手机随拍成片</h3>
             <p>AI 智能识别，菜品图秒变专业摄影作品</p>
           </div>
           <div class="feature-arrow">

@@ -39,13 +39,23 @@ frontend/                      # 前端项目（当前目录）
 │   │   └── index.ts        # 路由守卫
 │   ├── layouts/             # 布局组件
 │   │   ├── MobileLayout.vue # 移动端布局
-│   │   └── AdminLayout.vue  # PC 管理后台布局
+│   │   └── UserLayout.vue  # PC 统一布局
 │   ├── views/               # 页面组件
 │   │   ├── mobile/         # 移动端页面
 │   │   │   ├── Home.vue
 │   │   │   ├── Gallery.vue
 │   │   │   ├── Profile.vue
-│   │   │   └── masterpiece/ # 大师成相流程
+│   │   │   └── masterpiece/ # 手机随拍成片流程
+│   │   ├── user/           # PC 用户功能页面
+│   │   │   ├── Billing.vue   # 账单查询
+│   │   │   ├── Batch.vue    # 批量套图成片
+│   │   │   ├── Enhance.vue  # 智能高清优化
+│   │   │   ├── Wechat.vue   # 微信营销出图
+│   │   │   ├── Dianping.vue # 大众点评装修
+│   │   │   ├── Douyin.vue   # 抖音门店装修
+│   │   │   └── Menu.vue     # 印刷菜单出图
+│   │   ├── vip/            # PC VIP 功能页面
+│   │   │   └── Customers.vue # 客户管理
 │   │   └── admin/          # PC 管理后台页面
 │   │       ├── Dashboard.vue
 │   │       ├── users/      # 用户管理
