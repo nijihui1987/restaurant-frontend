@@ -1,21 +1,25 @@
 <template>
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
-    <div class="image-layer before" :style="{ clipPath: `polygon(0 0, ${position}% 0, ${position}% 100%, 0 100%)` }">
-      <img :src="beforeImage" class="image" alt="Before" />
+    <!-- Before 图片 - 显示斜线左侧 -->
+    <div class="layer before">
+      <img :src="beforeImage" alt="Before" :style="{ clipPath: beforeClip }" />
     </div>
-    <div class="image-layer after" :style="{ clipPath: `polygon(${position}% 0, 100% 0, 100% 100%, ${position}% 100%)` }">
-      <img :src="afterImage" class="image" alt="After" />
+    <!-- After 图片 - 显示斜线右侧 -->
+    <div class="layer after">
+      <img :src="afterImage" alt="After" :style="{ clipPath: afterClip }" />
     </div>
-    <div class="slider-handle" :style="{ left: `${position}%` }">
-      <div class="handle-line"></div>
+    <!-- 滑块 -->
+    <div class="slider" :style="{ left: `${position}%` }">
+      <div class="slider-line"></div>
     </div>
-    <div class="label before-label">处理前</div>
-    <div class="label after-label">处理后</div>
+    <!-- 标签 -->
+    <span class="label before-label">处理前</span>
+    <span class="label after-label">处理后</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = withDefaults(defineProps<{
   beforeImage: string
@@ -27,6 +31,30 @@ const props = withDefaults(defineProps<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const position = ref(50)
+const angleDeg = 15
+const angleRad = (angleDeg * Math.PI) / 180
+
+// 计算斜线裁剪
+const beforeClip = computed(() => {
+  const p = position.value
+  // 斜线方程: y = tan(angle) * (x - p) + 50
+  // 在 x=0 时: y = 50 - p * tan(angle)
+  // 在 x=100 时: y = 50 + (100-p) * tan(angle)
+  const y0 = 50 - p * Math.tan(angleRad)
+  const y1 = 50 + (100 - p) * Math.tan(angleRad)
+
+  // Before 图片: 显示斜线左下方的区域
+  return `polygon(0% ${y0}%, 0% 100%, 100% 100%, 100% ${y1}%)`
+})
+
+const afterClip = computed(() => {
+  const p = position.value
+  const y0 = 50 - p * Math.tan(angleRad)
+  const y1 = 50 + (100 - p) * Math.tan(angleRad)
+
+  // After 图片: 显示斜线右上方的区域
+  return `polygon(0% 0%, 0% ${y0}%, 100% ${y1}%, 100% 0%)`
+})
 
 function updatePosition(clientX: number) {
   if (!containerRef.value) return
@@ -56,30 +84,30 @@ function onLeave() {
   user-select: none;
 }
 
-.image-layer {
+.layer {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
-.image-layer.before {
-  z-index: 1;
-}
-
-.image-layer.after {
-  z-index: 2;
-}
-
-.image {
+.layer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.slider-handle {
+.layer.before {
+  z-index: 1;
+}
+
+.layer.after {
+  z-index: 2;
+}
+
+.slider {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -88,16 +116,16 @@ function onLeave() {
   pointer-events: none;
 }
 
-.handle-line {
+.slider-line {
   position: absolute;
-  top: -5%;
-  bottom: -5%;
-  width: 2px;
+  top: -10%;
+  bottom: -10%;
   left: 50%;
+  width: 2px;
   margin-left: -1px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  transform: rotate(15deg);
+  background: white;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  transform: rotate(var(--angle, 15deg));
   transform-origin: center center;
 }
 
@@ -106,10 +134,11 @@ function onLeave() {
   bottom: 12px;
   padding: 4px 12px;
   background: rgba(0, 0, 0, 0.6);
-  color: #ffffff;
+  color: white;
   font-size: 12px;
   border-radius: 4px;
   backdrop-filter: blur(4px);
+  z-index: 20;
 }
 
 .before-label {
