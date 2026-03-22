@@ -121,17 +121,24 @@ function goToLogin() {
 .feature-card {
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-surface);
+  background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
   border-radius: var(--radius-md);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
   transition: all var(--transition-normal);
-  box-shadow: var(--shadow-sm);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .feature-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 8px 16px rgba(0, 0, 0, 0.1),
+    0 16px 32px rgba(0, 0, 0, 0.12);
   transform: translateY(-4px);
 }
 
@@ -162,12 +169,16 @@ function goToLogin() {
   position: absolute;
   top: 8px;
   left: 8px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-  backdrop-filter: blur(8px);
-  padding: 5px 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-  border: 1px solid rgba(255,255,255,0.5);
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+  backdrop-filter: blur(12px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(0,0,0,0.05);
+  border: 1px solid rgba(255,255,255,0.8);
 }
 
 .title-text {
