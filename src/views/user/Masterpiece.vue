@@ -2,8 +2,16 @@
   <div class="page-container">
     <!-- 页面标题 -->
     <div class="page-header">
-      <h1 class="page-title">一键变身菜品图</h1>
-      <p class="page-desc">上传菜品图片，AI 智能识别并生成专业摄影级作品</p>
+      <div class="header-left">
+        <h1 class="page-title">一键变身菜品图</h1>
+        <p class="page-desc">上传菜品图片，AI 智能识别并生成专业摄影级作品</p>
+      </div>
+      <div class="header-right" v-if="userStore.isAdmin">
+        <el-button @click="goToConfig">
+          <el-icon><Setting /></el-icon>
+          功能配置
+        </el-button>
+      </div>
     </div>
 
     <!-- 步骤条 -->
@@ -240,9 +248,11 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { UploadFilled, Check, CircleCheckFilled } from '@element-plus/icons-vue'
+import { UploadFilled, Check, CircleCheckFilled, Setting } from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // 步骤控制
 const currentStep = ref(0)
@@ -453,6 +463,10 @@ function handleStartNew() {
   includeHd.value = false
   currentStep.value = 0
 }
+
+function goToConfig() {
+  router.push('/masterpiece-config')
+}
 </script>
 
 <style scoped>
@@ -462,6 +476,17 @@ function handleStartNew() {
 
 .page-header {
   margin-bottom: var(--space-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  flex-shrink: 0;
 }
 
 .page-title {
