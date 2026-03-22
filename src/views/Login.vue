@@ -152,8 +152,9 @@ fetchLogo()
 }
 
 .login-logo {
-  height: 48px;
-  width: auto;
+  width: 100%;
+  height: auto;
+  max-height: 80px;
   object-fit: contain;
 }
 
