@@ -116,7 +116,7 @@ function goToLogin() {
 .feature-card {
   display: flex;
   background: var(--color-bg-surface);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
