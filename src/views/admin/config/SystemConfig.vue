@@ -2,14 +2,32 @@
   <div class="system-config">
     <div class="config-sections">
       <div class="config-card">
+        <h2>账务参数</h2>
+        <el-form label-width="160px">
+          <el-form-item label="积分兑换比例">
+            <el-input-number v-model="config.coinExchangeRate" :min="1" :max="100" :precision="1" @change="handleChange('coin_exchange_rate', $event)" />
+            <span class="form-tip">1 元人民币 = ? 积分</span>
+          </el-form-item>
+          <el-form-item label="批量充值优惠">
+            <el-input-number v-model="config.bulkDiscountThreshold" :min="0" :max="10000" @change="handleChange('bulk_discount_threshold', $event)" />
+            <span class="form-tip">满 ? 元享额外积分赠送</span>
+          </el-form-item>
+          <el-form-item label="优惠比例">
+            <el-input-number v-model="config.bulkDiscountRate" :min="1" :max="50" :precision="1" @change="handleChange('bulk_discount_rate', $event)" />
+            <span class="form-tip">每满 100 元额外赠送 ?% 积分</span>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="config-card">
         <h2>充值权限</h2>
         <el-form label-width="160px">
           <el-form-item label="专业组充值">
-            <el-switch v-model="config.allowVipRecharge" @change="handleRechargeChange('vip', $event)" />
+            <el-switch v-model="config.allowVipRecharge" @change="handleChange('allow_vip_recharge', $event)" />
             <span class="form-tip">允许专业组用户充值积分</span>
           </el-form-item>
           <el-form-item label="普通用户充值">
-            <el-switch v-model="config.allowUserRecharge" @change="handleRechargeChange('user', $event)" />
+            <el-switch v-model="config.allowUserRecharge" @change="handleChange('allow_user_recharge', $event)" />
             <span class="form-tip">允许普通用户充值积分</span>
           </el-form-item>
         </el-form>
@@ -23,7 +41,6 @@
             <li>LLM API 配置（火山引擎、Dashscope、MiniMax）</li>
             <li>OSS 存储配置（AccessKey、SecretKey、Bucket、Endpoint）</li>
             <li>系统参数（Token 有效期、最大上传大小）</li>
-            <li>账务参数（积分兑换比例、批量充值优惠）</li>
           </ul>
         </div>
       </div>
@@ -37,36 +54,45 @@ import { ElMessage } from 'element-plus'
 import { getConfig, saveConfig } from '@/api/config'
 
 const config = ref({
+  coinExchangeRate: 10,
+  bulkDiscountThreshold: 100,
+  bulkDiscountRate: 10,
   allowVipRecharge: true,
   allowUserRecharge: true
 })
 
 async function loadConfig() {
   try {
-    const [allowVipRecharge, allowUserRecharge] = await Promise.all([
+    const [
+      coinExchangeRate,
+      bulkDiscountThreshold,
+      bulkDiscountRate,
+      allowVipRecharge,
+      allowUserRecharge
+    ] = await Promise.all([
+      getConfig('system', 'coin_exchange_rate'),
+      getConfig('system', 'bulk_discount_threshold'),
+      getConfig('system', 'bulk_discount_rate'),
       getConfig('system', 'allow_vip_recharge'),
       getConfig('system', 'allow_user_recharge')
     ])
 
-    if (allowVipRecharge !== null) {
-      config.value.allowVipRecharge = allowVipRecharge === 'true'
-    }
-    if (allowUserRecharge !== null) {
-      config.value.allowUserRecharge = allowUserRecharge === 'true'
-    }
+    if (coinExchangeRate !== null) config.value.coinExchangeRate = parseFloat(coinExchangeRate) || 10
+    if (bulkDiscountThreshold !== null) config.value.bulkDiscountThreshold = parseInt(bulkDiscountThreshold) || 100
+    if (bulkDiscountRate !== null) config.value.bulkDiscountRate = parseFloat(bulkDiscountRate) || 10
+    if (allowVipRecharge !== null) config.value.allowVipRecharge = allowVipRecharge === 'true'
+    if (allowUserRecharge !== null) config.value.allowUserRecharge = allowUserRecharge === 'true'
   } catch (error) {
     console.error('加载配置失败', error)
   }
 }
 
-async function handleRechargeChange(type: 'vip' | 'user', value: boolean) {
+async function handleChange(key: string, value: number | boolean) {
   try {
-    const key = type === 'vip' ? 'allow_vip_recharge' : 'allow_user_recharge'
     await saveConfig('system', key, String(value))
     ElMessage.success('配置已更新')
   } catch (error) {
     ElMessage.error('配置更新失败')
-    // 恢复原值
     await loadConfig()
   }
 }
