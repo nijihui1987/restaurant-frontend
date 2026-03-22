@@ -123,27 +123,26 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 24px;
+  width: 2px;
   transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   z-index: 10;
   cursor: ew-resize;
 }
 
 .handle-line {
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
   width: 2px;
-  height: 100%;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 1px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .handle-arrow {
   position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: 20px;
   height: 20px;
   background: rgba(255, 255, 255, 0.95);
@@ -159,13 +158,11 @@ onUnmounted(() => {
 }
 
 .handle-arrow-top {
-  top: 50%;
-  transform: translateY(-100%) translateY(-16px);
+  top: 8px;
 }
 
 .handle-arrow-bottom {
-  bottom: 50%;
-  transform: translateY(100%) translateY(16px);
+  bottom: 8px;
 }
 
 .slider-handle:hover .handle-arrow {
@@ -173,11 +170,11 @@ onUnmounted(() => {
 }
 
 .slider-handle:hover .handle-arrow-top {
-  transform: translateY(-100%) translateY(-16px) scale(1.1);
+  transform: translateX(-50%) scale(1.1);
 }
 
 .slider-handle:hover .handle-arrow-bottom {
-  transform: translateY(100%) translateY(16px) scale(1.1);
+  transform: translateX(-50%) scale(1.1);
 }
 
 .label {
