@@ -1,9 +1,5 @@
 <template>
   <div class="tutorial-page">
-    <header class="tutorial-header">
-      <h1>使用教程</h1>
-    </header>
-
     <main class="tutorial-content" v-if="content">
       <div class="markdown-body" v-html="renderedContent"></div>
     </main>
@@ -98,27 +94,11 @@ onMounted(() => {
 .tutorial-page {
   min-height: 100vh;
   background: #fafbfc;
-}
-
-.tutorial-header {
-  background: #ffffff;
-  padding: 16px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
-}
-
-.tutorial-header h1 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
-  text-align: center;
+  padding-top: 16px;
 }
 
 .tutorial-content {
-  padding: 24px 20px;
+  padding: 0 20px 24px;
   max-width: 680px;
   margin: 0 auto;
 }
