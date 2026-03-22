@@ -96,6 +96,7 @@ export interface FeatureItem {
   showInUserList: boolean  // 是否在用户功能列表显示
   showInVipList: boolean  // 是否在VIP功能列表显示
   blockedText?: string  // 遮挡时显示的文字
+  actionText?: string  // 按钮文字，默认"进入"
 }
 
 // 默认功能列表
@@ -110,7 +111,8 @@ export const defaultFeatures: FeatureItem[] = [
     order: 1,
     showInUserList: true,
     showInVipList: true,
-    blockedText: '即将上线'
+    blockedText: '即将上线',
+    actionText: '进入'
   },
   {
     id: 'batch',
@@ -122,7 +124,8 @@ export const defaultFeatures: FeatureItem[] = [
     order: 2,
     showInUserList: true,
     showInVipList: true,
-    blockedText: '即将上线'
+    blockedText: '即将上线',
+    actionText: '进入'
   },
   {
     id: 'enhance',
@@ -134,7 +137,8 @@ export const defaultFeatures: FeatureItem[] = [
     order: 3,
     showInUserList: true,
     showInVipList: true,
-    blockedText: '即将上线'
+    blockedText: '即将上线',
+    actionText: '进入'
   },
   {
     id: 'wechat',
@@ -146,7 +150,8 @@ export const defaultFeatures: FeatureItem[] = [
     order: 4,
     showInUserList: true,
     showInVipList: true,
-    blockedText: '即将上线'
+    blockedText: '即将上线',
+    actionText: '进入'
   },
   {
     id: 'dianping',
@@ -158,7 +163,8 @@ export const defaultFeatures: FeatureItem[] = [
     order: 5,
     showInUserList: true,
     showInVipList: true,
-    blockedText: '即将上线'
+    blockedText: '即将上线',
+    actionText: '进入'
   },
   {
     id: 'douyin',
@@ -170,7 +176,8 @@ export const defaultFeatures: FeatureItem[] = [
     order: 6,
     showInUserList: true,
     showInVipList: true,
-    blockedText: '即将上线'
+    blockedText: '即将上线',
+    actionText: '进入'
   },
   {
     id: 'menu',

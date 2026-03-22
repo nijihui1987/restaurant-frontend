@@ -35,7 +35,7 @@
             <div class="card-info">
               <p class="card-desc">{{ feature.desc }}</p>
               <div class="card-action">
-                <span class="action-text">进入</span>
+                <span class="action-text">{{ feature.actionText || '进入' }}</span>
                 <el-icon :size="14"><ArrowRight /></el-icon>
               </div>
             </div>

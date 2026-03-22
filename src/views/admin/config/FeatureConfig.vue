@@ -65,7 +65,8 @@
         <div class="feature-table-header">
           <div class="col-drag"></div>
           <div class="col-preview">预览</div>
-          <div class="col-title">标题 / 路径 / 图片链接</div>
+          <div class="col-title">标题 / 描述 / 路径 / 图片链接</div>
+          <div class="col-action-btn">按钮文字</div>
           <div class="col-status">状态</div>
           <div class="col-blocked">遮挡文字</div>
           <div class="col-user">用户</div>
@@ -94,6 +95,9 @@
                 <el-input v-model="feature.desc" size="small" placeholder="功能描述" class="desc-input" />
                 <el-input v-model="feature.path" size="small" placeholder="路由路径，如 /masterpiece" class="path-input" />
                 <el-input v-model="feature.image" size="small" placeholder="图片链接" class="image-url-input" />
+              </div>
+              <div class="col-action-btn">
+                <el-input v-model="feature.actionText" size="small" placeholder="进入" />
               </div>
               <div class="col-status">
                 <el-select v-model="feature.status" size="small">
@@ -448,6 +452,12 @@ onMounted(() => {
 .col-title {
   flex: 1;
   min-width: 120px;
+  margin-right: 12px;
+}
+
+.col-action-btn {
+  width: 80px;
+  flex-shrink: 0;
   margin-right: 12px;
 }
 
