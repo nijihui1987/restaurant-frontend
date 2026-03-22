@@ -7,10 +7,7 @@
       </div>
     </div>
     <div class="slider-handle" :style="{ left: `${position}%` }">
-      <div class="handle-line">
-        <div class="handle-arrow handle-arrow-top">‹</div>
-        <div class="handle-arrow handle-arrow-bottom">›</div>
-      </div>
+      <div class="handle-line"></div>
     </div>
     <div class="label before-label">处理前</div>
     <div class="label after-label">处理后</div>
@@ -123,7 +120,7 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: 3px;
   transform: translateX(-50%);
   z-index: 10;
   cursor: ew-resize;
@@ -135,46 +132,10 @@ onUnmounted(() => {
   bottom: 0;
   left: 0;
   width: 2px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-}
-
-.handle-arrow {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
+  margin: 0 auto;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.handle-arrow-top {
-  top: 8px;
-}
-
-.handle-arrow-bottom {
-  bottom: 8px;
-}
-
-.slider-handle:hover .handle-arrow {
-  color: #333;
-}
-
-.slider-handle:hover .handle-arrow-top {
-  transform: translateX(-50%) scale(1.1);
-}
-
-.slider-handle:hover .handle-arrow-bottom {
-  transform: translateX(-50%) scale(1.1);
+  border-radius: 1px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
 }
 
 .label {
