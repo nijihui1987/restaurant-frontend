@@ -89,6 +89,9 @@
                         <el-option label="隐藏" value="hidden" />
                       </el-select>
                     </el-form-item>
+                    <el-form-item label="遮挡文字">
+                      <el-input v-model="feature.blockedText" style="width: 120px" placeholder="即将上线" />
+                    </el-form-item>
                     <el-form-item label="描述">
                       <el-input v-model="feature.desc" type="textarea" :rows="2" style="width: 200px" />
                     </el-form-item>
@@ -235,7 +238,8 @@ function addNewFeature() {
     status: 'enabled',
     order: featureStore.features.length + 1,
     showInUserList: true,
-    showInVipList: true
+    showInVipList: true,
+    blockedText: '即将上线'
   })
 }
 

@@ -11,7 +11,7 @@
             <div class="card-image blocked">
               <img :src="feature.image" :alt="feature.title" />
               <div class="blocked-overlay">
-                <span class="blocked-text">即将上线</span>
+                <span class="blocked-text">{{ feature.blockedText || '即将上线' }}</span>
               </div>
             </div>
             <div class="card-info">
