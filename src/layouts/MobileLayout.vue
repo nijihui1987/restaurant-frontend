@@ -190,7 +190,7 @@ loadUserBalance()
 }
 
 .balance-star {
-  color: #f59e0b;
+  color: var(--color-text-primary);
 }
 
 .balance-num {

@@ -199,8 +199,9 @@ export async function getFeatures(): Promise<FeatureItem[]> {
     const value = await getConfig('home', 'features')
     if (!value) return defaultFeatures
     const parsed = JSON.parse(value)
-    // 合并默认配置和保存的配置
-    return parsed.features || defaultFeatures
+    const features = parsed.features || defaultFeatures
+    // 确保按 order 字段排序
+    return features.sort((a, b) => (a.order || 0) - (b.order || 0))
   } catch (error) {
     console.error('Failed to get features:', error)
     return defaultFeatures
