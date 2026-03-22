@@ -151,11 +151,9 @@ fetchLogo()
 
 .header-brand {
   padding: var(--space-xs) var(--space-lg);
-  text-align: center;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 12px;
 }
 
 .brand-logo {
@@ -176,7 +174,6 @@ fetchLogo()
   font-size: 10px;
   color: var(--color-text-secondary);
   letter-spacing: var(--letter-spacing-wide);
-  margin-top: 1px;
 }
 
 .header-announcement {
