@@ -150,23 +150,23 @@ fetchLogo()
 }
 
 .header-brand {
-  padding: var(--space-sm) var(--space-lg);
+  padding: var(--space-xs) var(--space-lg);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 1px;
 }
 
 .brand-logo {
-  height: 28px;
+  height: 22px;
   width: auto;
   object-fit: contain;
 }
 
 .brand-text {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-tight);
@@ -183,7 +183,7 @@ fetchLogo()
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: 6px var(--space-lg);
+  padding: 4px var(--space-lg);
   background: var(--color-bg-elevated);
   border-top: 1px solid var(--color-border);
 }
