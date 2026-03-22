@@ -42,7 +42,7 @@
           </div>
           <div
             v-else
-            class="feature-card disabled"
+            class="feature-card"
           >
             <div class="card-image">
               <img :src="feature.image" :alt="feature.title" />
@@ -179,17 +179,6 @@ function goToLogin() {
   color: #1a1a1a;
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-}
-
-/* disabled 状态 */
-.feature-card.disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.feature-card.disabled:hover {
-  transform: none;
-  box-shadow: var(--shadow-sm);
 }
 
 /* blocked 状态 */
