@@ -101,14 +101,15 @@ function onLeave() {
 
 .handle-line {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  margin: 0 auto;
+  top: -10%;
+  bottom: -10%;
+  left: 50%;
+  width: 3px;
+  margin-left: -1.5px;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 1px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  transform: rotate(15deg);
 }
 
 .label {
