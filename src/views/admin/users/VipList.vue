@@ -4,7 +4,7 @@
       <div class="header-right">
         <el-button type="primary" @click="openCreateDialog">
           <el-icon><Plus /></el-icon>
-          新增 VIP
+          新增专业组
         </el-button>
       </div>
     </div>
@@ -40,10 +40,10 @@
       </el-table>
     </div>
 
-    <!-- VIP 编辑弹窗 -->
+    <!-- 专业组编辑弹窗 -->
     <el-dialog
       v-model="dialogVisible"
-      :title="isEdit ? '编辑 VIP' : '新增 VIP'"
+      :title="isEdit ? '编辑专业组' : '新增专业组'"
       width="500px"
       @closed="resetForm"
     >
@@ -130,7 +130,7 @@ async function fetchVipList() {
     const res = await getVipList()
     vipList.value = res.vips
   } catch (error: any) {
-    ElMessage.error(error.response?.data?.detail || '获取 VIP 列表失败')
+    ElMessage.error(error.response?.data?.detail || '获取专业组列表失败')
   } finally {
     loading.value = false
   }
@@ -198,7 +198,7 @@ async function handleSubmit() {
 
 async function handleDelete(row: VipInfo) {
   try {
-    await ElMessageBox.confirm(`确定删除 VIP ${row.username}？`, '警告', {
+    await ElMessageBox.confirm(`确定删除专业组 ${row.username}？`, '警告', {
       type: 'warning',
       confirmButtonText: '删除',
       cancelButtonText: '取消'

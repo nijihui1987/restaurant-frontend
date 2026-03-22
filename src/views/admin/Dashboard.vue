@@ -16,7 +16,7 @@
         </div>
         <div class="stat-info">
           <p class="stat-value">{{ stats.totalVips }}</p>
-          <p class="stat-label">VIP 总数</p>
+          <p class="stat-label">专业组总数</p>
         </div>
       </div>
       <div class="stat-card">

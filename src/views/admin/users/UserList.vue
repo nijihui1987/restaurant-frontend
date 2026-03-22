@@ -100,7 +100,7 @@
         <el-form-item label="角色" prop="role">
           <el-select v-model="form.role" placeholder="请选择角色" style="width: 100%">
             <el-option label="管理员" value="admin" />
-            <el-option label="VIP" value="vip" />
+            <el-option label="专业组" value="vip" />
             <el-option label="普通用户" value="user" />
           </el-select>
         </el-form-item>
@@ -155,7 +155,7 @@ const rules: FormRules = {
 function getRoleName(role: string): string {
   const names: Record<string, string> = {
     admin: '管理员',
-    vip: 'VIP',
+    vip: '专业组',
     user: '用户'
   }
   return names[role] || role

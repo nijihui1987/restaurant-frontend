@@ -34,7 +34,7 @@ export interface UpdateVipData {
 }
 
 /**
- * 获取 VIP 列表 (admin)
+ * 获取专业组列表 (admin)
  */
 export async function getVipList(): Promise<VipListResponse> {
   const res = await api.get<VipListResponse>('/vips')
@@ -42,7 +42,7 @@ export async function getVipList(): Promise<VipListResponse> {
 }
 
 /**
- * 获取单个 VIP 详情 (admin)
+ * 获取单个专业组详情 (admin)
  */
 export async function getVip(id: number): Promise<VipInfo> {
   const res = await api.get<VipInfo>(`/vips/${id}`)
@@ -50,7 +50,7 @@ export async function getVip(id: number): Promise<VipInfo> {
 }
 
 /**
- * 创建 VIP (admin)
+ * 创建专业组 (admin)
  */
 export async function createVip(data: CreateVipData): Promise<VipInfo> {
   const res = await api.post<VipInfo>('/vips', data)
@@ -58,7 +58,7 @@ export async function createVip(data: CreateVipData): Promise<VipInfo> {
 }
 
 /**
- * 更新 VIP (admin)
+ * 更新专业组 (admin)
  */
 export async function updateVip(id: number, data: UpdateVipData): Promise<VipInfo> {
   const res = await api.put<VipInfo>(`/vips/${id}`, data)
@@ -66,14 +66,14 @@ export async function updateVip(id: number, data: UpdateVipData): Promise<VipInf
 }
 
 /**
- * 删除 VIP (admin)
+ * 删除专业组 (admin)
  */
 export async function deleteVip(id: number): Promise<void> {
   await api.delete(`/vips/${id}`)
 }
 
 /**
- * 获取 VIP 下的用户列表 (admin)
+ * 获取专业组下的用户列表 (admin)
  */
 export async function getVipUsers(vipId: number): Promise<any[]> {
   const res = await api.get<any[]>(`/vips/${vipId}/users`)

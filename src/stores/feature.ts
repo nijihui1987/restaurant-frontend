@@ -75,7 +75,7 @@ export const useFeatureStore = defineStore('feature', () => {
     return getVisibleFeatures().filter(f => f.showInUserList)
   }
 
-  // 获取VIP功能列表
+  // 获取专业组功能列表
   function getVipFeatures() {
     return getVisibleFeatures().filter(f => f.showInVipList)
   }

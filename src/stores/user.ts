@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', () => {
   const roleName = computed((): string => {
     const names: Record<UserRole, string> = {
       admin: '管理员',
-      vip: 'VIP',
+      vip: '专业组',
       user: '用户'
     }
     return userInfo.value ? names[userInfo.value.role] : ''
