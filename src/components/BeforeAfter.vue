@@ -1,9 +1,11 @@
 <template>
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
-    <div class="image-container">
-      <img :src="afterImage" class="image after-image" alt="After" />
-      <div class="image before-container" :style="{ clipPath: beforeClipPath }">
-        <img :src="beforeImage" class="image before-image" alt="Before" />
+    <div class="image-wrapper">
+      <div class="image-container" :style="{ clipPath: diagonalClip }">
+        <img :src="beforeImage" class="image" alt="Before" />
+      </div>
+      <div class="image-container after" :style="{ clipPath: afterClip }">
+        <img :src="afterImage" class="image" alt="After" />
       </div>
     </div>
     <div class="slider-handle">
@@ -27,23 +29,27 @@ const props = withDefaults(defineProps<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const position = ref(50)
-const angle = 15 // 斜线角度
 
-// 计算斜线切割的裁剪路径
-const beforeClipPath = computed(() => {
+const angle = 15
+const tanAngle = Math.tan((angle * Math.PI) / 180)
+
+// 斜线位置：p是百分比位置(0-100)，线通过点(p, 50)
+const diagonalClip = computed(() => {
   const p = position.value
-  const tanAngle = Math.tan((angle * Math.PI) / 180)
-
-  // 斜线通过位置P和中心点，斜率是tanAngle
+  // 斜线从左上角附近开始，斜向下
   // y = tanAngle * (x - p) + 50
-  // 在x=0处: y = 50 - p * tanAngle
-  // 在x=100处: y = 50 + (100 - p) * tanAngle
-
   const yAt0 = 50 - p * tanAngle
   const yAt100 = 50 + (100 - p) * tanAngle
+  // 显示斜线右下方的区域（before图右侧部分被切掉，显示左侧）
+  return `polygon(0% 0%, 0% ${yAt0}%, 100% ${yAt100}%, 100% 100%)`
+})
 
-  // 裁剪显示斜线左下方的区域
-  return `polygon(0% ${yAt0}%, 0% 100%, 100% 100%, 100% ${yAt100}%)`
+const afterClip = computed(() => {
+  const p = position.value
+  const yAt0 = 50 - p * tanAngle
+  const yAt100 = 50 + (100 - p) * tanAngle
+  // 显示斜线左上方的区域（after图左侧部分被切掉，显示右侧）
+  return `polygon(0% ${yAt0}%, 0% 0%, 100% 0%, 100% ${yAt100}%)`
 })
 
 function updatePosition(clientX: number) {
@@ -74,33 +80,25 @@ function onLeave() {
   user-select: none;
 }
 
-.image-container {
+.image-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
+.image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.image-container.after {
+  z-index: 2;
+}
+
 .image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.before-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.before-image {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
