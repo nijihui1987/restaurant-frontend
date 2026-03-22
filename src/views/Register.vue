@@ -6,13 +6,13 @@
     </div>
 
     <div class="login-card">
-      <h2 class="login-title">欢迎回来</h2>
-      <p class="login-hint">登录以继续使用</p>
+      <h2 class="login-title">新用户注册</h2>
+      <p class="login-hint">创建账号以开始使用</p>
 
-      <el-form @submit.prevent="handleLogin" class="login-form">
+      <el-form @submit.prevent="handleRegister" class="login-form">
         <el-form-item>
           <el-input
-            v-model="username"
+            v-model="form.username"
             placeholder="请输入用户名"
             size="large"
             :prefix-icon="User"
@@ -20,9 +20,27 @@
         </el-form-item>
         <el-form-item>
           <el-input
-            v-model="password"
+            v-model="form.phone"
+            placeholder="请输入手机号（选填）"
+            size="large"
+            :prefix-icon="Phone"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="form.password"
             type="password"
             placeholder="请输入密码"
+            size="large"
+            :prefix-icon="Lock"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="form.confirmPassword"
+            type="password"
+            placeholder="请确认密码"
             size="large"
             :prefix-icon="Lock"
             show-password
@@ -36,19 +54,19 @@
             size="large"
             class="login-btn"
           >
-            登录
+            注册
           </el-button>
         </el-form-item>
       </el-form>
 
-      <div class="register-hint">
-        <span>新用户？</span>
-        <router-link to="/register" class="register-link">立即注册</router-link>
+      <div class="login-hint-text">
+        <span>已有账号？</span>
+        <router-link to="/login" class="register-link">立即登录</router-link>
       </div>
     </div>
 
     <div class="login-footer">
-      <p>登录即表示同意<a href="#" class="link">《用户协议》</a></p>
+      <p>注册即表示同意<a href="#" class="link">《用户协议》</a></p>
     </div>
   </div>
 </template>
@@ -57,34 +75,44 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { User, Lock } from '@element-plus/icons-vue'
-import { useUserStore } from '@/stores/user'
+import { User, Lock, Phone } from '@element-plus/icons-vue'
+import { register } from '@/api/auth'
 
 const router = useRouter()
-const userStore = useUserStore()
 
-const username = ref('')
-const password = ref('')
+const form = ref({
+  username: '',
+  phone: '',
+  password: '',
+  confirmPassword: ''
+})
 const loading = ref(false)
 
-async function handleLogin() {
-  if (!username.value || !password.value) {
+async function handleRegister() {
+  if (!form.value.username || !form.value.password) {
     ElMessage.warning('请输入用户名和密码')
+    return
+  }
+  if (form.value.password !== form.value.confirmPassword) {
+    ElMessage.warning('两次输入的密码不一致')
+    return
+  }
+  if (form.value.password.length < 6) {
+    ElMessage.warning('密码长度不能少于6位')
     return
   }
 
   loading.value = true
   try {
-    await userStore.loginAction(username.value, password.value)
-    ElMessage.success('登录成功')
-
-    if (userStore.canAccessAdmin) {
-      router.push('/admin')
-    } else {
-      router.push('/')
-    }
+    await register({
+      username: form.value.username,
+      password: form.value.password,
+      phone: form.value.phone || undefined
+    })
+    ElMessage.success('注册成功，请登录')
+    router.push('/login')
   } catch (error: any) {
-    ElMessage.error(error.response?.data?.detail || '登录失败')
+    ElMessage.error(error.response?.data?.detail || '注册失败')
   } finally {
     loading.value = false
   }
@@ -192,6 +220,25 @@ async function handleLogin() {
   border-color: #000;
 }
 
+.login-hint-text {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.login-hint-text .register-link {
+  color: #1a1a1a;
+  font-weight: 500;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.login-hint-text .register-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .login-footer {
   margin-top: 32px;
   text-align: center;
@@ -205,25 +252,6 @@ async function handleLogin() {
 
 .login-footer .link {
   color: #1a1a1a;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.register-hint {
-  text-align: center;
-  margin-top: 16px;
-  font-size: 14px;
-  color: #8c8c8c;
-}
-
-.register-link {
-  color: #1a1a1a;
-  font-weight: 500;
-  text-decoration: none;
-  margin-left: 4px;
-}
-
-.register-link:hover {
   text-decoration: underline;
   text-underline-offset: 2px;
 }

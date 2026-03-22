@@ -5,12 +5,12 @@
     </main>
     <nav class="bottom-nav" v-if="showBottomNav">
       <router-link to="/" class="nav-item" :class="{ active: route.path === '/' }">
-        <el-icon :size="22"><HomeFilled /></el-icon>
-        <span class="nav-label">首页</span>
+        <el-icon :size="22"><Operation /></el-icon>
+        <span class="nav-label">功能</span>
       </router-link>
-      <router-link to="/masterpiece" class="nav-item" :class="{ active: route.path.startsWith('/masterpiece') }">
-        <el-icon :size="22"><MagicStick /></el-icon>
-        <span class="nav-label">大师</span>
+      <router-link to="/tutorial" class="nav-item" :class="{ active: route.path === '/tutorial' }">
+        <el-icon :size="22"><Reading /></el-icon>
+        <span class="nav-label">教程</span>
       </router-link>
       <router-link to="/gallery" class="nav-item" v-if="userStore.isLoggedIn" :class="{ active: route.path === '/gallery' }">
         <el-icon :size="22"><Picture /></el-icon>
@@ -34,7 +34,7 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { HomeFilled, MagicStick, Picture, User, Key } from '@element-plus/icons-vue'
+import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
 
 const route = useRoute()
@@ -45,6 +45,7 @@ const showBottomNav = computed(() => {
 })
 
 const showLoginTip = ref(false)
+
 </script>
 
 <style scoped>

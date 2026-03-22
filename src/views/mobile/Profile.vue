@@ -59,6 +59,13 @@
         </div>
       </div>
 
+      <div class="logout-section" v-if="userStore.canAccessAdmin">
+        <el-button type="primary" size="large" @click="goToAdmin" class="admin-btn">
+          <el-icon :size="18"><Setting /></el-icon>
+          进入管理后台
+        </el-button>
+      </div>
+
       <div class="logout-section">
         <el-button type="danger" plain size="large" @click="handleLogout" class="logout-btn">
           退出登录
@@ -73,7 +80,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowLeft, ArrowRight, Edit, Lock, Camera } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight, Edit, Lock, Camera, Setting } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -101,6 +108,10 @@ function editProfile() {
 
 function changePassword() {
   ElMessage.info('修改密码功能开发中')
+}
+
+function goToAdmin() {
+  router.push('/admin')
 }
 
 async function handleLogout() {
@@ -293,6 +304,24 @@ async function handleLogout() {
 
 .logout-section {
   padding: 8px 0;
+}
+
+.admin-btn {
+  width: 100%;
+  height: 48px;
+  font-size: 15px;
+  border-radius: 24px;
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.admin-btn:hover {
+  background: #333333;
+  border-color: #333333;
 }
 
 .logout-btn {

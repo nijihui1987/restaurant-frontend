@@ -117,6 +117,11 @@ Vision 和 Masterpiece 任务是异步的，需要轮询状态：
 - 状态：`pending` → `generating` → `done` / `failed`
 - 轮询间隔建议：2-3秒
 
+### 代码提交
+**重要**：每次代码修改完成后，自动提交到 GitHub 备份。每次修改视为一个独立提交，commit message 自动生成描述本次修改内容。
+
+## 文档维护
+
 ## 文档维护
 
 - **API 文档**：`../API_INTEGRATION.md` - **只读**，由后端负责维护

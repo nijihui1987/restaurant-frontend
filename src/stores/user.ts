@@ -5,6 +5,7 @@ import { login, getUserInfo, logout as apiLogout, type User, type UserRole } fro
 export const useUserStore = defineStore('user', () => {
   const token = ref<string>(localStorage.getItem('token') || '')
   const userInfo = ref<User | null>(null)
+  const isLoading = ref(false)  // 标记是否正在加载用户信息
 
   const isLoggedIn = computed(() => !!token.value)
 
@@ -37,11 +38,14 @@ export const useUserStore = defineStore('user', () => {
 
   async function fetchUserInfo() {
     if (!token.value) return
+    isLoading.value = true
     try {
       userInfo.value = await getUserInfo()
     } catch (error) {
       console.error('获取用户信息失败', error)
       logout()
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -65,6 +69,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     token,
     userInfo,
+    isLoading,
     isLoggedIn,
     isAdmin,
     isVip,

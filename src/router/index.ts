@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { watch } from 'vue'
 import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
@@ -9,6 +10,12 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/Register.vue'),
       meta: { requiresAuth: false }
     },
 
@@ -22,6 +29,12 @@ const router = createRouter({
           path: '',
           name: 'home',
           component: () => import('@/views/mobile/Home.vue')
+        },
+        // 教程
+        {
+          path: 'tutorial',
+          name: 'tutorial',
+          component: () => import('@/views/mobile/Tutorial.vue')
         },
         // 大师成相
         {
@@ -126,8 +139,24 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, _from) => {
+router.beforeEach(async (to, _from) => {
   const userStore = useUserStore()
+
+  // 如果有 token 但 userInfo 还没加载，等待加载完成
+  if (userStore.token && userStore.isLoading) {
+    await new Promise<void>(resolve => {
+      const unwatch = watch(
+        () => userStore.isLoading,
+        (loading) => {
+          if (!loading) {
+            unwatch()
+            resolve()
+          }
+        },
+        { immediate: true }
+      )
+    })
+  }
 
   // 需要登录的页面
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {

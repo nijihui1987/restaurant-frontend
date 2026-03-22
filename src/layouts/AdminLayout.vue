@@ -6,36 +6,36 @@
         <span class="logo-tag">管理后台</span>
       </div>
       <nav class="nav-menu">
-        <router-link to="/admin" class="nav-item" :class="{ active: route.path === '/admin' }">
+        <router-link to="/admin" class="nav-item" :class="{ active: isActive('/admin') }">
           <el-icon :size="18"><DataLine /></el-icon>
           <span class="nav-label">仪表盘</span>
         </router-link>
-        <router-link to="/admin/users" class="nav-item" :class="{ active: route.path === '/admin/users' }">
+        <router-link to="/admin/users" class="nav-item" :class="{ active: isActive('/admin/users') }">
           <el-icon :size="18"><User /></el-icon>
           <span class="nav-label">用户管理</span>
         </router-link>
-        <router-link to="/admin/vip" class="nav-item" :class="{ active: route.path === '/admin/vip' }">
+        <router-link to="/admin/vip" class="nav-item" :class="{ active: isActive('/admin/vip') }">
           <el-icon :size="18"><UserFilled /></el-icon>
           <span class="nav-label">VIP 管理</span>
         </router-link>
-        <router-link to="/admin/query" class="nav-item" :class="{ active: route.path === '/admin/query' }">
+        <router-link to="/admin/query" class="nav-item" :class="{ active: isActive('/admin/query') }">
           <el-icon :size="18"><Search /></el-icon>
           <span class="nav-label">数据查询</span>
         </router-link>
-        <router-link to="/admin/audit" class="nav-item" :class="{ active: route.path === '/admin/audit' }">
+        <router-link to="/admin/audit" class="nav-item" :class="{ active: isActive('/admin/audit') }">
           <el-icon :size="18"><CircleCheck /></el-icon>
           <span class="nav-label">任务审核</span>
         </router-link>
         <div class="nav-divider" v-if="userStore.isAdmin"></div>
-        <router-link to="/admin/config" class="nav-item" v-if="userStore.isAdmin" :class="{ active: route.path === '/admin/config' }">
+        <router-link to="/admin/config" class="nav-item" v-if="userStore.isAdmin" :class="{ active: isActive('/admin/config') }">
           <el-icon :size="18"><Setting /></el-icon>
           <span class="nav-label">系统配置</span>
         </router-link>
-        <router-link to="/admin/features" class="nav-item" v-if="userStore.isAdmin" :class="{ active: route.path === '/admin/features' }">
+        <router-link to="/admin/features" class="nav-item" v-if="userStore.isAdmin" :class="{ active: isActive('/admin/features') }">
           <el-icon :size="18"><Operation /></el-icon>
           <span class="nav-label">功能配置</span>
         </router-link>
-        <router-link to="/admin/maintenance" class="nav-item" v-if="userStore.isAdmin" :class="{ active: route.path === '/admin/maintenance' }">
+        <router-link to="/admin/maintenance" class="nav-item" v-if="userStore.isAdmin" :class="{ active: isActive('/admin/maintenance') }">
           <el-icon :size="18"><Tools /></el-icon>
           <span class="nav-label">系统运维</span>
         </router-link>
@@ -99,6 +99,10 @@ const pageTitle = computed(() => {
   }
   return map[route.path] || '管理后台'
 })
+
+function isActive(path: string) {
+  return route.path === path
+}
 
 async function handleLogout() {
   await ElMessageBox.confirm('确定退出登录？', '提示', { type: 'warning' })
@@ -168,7 +172,6 @@ async function handleLogout() {
   color: #1a1a1a;
 }
 
-.nav-item.router-link-active,
 .nav-item.active {
   background: #1a1a1a;
   color: #ffffff;
