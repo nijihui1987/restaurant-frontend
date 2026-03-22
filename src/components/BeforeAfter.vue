@@ -1,7 +1,11 @@
 <template>
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
-    <img :src="beforeImage" class="image before-image" alt="Before" :style="{ clipPath: `inset(0 0 0 ${position}%)` }" />
-    <img :src="afterImage" class="image after-image" alt="After" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }" />
+    <div class="image-layer before" :style="{ clipPath: `polygon(0 0, ${position}% 0, ${position}% 100%, 0 100%)` }">
+      <img :src="beforeImage" class="image" alt="Before" />
+    </div>
+    <div class="image-layer after" :style="{ clipPath: `polygon(${position}% 0, 100% 0, 100% 100%, ${position}% 100%)` }">
+      <img :src="afterImage" class="image" alt="After" />
+    </div>
     <div class="slider-handle" :style="{ left: `${position}%` }">
       <div class="handle-line"></div>
     </div>
@@ -52,21 +56,27 @@ function onLeave() {
   user-select: none;
 }
 
-.image {
+.image-layer {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  overflow: hidden;
 }
 
-.before-image {
+.image-layer.before {
   z-index: 1;
 }
 
-.after-image {
+.image-layer.after {
   z-index: 2;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .slider-handle {
