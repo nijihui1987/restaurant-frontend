@@ -62,49 +62,55 @@
         <p class="config-desc">拖拽排序，调整功能显示状态、内容及列表可见性</p>
 
         <div class="feature-list">
-          <div
-            v-for="feature in featureStore.features"
-            :key="feature.id"
-            class="feature-item"
+          <draggable
+            v-model="featureStore.features"
+            item-key="id"
+            handle=".feature-drag"
+            @end="onDragEnd"
+            class="drag-wrapper"
           >
-            <div class="feature-drag">
-              <el-icon :size="16"><Rank /></el-icon>
-            </div>
-            <div class="feature-preview">
-              <img :src="feature.image" :alt="feature.title" class="preview-img" />
-            </div>
-            <div class="feature-form">
-              <el-form label-width="80px" size="small">
-                <el-form-item label="标题">
-                  <el-input v-model="feature.title" style="width: 160px" />
-                </el-form-item>
-                <el-form-item label="状态">
-                  <el-select v-model="feature.status" style="width: 120px">
-                    <el-option label="正常" value="enabled" />
-                    <el-option label="遮挡" value="blocked" />
-                    <el-option label="隐藏" value="hidden" />
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="描述">
-                  <el-input v-model="feature.desc" type="textarea" :rows="2" style="width: 200px" />
-                </el-form-item>
-                <el-form-item label="图片URL">
-                  <el-input v-model="feature.image" style="width: 200px" />
-                </el-form-item>
-                <el-form-item label="用户列表">
-                  <el-switch v-model="feature.showInUserList" />
-                </el-form-item>
-                <el-form-item label="VIP列表">
-                  <el-switch v-model="feature.showInVipList" />
-                </el-form-item>
-              </el-form>
-            </div>
-            <div class="feature-actions">
-              <el-button type="danger" size="small" circle @click="removeFeature(feature.id)">
-                <el-icon><Delete /></el-icon>
-              </el-button>
-            </div>
-          </div>
+            <template #item="{ element: feature }">
+              <div class="feature-item">
+                <div class="feature-drag">
+                  <el-icon :size="16"><Rank /></el-icon>
+                </div>
+                <div class="feature-preview">
+                  <img :src="feature.image" :alt="feature.title" class="preview-img" />
+                </div>
+                <div class="feature-form">
+                  <el-form label-width="80px" size="small">
+                    <el-form-item label="标题">
+                      <el-input v-model="feature.title" style="width: 160px" />
+                    </el-form-item>
+                    <el-form-item label="状态">
+                      <el-select v-model="feature.status" style="width: 120px">
+                        <el-option label="正常" value="enabled" />
+                        <el-option label="遮挡" value="blocked" />
+                        <el-option label="隐藏" value="hidden" />
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="描述">
+                      <el-input v-model="feature.desc" type="textarea" :rows="2" style="width: 200px" />
+                    </el-form-item>
+                    <el-form-item label="图片URL">
+                      <el-input v-model="feature.image" style="width: 200px" />
+                    </el-form-item>
+                    <el-form-item label="用户列表">
+                      <el-switch v-model="feature.showInUserList" />
+                    </el-form-item>
+                    <el-form-item label="VIP列表">
+                      <el-switch v-model="feature.showInVipList" />
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <div class="feature-actions">
+                  <el-button type="danger" size="small" circle @click="removeFeature(feature.id)">
+                    <el-icon><Delete /></el-icon>
+                  </el-button>
+                </div>
+              </div>
+            </template>
+          </draggable>
         </div>
 
         <div class="add-feature">
@@ -121,6 +127,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
+import draggable from 'vuedraggable'
 import { getAnnouncement, saveAnnouncement as saveAnnouncementApi, getTutorial, saveTutorial as saveTutorialApi } from '@/api/config'
 import { useFeatureStore } from '@/stores/feature'
 import { Rank, Delete, Plus } from '@element-plus/icons-vue'
@@ -129,6 +136,13 @@ const savingAnnouncement = ref(false)
 const savingTutorial = ref(false)
 const savingFeaturesAll = ref(false)
 const featureStore = useFeatureStore()
+
+function onDragEnd() {
+  // 更新排序号
+  featureStore.features.forEach((feature, index) => {
+    feature.order = index + 1
+  })
+}
 
 // 公告配置
 const announcement = ref({
@@ -282,10 +296,13 @@ onMounted(() => {
 
 /* 功能列表 */
 .feature-list {
+  margin-bottom: 16px;
+}
+
+.drag-wrapper {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 16px;
 }
 
 .feature-item {
@@ -296,6 +313,22 @@ onMounted(() => {
   background: #fafafa;
   border-radius: 8px;
   border: 1px solid #f0f0f0;
+  transition: box-shadow 0.2s;
+}
+
+.feature-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 拖拽时的样式 */
+.sortable-ghost {
+  opacity: 0.5;
+  background: #e6f7ff;
+  border: 1px dashed #1890ff;
+}
+
+.sortable-chosen {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .feature-drag {
