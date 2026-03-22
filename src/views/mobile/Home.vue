@@ -147,7 +147,7 @@ function goToLogin() {
   position: absolute;
   bottom: 8px;
   left: 8px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(8px);
   padding: 4px 8px;
   border-radius: 4px;
