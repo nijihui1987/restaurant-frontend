@@ -6,13 +6,6 @@ const api = axios.create({
   maxRedirects: 0
 })
 
-// 公开 API 实例 - 不处理 401 重定向（用于公开接口如 config）
-export const publicApi = axios.create({
-  baseURL: '/api/v1',
-  timeout: 60000,
-  maxRedirects: 0
-})
-
 // 请求拦截器 - 添加 token 和修复路径
 api.interceptors.request.use(
   config => {
