@@ -1,4 +1,4 @@
-import api from './request'
+import api, { publicApi } from './request'
 
 export interface ConfigItem {
   group_key: string
@@ -12,7 +12,18 @@ export interface AnnouncementConfig {
   enabled: boolean
 }
 
-// 获取配置项
+// 获取配置项（公开接口，不需要认证）
+async function getConfigPublic(groupKey: string, configKey: string): Promise<string | null> {
+  try {
+    const res = await publicApi.get<ConfigItem>(`/config/${groupKey}/${configKey}`)
+    return res.data.config_value
+  } catch (error) {
+    console.error(`Failed to get config ${groupKey}/${configKey}:`, error)
+    return null
+  }
+}
+
+// 获取配置项（需要认证）
 export async function getConfig(groupKey: string, configKey: string): Promise<string | null> {
   try {
     const res = await api.get<ConfigItem>(`/config/${groupKey}/${configKey}`)
@@ -36,10 +47,10 @@ export async function saveConfig(groupKey: string, configKey: string, value: str
   }
 }
 
-// 获取公告配置
+// 获取公告配置（公开接口）
 export async function getAnnouncement(): Promise<AnnouncementConfig | null> {
   try {
-    const value = await getConfig('system', 'announcement')
+    const value = await getConfigPublic('system', 'announcement')
     if (!value) return null
     return JSON.parse(value) as AnnouncementConfig
   } catch (error) {
@@ -53,9 +64,9 @@ export async function saveAnnouncement(config: AnnouncementConfig): Promise<bool
   return saveConfig('system', 'announcement', JSON.stringify(config))
 }
 
-// 获取教程内容
+// 获取教程内容（公开接口）
 export async function getTutorial(): Promise<string | null> {
-  return getConfig('system', 'tutorial')
+  return getConfigPublic('system', 'tutorial')
 }
 
 // 保存教程内容
@@ -63,10 +74,10 @@ export async function saveTutorial(content: string): Promise<boolean> {
   return saveConfig('system', 'tutorial', content)
 }
 
-// 获取Logo配置
+// 获取Logo配置（公开接口）
 export async function getLogoConfig(): Promise<{ logo_url: string; logo_text: string } | null> {
   try {
-    const value = await getConfig('system', 'logo')
+    const value = await getConfigPublic('system', 'logo')
     if (!value) return null
     return JSON.parse(value)
   } catch (error) {
