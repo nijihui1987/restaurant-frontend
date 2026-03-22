@@ -225,37 +225,30 @@ function goToLogin() {
 @media (max-width: 640px) {
   .features-section {
     grid-template-columns: 1fr;
+    gap: var(--space-lg);
   }
 
   .feature-card {
-    flex-direction: row;
+    flex-direction: column;
   }
 
   .card-image {
-    width: 40%;
+    width: 100%;
     aspect-ratio: 6 / 3;
   }
 
   .card-info {
-    flex: 1;
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-md);
   }
 
   .card-title {
     font-size: var(--font-size-base);
+    margin-bottom: var(--space-xs);
   }
 
   .card-desc {
-    font-size: var(--font-size-xs);
-    margin-bottom: var(--space-xs);
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .card-action {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-sm);
   }
 }
 </style>
