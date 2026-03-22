@@ -222,6 +222,7 @@ const featureIcons: Record<string, any> = {
 }
 
 function isActive(path: string) {
+  if (!path) return false
   if (path === '/') {
     return route.path === '/'
   }
