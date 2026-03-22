@@ -5,13 +5,13 @@
       <section class="features-section">
         <template v-for="feature in visibleFeatures" :key="feature.id">
           <div
-            v-if="feature.status === 'blocked'"
-            class="feature-card"
+            v-if="feature.status === 'blocked' || !feature.path"
+            class="feature-card disabled"
           >
             <div class="card-image blocked">
               <img :src="feature.image" :alt="feature.title" />
               <div class="blocked-overlay">
-                <span class="blocked-text">{{ feature.blockedText || '即将上线' }}</span>
+                <span class="blocked-text">{{ feature.blockedText || (!feature.path ? '链接为空' : '即将上线') }}</span>
               </div>
               <div class="title-box">
                 <span class="title-text">{{ feature.title }}</span>
@@ -161,6 +161,17 @@ function goToLogin() {
   color: #1a1a1a;
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* disabled 状态 */
+.feature-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.feature-card.disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
 }
 
 /* blocked 状态 */
