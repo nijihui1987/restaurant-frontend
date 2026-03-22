@@ -142,10 +142,10 @@ function goToLogin() {
   transform: scale(1.05);
 }
 
-/* 标题盒子 - 位于图片左下角 */
+/* 标题盒子 - 位于图片左上角 */
 .title-box {
   position: absolute;
-  bottom: 8px;
+  top: 8px;
   left: 8px;
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
