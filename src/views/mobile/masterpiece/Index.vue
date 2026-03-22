@@ -1,13 +1,8 @@
 <template>
   <div class="masterpiece-intro">
-    <header class="intro-header">
-      <button class="back-btn" @click="goBack">
-        <el-icon :size="24"><ArrowLeft /></el-icon>
-      </button>
-      <h1>大师成相</h1>
-    </header>
-
     <main class="intro-content">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+
       <section class="compare-section">
         <div class="compare-grid">
           <div class="compare-item">
@@ -80,16 +75,23 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { useFeatureStore } from '@/stores/feature'
 
 const router = useRouter()
 const userStore = useUserStore()
+const featureStore = useFeatureStore()
 
-function goBack() {
-  router.back()
-}
+const pageTitle = computed(() => {
+  const feature = featureStore.features.find(f => f.path === '/masterpiece')
+  return feature?.title || '大师成相'
+})
+
+onMounted(() => {
+  featureStore.loadFeatures()
+})
 
 function startProcess() {
   if (!userStore.isLoggedIn) {
@@ -106,40 +108,18 @@ function startProcess() {
   background: #fafbfc;
 }
 
-.intro-header {
-  background: #ffffff;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: #1a1a1a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.intro-header h1 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
 .intro-content {
   padding: 24px 20px;
   max-width: 480px;
   margin: 0 auto;
+}
+
+.page-title {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
 }
 
 .compare-section {
