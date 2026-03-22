@@ -16,6 +16,85 @@
           </div>
         </router-link>
 
+        <!-- 新功能入口 -->
+        <router-link to="/batch" class="feature-item">
+          <div class="feature-icon">
+            <el-icon :size="24"><Collection /></el-icon>
+          </div>
+          <div class="feature-text">
+            <h3>批量套图成片</h3>
+            <p>一次上传多张，批量处理成专业素材</p>
+          </div>
+          <div class="feature-arrow">
+            <el-icon :size="18"><ArrowRight /></el-icon>
+          </div>
+        </router-link>
+
+        <router-link to="/enhance" class="feature-item">
+          <div class="feature-icon">
+            <el-icon :size="24"><Aim /></el-icon>
+          </div>
+          <div class="feature-text">
+            <h3>智能高清优化</h3>
+            <p>AI 提升清晰度，还原图片细节</p>
+          </div>
+          <div class="feature-arrow">
+            <el-icon :size="18"><ArrowRight /></el-icon>
+          </div>
+        </router-link>
+
+        <router-link to="/wechat" class="feature-item">
+          <div class="feature-icon">
+            <el-icon :size="24"><ChatDotRound /></el-icon>
+          </div>
+          <div class="feature-text">
+            <h3>微信营销出图</h3>
+            <p>生成适合微信分享的高质量图片</p>
+          </div>
+          <div class="feature-arrow">
+            <el-icon :size="18"><ArrowRight /></el-icon>
+          </div>
+        </router-link>
+
+        <router-link to="/dianping" class="feature-item">
+          <div class="feature-icon">
+            <el-icon :size="24"><Shop /></el-icon>
+          </div>
+          <div class="feature-text">
+            <h3>大众点评装修</h3>
+            <p>为店铺生成专业的头图和菜单</p>
+          </div>
+          <div class="feature-arrow">
+            <el-icon :size="18"><ArrowRight /></el-icon>
+          </div>
+        </router-link>
+
+        <router-link to="/douyin" class="feature-item">
+          <div class="feature-icon">
+            <el-icon :size="24"><VideoCamera /></el-icon>
+          </div>
+          <div class="feature-text">
+            <h3>抖音门店装修</h3>
+            <p>为抖音店铺生成吸睛视觉素材</p>
+          </div>
+          <div class="feature-arrow">
+            <el-icon :size="18"><ArrowRight /></el-icon>
+          </div>
+        </router-link>
+
+        <router-link to="/menu" class="feature-item">
+          <div class="feature-icon">
+            <el-icon :size="24"><Tickets /></el-icon>
+          </div>
+          <div class="feature-text">
+            <h3>印刷菜单出图</h3>
+            <p>生成适合印刷的高清菜单图片</p>
+          </div>
+          <div class="feature-arrow">
+            <el-icon :size="18"><ArrowRight /></el-icon>
+          </div>
+        </router-link>
+
         <template v-if="userStore.isLoggedIn">
           <div class="feature-item" @click="goToGallery">
             <div class="feature-icon">
@@ -59,7 +138,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { ArrowRight, Picture, User, MagicStick } from '@element-plus/icons-vue'
+import { ArrowRight, Picture, User, MagicStick, Collection, Aim, ChatDotRound, Shop, VideoCamera, Tickets } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
