@@ -1,15 +1,17 @@
 <template>
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
     <div class="image-wrapper">
-      <div class="image-container" :style="{ clipPath: diagonalClip }">
+      <div class="image-container before">
         <img :src="beforeImage" class="image" alt="Before" />
+        <div class="overlay" :style="{ clipPath: `inset(0 0 0 ${position}%)` }"></div>
       </div>
-      <div class="image-container after" :style="{ clipPath: afterClip }">
+      <div class="image-container after">
         <img :src="afterImage" class="image" alt="After" />
+        <div class="overlay" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }"></div>
       </div>
     </div>
-    <div class="slider-handle">
-      <div class="handle-line" :style="{ left: `${position}%` }"></div>
+    <div class="slider-handle" :style="{ left: `${position}%` }">
+      <div class="handle-line"></div>
     </div>
     <div class="label before-label">处理前</div>
     <div class="label after-label">处理后</div>
@@ -17,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 const props = withDefaults(defineProps<{
   beforeImage: string
@@ -29,28 +31,6 @@ const props = withDefaults(defineProps<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const position = ref(50)
-
-const angle = 15
-const tanAngle = Math.tan((angle * Math.PI) / 180)
-
-// 斜线位置：p是百分比位置(0-100)，线通过点(p, 50)
-const diagonalClip = computed(() => {
-  const p = position.value
-  // 斜线从左上角附近开始，斜向下
-  // y = tanAngle * (x - p) + 50
-  const yAt0 = 50 - p * tanAngle
-  const yAt100 = 50 + (100 - p) * tanAngle
-  // 显示斜线右下方的区域（before图右侧部分被切掉，显示左侧）
-  return `polygon(0% 0%, 0% ${yAt0}%, 100% ${yAt100}%, 100% 100%)`
-})
-
-const afterClip = computed(() => {
-  const p = position.value
-  const yAt0 = 50 - p * tanAngle
-  const yAt100 = 50 + (100 - p) * tanAngle
-  // 显示斜线左上方的区域（after图左侧部分被切掉，显示右侧）
-  return `polygon(0% ${yAt0}%, 0% 0%, 100% 0%, 100% ${yAt100}%)`
-})
 
 function updatePosition(clientX: number) {
   if (!containerRef.value) return
@@ -94,35 +74,56 @@ function onLeave() {
   height: 100%;
 }
 
-.image-container.after {
-  z-index: 2;
-}
-
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+.image-container.before {
+  z-index: 1;
+}
+
+.image-container.after {
+  z-index: 2;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 使用背景色遮挡 */
+}
+
+.image-container.before .overlay {
+  background: linear-gradient(90deg, transparent 0%, transparent 98%, rgba(255,255,255,0.1) 100%);
+}
+
+.image-container.after .overlay {
+  background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 2%, transparent 100%);
+}
+
 .slider-handle {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 3px;
+  transform: translateX(-50%);
   z-index: 10;
   pointer-events: none;
 }
 
 .handle-line {
   position: absolute;
-  top: -10%;
-  bottom: -10%;
+  top: 0;
+  bottom: 0;
   width: 2px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   transform: rotate(15deg);
-  left: 50%;
+  transform-origin: center center;
 }
 
 .label {
