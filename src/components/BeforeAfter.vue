@@ -1,5 +1,5 @@
 <template>
-  <div class="before-after" ref="containerRef" @mousedown.prevent="startDrag" @touchstart.prevent="startDrag" @click.stop="handleClick">
+  <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
     <div class="image-container">
       <img :src="afterImage" class="image after-image" alt="After" />
       <div class="image before-container" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }">
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
 const props = withDefaults(defineProps<{
   beforeImage: string
@@ -27,7 +27,6 @@ const props = withDefaults(defineProps<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const position = ref(50)
-const isDragging = ref(false)
 
 function updatePosition(clientX: number) {
   if (!containerRef.value) return
@@ -37,40 +36,14 @@ function updatePosition(clientX: number) {
   position.value = Math.max(0, Math.min(100, percent))
 }
 
-function startDrag(e: MouseEvent | TouchEvent) {
-  e.stopPropagation()
-  isDragging.value = true
-  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
-  updatePosition(clientX)
+function onHover(e: MouseEvent) {
+  updatePosition(e.clientX)
 }
 
-function onDrag(e: MouseEvent | TouchEvent) {
-  if (!isDragging.value) return
-  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
-  updatePosition(clientX)
+function onLeave() {
+  // 鼠标离开时恢复50%位置
+  position.value = 50
 }
-
-function stopDrag() {
-  isDragging.value = false
-}
-
-function handleClick(e: Event) {
-  e.stopPropagation()
-}
-
-onMounted(() => {
-  document.addEventListener('mousemove', onDrag)
-  document.addEventListener('mouseup', stopDrag)
-  document.addEventListener('touchmove', onDrag)
-  document.addEventListener('touchend', stopDrag)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('mousemove', onDrag)
-  document.removeEventListener('mouseup', stopDrag)
-  document.removeEventListener('touchmove', onDrag)
-  document.removeEventListener('touchend', stopDrag)
-})
 </script>
 
 <style scoped>
