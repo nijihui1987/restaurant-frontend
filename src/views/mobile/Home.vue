@@ -3,7 +3,7 @@
     <main class="home-content">
       <!-- 功能入口 -->
       <section class="features-section">
-        <template v-for="feature in featureStore.getVisibleFeatures()" :key="feature.id">
+        <template v-for="feature in visibleFeatures" :key="feature.id">
           <div
             v-if="feature.status === 'blocked'"
             class="feature-card"
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useFeatureStore } from '@/stores/feature'
@@ -60,6 +60,14 @@ import { ArrowRight } from '@element-plus/icons-vue'
 const router = useRouter()
 const userStore = useUserStore()
 const featureStore = useFeatureStore()
+
+// 根据用户类型获取功能列表
+const visibleFeatures = computed(() => {
+  if (userStore.isVip) {
+    return featureStore.getVipFeatures()
+  }
+  return featureStore.getUserFeatures()
+})
 
 onMounted(() => {
   featureStore.loadFeatures()
