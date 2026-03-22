@@ -42,7 +42,7 @@
           </div>
           <div
             v-else
-            class="feature-card"
+            class="feature-card disabled"
           >
             <div class="card-image">
               <img :src="feature.image" :alt="feature.title" />
@@ -52,6 +52,10 @@
             </div>
             <div class="card-info">
               <p class="card-desc">{{ feature.desc }}</p>
+              <div class="card-action disabled">
+                <span class="action-text">{{ feature.actionText || '进入' }}</span>
+                <el-icon :size="14"><ArrowRight /></el-icon>
+              </div>
             </div>
           </div>
         </template>
@@ -240,6 +244,11 @@ function goToLogin() {
 
 .feature-card:hover .card-action {
   gap: 4px;
+}
+
+.card-action.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* ==================== 登录提示 ==================== */
