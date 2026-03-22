@@ -79,7 +79,7 @@
             <span class="date-text">{{ formatDate(row.created_at) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="140" fixed="right">
+        <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" text size="small" @click="openEditDialog(row)">编辑</el-button>
             <el-button type="primary" text size="small" @click="viewUsers(row)">下属用户</el-button>
