@@ -1,0 +1,240 @@
+/**
+ * 主厨相机 - 设计系统
+ * Design System for Chef Camera
+ *
+ * 基于 "专业·高端·信赖" 品牌理念
+ * 浅色主调、高端餐厅风格、Apple 产品般精致
+ */
+
+:root {
+  /* ==================== 色彩系统 ==================== */
+
+  /* 主色 - 近黑色系 */
+  --color-primary: #1a1a1a;
+  --color-primary-hover: #333333;
+  --color-primary-active: #000000;
+  --color-primary-light: #404040;
+
+  /* 文字色 - 暖灰调 */
+  --color-text-primary: #1a1a1a;
+  --color-text-regular: #595959;
+  --color-text-secondary: #8c8c8c;
+  --color-text-placeholder: #b3b3b3;
+  --color-text-disabled: #d9d9d9;
+
+  /* 背景色 */
+  --color-bg-page: #fafbfc;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #f5f5f5;
+  --color-bg-masked: #f0f0f0;
+  --color-bg-hover: #fafafa;
+  --color-bg-active: #f0f0f0;
+
+  /* 边框色 */
+  --color-border: #f0f0f0;
+  --color-border-light: #e6e6e6;
+  --color-border-medium: #d9d9d9;
+
+  /* 语义色 */
+  --color-success: #52c41a;
+  --color-success-bg: #f6ffed;
+  --color-warning: #faad14;
+  --color-warning-bg: #fffbe6;
+  --color-danger: #ff4d4f;
+  --color-danger-bg: #fff2f0;
+  --color-info: #1890ff;
+  --color-info-bg: #e6f7ff;
+
+  /* ==================== 字体系统 ==================== */
+
+  --font-family-base: "SF Pro Text", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-display: "SF Pro Display", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "SF Mono", "JetBrains Mono", "Fira Code", Monaco, monospace;
+
+  /* 字体大小 */
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 28px;
+  --font-size-5xl: 32px;
+
+  /* 字体粗细 */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* 行高 */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+
+  /* 字间距 */
+  --letter-spacing-tight: -0.5px;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.3px;
+  --letter-spacing-wider: 0.5px;
+
+  /* ==================== 间距系统 ==================== */
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 40px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+
+  /* ==================== 圆角系统 ==================== */
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ==================== 阴影系统 ==================== */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* ==================== 过渡动画 ==================== */
+
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* 缓动函数 */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ==================== Z-Index 层级 ==================== */
+
+  --z-index-dropdown: 100;
+  --z-index-sticky: 200;
+  --z-index-fixed: 300;
+  --z-index-modal-backdrop: 400;
+  --z-index-modal: 500;
+  --z-index-popover: 600;
+  --z-index-tooltip: 700;
+  --z-index-toast: 800;
+}
+
+/* ==================== 基础重置 ==================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+}
+
+/* ==================== 滚动条样式 ==================== */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-medium);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-placeholder);
+}
+
+/* ==================== 选择文本样式 ==================== */
+
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ==================== 焦点样式 ==================== */
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ==================== 链接样式 ==================== */
+
+a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ====================  Utility Classes ==================== */
+
+/* 文字省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 行数省略 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 隐藏滚动条 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 视觉隐藏（但屏幕阅读器可读） */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,29 +1,23 @@
 <template>
   <div class="mobile-home">
-    <header class="home-header">
-      <div class="header-content">
-        <h1 class="app-name">主厨相机</h1>
-        <p class="app-motto">让每一道菜品都成为艺术</p>
-      </div>
-    </header>
-
     <main class="home-content">
+      <!-- Hero 区域 -->
       <section class="hero-section">
         <div class="hero-visual">
           <div class="hero-icon">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="24" cy="24" r="23" stroke="#1a1a1a" stroke-width="1.5"/>
-              <circle cx="24" cy="24" r="8" stroke="#1a1a1a" stroke-width="1.5"/>
-              <line x1="24" y1="1" x2="24" y2="11" stroke="#1a1a1a" stroke-width="1.5"/>
-              <line x1="24" y1="37" x2="24" y2="47" stroke="#1a1a1a" stroke-width="1.5"/>
-              <line x1="1" y1="24" x2="11" y2="24" stroke="#1a1a1a" stroke-width="1.5"/>
-              <line x1="37" y1="24" x2="47" y2="24" stroke="#1a1a1a" stroke-width="1.5"/>
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+              <circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5"/>
+              <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="24" r="3" fill="currentColor"/>
             </svg>
           </div>
-          <p class="hero-text">专业菜品视觉呈现</p>
+          <h1 class="hero-title">让每一道菜品</h1>
+          <p class="hero-subtitle">都成为艺术</p>
         </div>
       </section>
 
+      <!-- 功能入口 -->
       <section class="features-section">
         <router-link to="/masterpiece" class="feature-item feature-primary">
           <div class="feature-icon">
@@ -34,7 +28,7 @@
             <p>AI 智能识别，菜品图秒变专业摄影作品</p>
           </div>
           <div class="feature-arrow">
-            <el-icon :size="20"><ArrowRight /></el-icon>
+            <el-icon :size="18"><ArrowRight /></el-icon>
           </div>
         </router-link>
 
@@ -48,7 +42,7 @@
               <p>管理您的菜品图片，查看生成历史</p>
             </div>
             <div class="feature-arrow">
-              <el-icon :size="20"><ArrowRight /></el-icon>
+              <el-icon :size="18"><ArrowRight /></el-icon>
             </div>
           </div>
 
@@ -61,12 +55,13 @@
               <p>修改头像、密码，查看账户信息</p>
             </div>
             <div class="feature-arrow">
-              <el-icon :size="20"><ArrowRight /></el-icon>
+              <el-icon :size="18"><ArrowRight /></el-icon>
             </div>
           </div>
         </template>
       </section>
 
+      <!-- 登录提示 -->
       <section class="auth-section" v-if="!userStore.isLoggedIn">
         <p class="auth-hint">登录后可使用完整功能</p>
         <el-button type="primary" size="large" @click="goToLogin" class="auth-btn">
@@ -100,44 +95,20 @@ function goToProfile() {
 
 <style scoped>
 .mobile-home {
-  min-height: 100vh;
-  background: #fafbfc;
-}
-
-.home-header {
-  background: #ffffff;
-  padding: 48px 24px 32px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.header-content {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.app-name {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0 0 6px;
-  letter-spacing: -0.5px;
-}
-
-.app-motto {
-  font-size: 15px;
-  color: #8c8c8c;
-  margin: 0;
-  letter-spacing: 1px;
+  min-height: calc(100vh - var(--space-4xl));
+  background: var(--color-bg-page);
 }
 
 .home-content {
-  padding: 0 16px;
+  padding: 0 var(--space-lg);
   max-width: 480px;
   margin: 0 auto;
 }
 
+/* ==================== Hero 区域 ==================== */
+
 .hero-section {
-  padding: 40px 0;
+  padding: var(--space-3xl) 0 var(--space-xl);
 }
 
 .hero-visual {
@@ -148,37 +119,53 @@ function goToProfile() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: #ffffff;
+  width: 88px;
+  height: 88px;
+  background: var(--color-bg-surface);
   border-radius: 50%;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  margin-bottom: 16px;
+  color: var(--color-primary);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-md);
 }
 
-.hero-text {
-  font-size: 14px;
-  color: #8c8c8c;
+.hero-title {
   margin: 0;
-  letter-spacing: 1px;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
 }
+
+.hero-subtitle {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ==================== 功能入口 ==================== */
 
 .features-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-md);
 }
 
 .feature-item {
   display: flex;
   align-items: center;
-  padding: 18px 20px;
-  background: #ffffff;
-  border-radius: 12px;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
   text-decoration: none;
   color: inherit;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all var(--transition-fast);
   cursor: pointer;
+}
+
+.feature-item:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 .feature-item:active {
@@ -186,73 +173,96 @@ function goToProfile() {
 }
 
 .feature-primary {
-  border: 1px solid #e6e6e6;
+  border: 1px solid var(--color-border);
 }
 
 .feature-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafbfc;
-  border-radius: 10px;
-  margin-right: 16px;
-  color: #1a1a1a;
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  margin-right: var(--space-md);
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
 }
 
 .feature-primary .feature-icon {
-  background: #1a1a1a;
+  background: var(--color-primary);
   color: #ffffff;
+}
+
+.feature-item:hover .feature-icon {
+  transform: scale(1.05);
 }
 
 .feature-text {
   flex: 1;
+  min-width: 0;
 }
 
 .feature-text h3 {
-  margin: 0 0 3px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
 .feature-text p {
   margin: 0;
-  font-size: 13px;
-  color: #8c8c8c;
-  line-height: 1.4;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
 }
 
 .feature-arrow {
-  color: #cccccc;
-  margin-left: 12px;
+  color: var(--color-text-placeholder);
+  margin-left: var(--space-sm);
+  transition: all var(--transition-fast);
 }
 
+.feature-item:hover .feature-arrow {
+  color: var(--color-text-secondary);
+  transform: translateX(4px);
+}
+
+/* ==================== 登录提示 ==================== */
+
 .auth-section {
-  padding: 32px 0 48px;
+  padding: var(--space-2xl) 0 var(--space-3xl);
   text-align: center;
 }
 
 .auth-hint {
-  font-size: 14px;
-  color: #8c8c8c;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .auth-btn {
   min-width: 160px;
   height: 48px;
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 24px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-  transition: all 0.2s ease;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transition: all var(--transition-fast);
 }
 
 .auth-btn:hover {
-  background: #333;
-  border-color: #333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-btn:active {
+  background: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+  transform: translateY(0);
 }
 </style>

@@ -1,28 +1,66 @@
+/**
+ * 主厨相机 - 项目变量覆盖
+ * 用于覆盖 design-system.css 中的默认值
+ * 保持与项目实际设计的一致性
+ */
+
 :root {
-  /* 主题色 */
-  --color-primary: #409eff;
-  --color-success: #67c23a;
-  --color-warning: #e6a23c;
-  --color-danger: #f56c6c;
-  --color-info: #909399;
+  /* 主色调 - 近黑色系（覆盖 design-system 默认值） */
+  --color-primary: #1a1a1a;
+  --color-primary-hover: #333333;
+  --color-primary-active: #000000;
+
+  /* Element Plus 主题色覆盖（保持兼容性） */
+  --el-color-primary: #1a1a1a;
+  --el-color-primary-light-3: #404040;
+  --el-color-primary-light-5: #595959;
+  --el-color-primary-light-7: #808080;
+  --el-color-primary-light-8: #999999;
+  --el-color-primary-light-9: #b3b3b3;
+  --el-color-primary-dark-2: #000000;
 
   /* 文字颜色 */
-  --text-primary: #303133;
-  --text-regular: #606266;
-  --text-secondary: #909399;
-  --text-tertiary: #c0c4cc;
+  --text-primary: #1a1a1a;
+  --text-regular: #595959;
+  --text-secondary: #8c8c8c;
+  --text-tertiary: #b3b3b3;
 
   /* 背景颜色 */
   --bg-white: #ffffff;
   --bg-gray-50: #fafbfc;
-  --bg-gray-100: #f5f7fa;
-  --bg-gray-200: #ebeef5;
+  --bg-gray-100: #f5f5f5;
+  --bg-gray-200: #f0f0f0;
 
-  /* 侧边栏 */
-  --sidebar-bg: #304156;
-  --sidebar-hover: #263445;
+  /* 侧边栏 - 管理后台深色侧边栏 */
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #fafbfc;
+  --sidebar-active: #f5f5f5;
 
   /* 边框 */
-  --border-color: #dcdfe6;
-  --border-light: #e4e7ed;
+  --border-color: #f0f0f0;
+  --border-light: #e6e6e6;
+
+  /* 成功/警告/危险色 */
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-danger: #ff4d4f;
+  --color-info: #1890ff;
+
+  /* Element Plus 覆盖 */
+  --el-color-success: #52c41a;
+  --el-color-warning: #faad14;
+  --el-color-danger: #ff4d4f;
+  --el-color-info: #1890ff;
+
+  /* 字体 */
+  --font-family-base: "SF Pro Text", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* 圆角 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
 }

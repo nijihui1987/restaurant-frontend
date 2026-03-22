@@ -1,54 +1,71 @@
 <template>
-  <div class="login-container">
-    <div class="login-header">
-      <h1 class="logo">主厨相机</h1>
-      <p class="tagline">专业菜品视觉呈现</p>
-    </div>
+  <div class="login-page">
+    <div class="login-container">
+      <!-- Logo 区域 -->
+      <div class="login-header">
+        <img
+          v-if="logoUrl"
+          :src="logoUrl"
+          alt="大师相机"
+          class="login-logo"
+          @error="handleLogoError"
+        />
+        <div v-else class="login-brand">
+          <span class="brand-name">大师相机</span>
+          <span class="brand-tagline">专业菜品视觉呈现</span>
+        </div>
+      </div>
 
-    <div class="login-card">
-      <h2 class="login-title">欢迎回来</h2>
-      <p class="login-hint">登录以继续使用</p>
+      <!-- 登录卡片 -->
+      <div class="login-card">
+        <div class="card-header">
+          <h2 class="card-title">欢迎回来</h2>
+          <p class="card-hint">登录以继续使用</p>
+        </div>
 
-      <el-form @submit.prevent="handleLogin" class="login-form">
-        <el-form-item>
-          <el-input
-            v-model="username"
-            placeholder="请输入用户名"
-            size="large"
-            :prefix-icon="User"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-input
-            v-model="password"
-            type="password"
-            placeholder="请输入密码"
-            size="large"
-            :prefix-icon="Lock"
-            show-password
-          />
-        </el-form-item>
-        <el-form-item>
+        <el-form @submit.prevent="handleLogin" class="login-form">
+          <div class="form-item">
+            <label class="form-label">用户名</label>
+            <el-input
+              v-model="username"
+              placeholder="请输入用户名"
+              size="large"
+              :prefix-icon="User"
+              class="form-input"
+            />
+          </div>
+          <div class="form-item">
+            <label class="form-label">密码</label>
+            <el-input
+              v-model="password"
+              type="password"
+              placeholder="请输入密码"
+              size="large"
+              :prefix-icon="Lock"
+              show-password
+              class="form-input"
+            />
+          </div>
           <el-button
             type="primary"
             native-type="submit"
             :loading="loading"
             size="large"
-            class="login-btn"
+            class="submit-btn"
           >
             登录
           </el-button>
-        </el-form-item>
-      </el-form>
+        </el-form>
 
-      <div class="register-hint">
-        <span>新用户？</span>
-        <router-link to="/register" class="register-link">立即注册</router-link>
+        <div class="login-footer">
+          <span class="footer-text">新用户？</span>
+          <router-link to="/register" class="register-link">立即注册</router-link>
+        </div>
       </div>
-    </div>
 
-    <div class="login-footer">
-      <p>登录即表示同意<a href="#" class="link">《用户协议》</a></p>
+      <div class="login-legal">
+        <p>登录即表示同意<a href="#" class="legal-link">《用户协议》</a></p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +76,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
+import { getLogoConfig } from '@/api/config'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -66,6 +84,22 @@ const userStore = useUserStore()
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
+const logoUrl = ref('/images/logo.svg')
+
+async function fetchLogo() {
+  try {
+    const config = await getLogoConfig()
+    if (config && config.logo_url) {
+      logoUrl.value = config.logo_url
+    }
+  } catch (error) {
+    console.error('Failed to fetch logo:', error)
+  }
+}
+
+function handleLogoError() {
+  logoUrl.value = ''
+}
 
 async function handleLogin() {
   if (!username.value || !password.value) {
@@ -89,142 +123,202 @@ async function handleLogin() {
     loading.value = false
   }
 }
+
+fetchLogo()
 </script>
 
 <style scoped>
-.login-container {
+.login-page {
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-page);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: #fafbfc;
-  padding: 40px 24px;
 }
+
+/* ==================== Logo 区域 ==================== */
 
 .login-header {
+  margin-bottom: var(--space-2xl);
   text-align: center;
-  margin-bottom: 48px;
 }
 
-.logo {
-  font-size: 32px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0 0 8px;
-  letter-spacing: -0.5px;
+.login-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
 }
 
-.tagline {
-  font-size: 15px;
-  color: #8c8c8c;
-  margin: 0;
-  letter-spacing: 2px;
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
 }
+
+.brand-name {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.brand-tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ==================== 登录卡片 ==================== */
 
 .login-card {
   width: 100%;
-  max-width: 340px;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 32px 28px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
 }
 
-.login-title {
-  margin: 0 0 4px;
-  font-size: 22px;
-  font-weight: 600;
-  color: #1a1a1a;
-  letter-spacing: -0.3px;
+.card-header {
+  margin-bottom: var(--space-lg);
 }
 
-.login-hint {
-  margin: 0 0 28px;
-  font-size: 14px;
-  color: #8c8c8c;
+.card-title {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
+
+.card-hint {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ==================== 表单 ==================== */
 
 .login-form {
-  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 
-.login-form :deep(.el-form-item) {
-  margin-bottom: 16px;
+.form-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
-.login-form :deep(.el-input__wrapper) {
-  padding: 4px 16px;
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px #e6e6e6;
-  transition: box-shadow 0.2s ease;
+.form-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-regular);
 }
 
-.login-form :deep(.el-input__wrapper:hover),
-.login-form :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px #1a1a1a;
+.form-input {
+  --el-input-bg-color: var(--color-bg-surface);
+  --el-input-border-color: var(--color-border);
+  --el-input-hover-border-color: var(--color-border-medium);
+  --el-input-focus-border-color: var(--color-primary);
 }
 
-.login-form :deep(.el-input__inner) {
-  font-size: 15px;
-  height: 40px;
+.form-input :deep(.el-input__wrapper) {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 1px var(--color-border);
+  transition: all var(--transition-fast);
 }
 
-.login-btn {
+.form-input :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--color-border-medium);
+}
+
+.form-input :deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.form-input :deep(.el-input__inner) {
+  font-size: var(--font-size-md);
+}
+
+.submit-btn {
   width: 100%;
   height: 48px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 8px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-  margin-top: 8px;
-  transition: all 0.2s ease;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  margin-top: var(--space-sm);
+  transition: all var(--transition-fast);
 }
 
-.login-btn:hover {
-  background: #333;
-  border-color: #333;
+.submit-btn:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
-.login-btn:active {
-  background: #000;
-  border-color: #000;
+.submit-btn:active {
+  background: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+  transform: translateY(0);
 }
+
+/* ==================== 页脚 ==================== */
 
 .login-footer {
-  margin-top: 32px;
+  margin-top: var(--space-lg);
   text-align: center;
-}
-
-.login-footer p {
-  font-size: 12px;
-  color: #b3b3b3;
-  margin: 0;
-}
-
-.login-footer .link {
-  color: #1a1a1a;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.register-hint {
-  text-align: center;
-  margin-top: 16px;
-  font-size: 14px;
-  color: #8c8c8c;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .register-link {
-  color: #1a1a1a;
-  font-weight: 500;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
-  margin-left: 4px;
+  margin-left: var(--space-xs);
+  transition: color var(--transition-fast);
 }
 
 .register-link:hover {
+  color: var(--color-primary-hover);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.login-legal {
+  margin-top: var(--space-xl);
+  text-align: center;
+}
+
+.login-legal p {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-placeholder);
+}
+
+.legal-link {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+}
+
+.legal-link:hover {
+  color: var(--color-text-primary);
 }
 </style>
