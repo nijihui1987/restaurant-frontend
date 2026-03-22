@@ -147,11 +147,12 @@ function goToLogin() {
   position: absolute;
   top: 8px;
   left: 8px;
-  background: rgba(255, 255, 255, 0.7);
+  background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
   backdrop-filter: blur(8px);
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.5);
 }
 
 .title-text {
@@ -159,6 +160,7 @@ function goToLogin() {
   font-weight: 600;
   color: #1a1a1a;
   white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
 }
 
 /* blocked 状态 */
@@ -263,7 +265,7 @@ function goToLogin() {
   .title-box {
     top: 10px;
     left: 10px;
-    padding: 4px 8px;
+    padding: 5px 10px;
   }
 
   .title-text {
