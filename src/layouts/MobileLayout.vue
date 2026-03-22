@@ -137,8 +137,8 @@ async function fetchAnnouncement() {
 async function fetchLogo() {
   try {
     const config = await getLogoConfig()
-    if (config && config.logo_url) {
-      logoUrl.value = config.logo_url
+    if (config && config.mobile_logo) {
+      logoUrl.value = config.mobile_logo
     }
   } catch (error) {
     console.error('Failed to fetch logo:', error)

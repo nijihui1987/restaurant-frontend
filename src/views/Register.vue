@@ -113,8 +113,8 @@ const logoUrl = ref('/images/logo.png')
 async function fetchLogo() {
   try {
     const config = await getLogoConfig()
-    if (config && config.logo_url) {
-      logoUrl.value = config.logo_url
+    if (config && config.login_logo) {
+      logoUrl.value = config.login_logo
     }
   } catch (error) {
     console.error('Failed to fetch logo:', error)

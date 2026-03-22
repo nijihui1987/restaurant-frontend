@@ -67,8 +67,16 @@ export async function saveTutorial(content: string): Promise<boolean> {
   return saveConfig('system', 'tutorial', content)
 }
 
-// 获取Logo配置
-export async function getLogoConfig(): Promise<{ logo_url: string; logo_text: string } | null> {
+// Logo 配置项
+export interface LogoConfig {
+  pc_logo: string  // PC 端 logo URL
+  mobile_logo: string  // 移动端 logo URL
+  login_logo: string  // 登录页 logo URL
+  logo_text: string  // 备用文字
+}
+
+// 获取 Logo 配置
+export async function getLogoConfig(): Promise<LogoConfig | null> {
   try {
     const value = await getConfig('system', 'logo')
     if (!value) return null
@@ -79,8 +87,8 @@ export async function getLogoConfig(): Promise<{ logo_url: string; logo_text: st
   }
 }
 
-// 保存Logo配置
-export async function saveLogoConfig(config: { logo_url: string; logo_text: string }): Promise<boolean> {
+// 保存 Logo 配置
+export async function saveLogoConfig(config: LogoConfig): Promise<boolean> {
   return saveConfig('system', 'logo', JSON.stringify(config))
 }
 

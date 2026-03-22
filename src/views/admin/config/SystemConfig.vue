@@ -1,6 +1,57 @@
 <template>
   <div class="system-config">
     <div class="config-sections">
+      <!-- Logo 配置 -->
+      <div class="config-card">
+        <h2>Logo 设置</h2>
+        <el-form label-width="140px">
+          <el-form-item label="PC 端 Logo">
+            <el-input
+              v-model="logoConfig.pc_logo"
+              placeholder="输入 PC 端 logo 图片 URL"
+              @blur="handleLogoSave"
+            >
+              <template #append>
+                <el-button @click="triggerLogoUpload('pc')">上传</el-button>
+              </template>
+            </el-input>
+            <div class="logo-preview" v-if="logoConfig.pc_logo">
+              <img :src="logoConfig.pc_logo" alt="PC Logo" />
+            </div>
+          </el-form-item>
+
+          <el-form-item label="移动端 Logo">
+            <el-input
+              v-model="logoConfig.mobile_logo"
+              placeholder="输入移动端 logo 图片 URL"
+              @blur="handleLogoSave"
+            >
+              <template #append>
+                <el-button @click="triggerLogoUpload('mobile')">上传</el-button>
+              </template>
+            </el-input>
+            <div class="logo-preview" v-if="logoConfig.mobile_logo">
+              <img :src="logoConfig.mobile_logo" alt="Mobile Logo" />
+            </div>
+          </el-form-item>
+
+          <el-form-item label="登录页 Logo">
+            <el-input
+              v-model="logoConfig.login_logo"
+              placeholder="输入登录页 logo 图片 URL"
+              @blur="handleLogoSave"
+            >
+              <template #append>
+                <el-button @click="triggerLogoUpload('login')">上传</el-button>
+              </template>
+            </el-input>
+            <div class="logo-preview" v-if="logoConfig.login_logo">
+              <img :src="logoConfig.login_logo" alt="Login Logo" />
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <div class="config-card">
         <h2>账务参数</h2>
         <el-form label-width="160px">
@@ -49,9 +100,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getConfig, saveConfig } from '@/api/config'
+import { getConfig, saveConfig, getLogoConfig, saveLogoConfig, type LogoConfig } from '@/api/config'
+import { uploadFile } from '@/api/oss'
 
 const config = ref({
   coinExchangeRate: 10,
@@ -97,8 +149,74 @@ async function handleChange(key: string, value: number | boolean) {
   }
 }
 
+// Logo 配置
+const logoConfig = reactive<LogoConfig>({
+  pc_logo: '',
+  mobile_logo: '',
+  login_logo: '',
+  logo_text: ''
+})
+
+let logoUploadTarget: 'pc' | 'mobile' | 'login' = 'pc'
+
+async function loadLogoConfig() {
+  try {
+    const data = await getLogoConfig()
+    if (data) {
+      logoConfig.pc_logo = data.pc_logo || ''
+      logoConfig.mobile_logo = data.mobile_logo || ''
+      logoConfig.login_logo = data.login_logo || ''
+      logoConfig.logo_text = data.logo_text || ''
+    }
+  } catch (error) {
+    console.error('加载 Logo 配置失败', error)
+  }
+}
+
+async function handleLogoSave() {
+  try {
+    await saveLogoConfig({
+      pc_logo: logoConfig.pc_logo,
+      mobile_logo: logoConfig.mobile_logo,
+      login_logo: logoConfig.login_logo,
+      logo_text: logoConfig.logo_text
+    })
+    ElMessage.success('Logo 配置已保存')
+  } catch (error) {
+    ElMessage.error('保存失败')
+  }
+}
+
+function triggerLogoUpload(target: 'pc' | 'mobile' | 'login') {
+  logoUploadTarget = target
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  input.onchange = async (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0]
+    if (file) {
+      try {
+        const res = await uploadFile(file, 'logos')
+        if (logoUploadTarget === 'pc') {
+          logoConfig.pc_logo = res.url
+        } else if (logoUploadTarget === 'mobile') {
+          logoConfig.mobile_logo = res.url
+        } else {
+          logoConfig.login_logo = res.url
+        }
+        await handleLogoSave()
+        ElMessage.success('Logo 上传成功')
+      } catch (error) {
+        ElMessage.error('上传失败')
+      }
+    }
+  }
+  input.click()
+}
+
 onMounted(() => {
   loadConfig()
+  loadLogoConfig()
 })
 </script>
 
@@ -127,6 +245,20 @@ onMounted(() => {
   color: #1a1a1a;
   padding-bottom: 12px;
   border-bottom: 1px solid #f0f0f0;
+}
+
+.logo-preview {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.logo-preview img {
+  max-height: 60px;
+  max-width: 200px;
+  object-fit: contain;
 }
 
 .form-tip {
