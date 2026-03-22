@@ -19,7 +19,6 @@
               <p class="card-desc">{{ feature.desc }}</p>
               <div class="card-action">
                 <span class="action-text">{{ feature.actionText || '进入' }}</span>
-                <el-icon :size="14"><ArrowRight /></el-icon>
               </div>
             </div>
           </router-link>
@@ -54,7 +53,6 @@
               <p class="card-desc">{{ feature.desc }}</p>
               <div class="card-action disabled">
                 <span class="action-text">{{ feature.actionText || '进入' }}</span>
-                <el-icon :size="14"><ArrowRight /></el-icon>
               </div>
             </div>
           </div>
@@ -77,7 +75,6 @@ import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useFeatureStore } from '@/stores/feature'
-import { ArrowRight } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
