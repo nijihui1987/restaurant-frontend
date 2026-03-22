@@ -147,7 +147,7 @@ function goToLogin() {
   position: absolute;
   bottom: 8px;
   left: 8px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
   padding: 4px 8px;
   border-radius: 4px;
@@ -195,7 +195,7 @@ function goToLogin() {
 
 .card-desc {
   margin: 0 0 var(--space-sm);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
 }
