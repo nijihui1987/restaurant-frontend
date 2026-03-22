@@ -1,24 +1,6 @@
 <template>
   <div class="mobile-home">
     <main class="home-content">
-      <!-- Hero 区域 -->
-      <section class="hero-section">
-        <div class="hero-visual">
-          <div class="hero-icon">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <!-- 相机轮廓 -->
-              <circle cx="24" cy="24" r="14" stroke="currentColor" stroke-width="2" stroke-opacity="0.6"/>
-              <!-- 光圈叶片 -->
-              <path d="M24 14 L26 20 L32 20 L27 24 L29 30 L24 26 L19 30 L21 24 L16 20 L22 20 Z" fill="currentColor" opacity="0.5"/>
-              <!-- 中心点 -->
-              <circle cx="24" cy="24" r="3" fill="currentColor"/>
-            </svg>
-          </div>
-          <h1 class="hero-title">让每一道菜品</h1>
-          <p class="hero-subtitle">都成为艺术</p>
-        </div>
-      </section>
-
       <!-- 功能入口 -->
       <section class="features-section">
         <router-link to="/masterpiece" class="feature-item feature-primary">
@@ -105,45 +87,6 @@ function goToProfile() {
   padding: 0 var(--space-lg);
   max-width: 480px;
   margin: 0 auto;
-}
-
-/* ==================== Hero 区域 ==================== */
-
-.hero-section {
-  padding: var(--space-3xl) 0 var(--space-xl);
-}
-
-.hero-visual {
-  text-align: center;
-}
-
-.hero-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 88px;
-  height: 88px;
-  background: var(--color-bg-surface);
-  border-radius: 50%;
-  color: var(--color-primary);
-  margin-bottom: var(--space-lg);
-  box-shadow: var(--shadow-md);
-}
-
-.hero-title {
-  margin: 0;
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-.hero-subtitle {
-  margin: var(--space-xs) 0 0;
-  font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
-  letter-spacing: var(--letter-spacing-wide);
 }
 
 /* ==================== 功能入口 ==================== */

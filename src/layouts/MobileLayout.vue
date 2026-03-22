@@ -11,7 +11,7 @@
           @error="handleLogoError"
         />
         <span v-else class="brand-text">主厨相机</span>
-        <span class="brand-tagline">专业菜品视觉呈现</span>
+        <span class="brand-tagline">让每一道菜成为艺术</span>
       </div>
       <div class="header-announcement" v-if="announcement">
         <span class="announcement-icon">

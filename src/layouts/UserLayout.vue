@@ -11,7 +11,7 @@
           @error="handleLogoError"
         />
         <span v-else class="brand-text">主厨相机</span>
-        <span class="brand-tagline">专业菜品视觉呈现</span>
+        <span class="brand-tagline">让每一道菜成为艺术</span>
       </div>
       <div class="header-announcement" v-if="announcement">
         <span class="announcement-icon">
@@ -29,23 +29,30 @@
       <!-- 左侧导航 -->
       <aside class="sidebar">
         <nav class="nav-menu">
-          <router-link
-            to="/"
-            class="nav-item"
-            :class="{ active: isActive('/') }"
-          >
-            <el-icon :size="20"><Operation /></el-icon>
-            <span class="nav-label">功能</span>
-          </router-link>
-
-          <router-link
-            to="/masterpiece"
-            class="nav-item"
-            :class="{ active: isActive('/masterpiece') }"
-          >
-            <el-icon :size="20"><MagicStick /></el-icon>
-            <span class="nav-label">大师成相</span>
-          </router-link>
+          <!-- 全部功能（可折叠） -->
+          <div class="nav-group">
+            <div
+              class="nav-parent"
+              @click="toggleFeatureMenu"
+              :class="{ active: isFeatureMenuActive }"
+            >
+              <el-icon :size="20"><Operation /></el-icon>
+              <span class="nav-label">全部功能</span>
+              <el-icon :size="14" class="nav-arrow" :class="{ expanded: featureMenuExpanded }">
+                <ArrowRight />
+              </el-icon>
+            </div>
+            <div class="nav-children" v-show="featureMenuExpanded">
+              <router-link
+                to="/masterpiece"
+                class="nav-child"
+                :class="{ active: isActive('/masterpiece') }"
+              >
+                <span class="child-dot"></span>
+                <span class="child-label">大师成相</span>
+              </router-link>
+            </div>
+          </div>
 
           <router-link
             to="/tutorial"
@@ -53,7 +60,7 @@
             :class="{ active: isActive('/tutorial') }"
           >
             <el-icon :size="20"><Reading /></el-icon>
-            <span class="nav-label">教程</span>
+            <span class="nav-label">使用教程</span>
           </router-link>
 
           <router-link
@@ -63,7 +70,7 @@
             :class="{ active: isActive('/gallery') }"
           >
             <el-icon :size="20"><Picture /></el-icon>
-            <span class="nav-label">图库</span>
+            <span class="nav-label">我的图库</span>
           </router-link>
 
           <router-link
@@ -73,7 +80,7 @@
             :class="{ active: isActive('/profile') }"
           >
             <el-icon :size="20"><User /></el-icon>
-            <span class="nav-label">我的</span>
+            <span class="nav-label">个人设置</span>
           </router-link>
 
           <router-link
@@ -101,10 +108,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { Operation, MagicStick, Reading, Picture, User, Key } from '@element-plus/icons-vue'
+import { Operation, Reading, Picture, User, Key, ArrowRight } from '@element-plus/icons-vue'
 import { getAnnouncement, getLogoConfig } from '@/api/config'
 
 const route = useRoute()
@@ -112,6 +119,15 @@ const userStore = useUserStore()
 
 const announcement = ref('')
 const logoUrl = ref('/images/logo.svg')
+const featureMenuExpanded = ref(true) // 默认全部展开
+
+const isFeatureMenuActive = computed(() => {
+  return route.path.startsWith('/masterpiece')
+})
+
+function toggleFeatureMenu() {
+  featureMenuExpanded.value = !featureMenuExpanded.value
+}
 
 function isActive(path: string) {
   if (path === '/') {
@@ -237,6 +253,101 @@ fetchLogo()
 
 .nav-menu {
   padding: var(--space-md) var(--space-sm);
+}
+
+.nav-group {
+  margin-bottom: var(--space-xs);
+}
+
+.nav-parent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-text-regular);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast);
+  margin: 2px var(--space-xs);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-parent::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 16px;
+  background: var(--color-primary);
+  border-radius: 0 2px 2px 0;
+  transition: transform var(--transition-fast) var(--ease-out-quart);
+}
+
+.nav-parent:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.nav-parent.active {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-parent.active::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+.nav-arrow {
+  margin-left: auto;
+  transition: transform var(--transition-fast);
+}
+
+.nav-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.nav-children {
+  padding-left: var(--space-lg);
+}
+
+.nav-child {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  margin: 2px var(--space-xs);
+  border-radius: var(--radius-sm);
+}
+
+.nav-child:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.nav-child.active {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.child-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.nav-child.active .child-dot {
+  opacity: 1;
+  background: var(--color-primary);
 }
 
 .nav-item {
