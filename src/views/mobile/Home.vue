@@ -261,9 +261,9 @@ function goToLogin() {
   }
 
   .title-box {
-    bottom: 10px;
+    top: 10px;
     left: 10px;
-    padding: 5px 10px;
+    padding: 4px 8px;
   }
 
   .title-text {
