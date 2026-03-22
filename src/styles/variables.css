@@ -4,52 +4,52 @@
  */
 
 :root {
-  /* 主色调覆盖 - 暖琥珀色 */
-  --color-primary: #C8854A;
-  --color-primary-hover: #B8733F;
-  --color-primary-active: #A66335;
+  /* 主色调覆盖 - 经典黑色系 */
+  --color-primary: #1a1a1a;
+  --color-primary-hover: #333333;
+  --color-primary-active: #000000;
 
   /* Element Plus 主题色覆盖 */
-  --el-color-primary: #C8854A;
-  --el-color-primary-light-3: #D9A07A;
-  --el-color-primary-light-5: #E5C4A8;
-  --el-color-primary-light-7: #F0DBCB;
-  --el-color-primary-light-8: #F5E6D8;
-  --el-color-primary-light-9: #FAF0E6;
-  --el-color-primary-dark-2: #A66335;
+  --el-color-primary: #1a1a1a;
+  --el-color-primary-light-3: #595959;
+  --el-color-primary-light-5: #8C8C8C;
+  --el-color-primary-light-7: #B3B3B3;
+  --el-color-primary-light-8: #D4D4D4;
+  --el-color-primary-light-9: #EBEBEB;
+  --el-color-primary-dark-2: #000000;
 
   /* 文字颜色 */
-  --text-primary: #2D2A26;
-  --text-regular: #5C5650;
-  --text-secondary: #8A8279;
-  --text-tertiary: #B5AEA4;
+  --text-primary: #1a1a1a;
+  --text-regular: #595959;
+  --text-secondary: #8C8C8C;
+  --text-tertiary: #B3B3B3;
 
   /* 背景颜色 */
   --bg-white: #ffffff;
-  --bg-gray-50: #FAF8F6;
-  --bg-gray-100: #F5F2EE;
-  --bg-gray-200: #EDE9E4;
+  --bg-gray-50: #FAFAFA;
+  --bg-gray-100: #F5F5F5;
+  --bg-gray-200: #EBEBEB;
 
   /* 侧边栏 */
   --sidebar-bg: #ffffff;
-  --sidebar-hover: #FAF8F6;
-  --sidebar-active: #F0ECE7;
+  --sidebar-hover: #FAFAFA;
+  --sidebar-active: #F0F0F0;
 
   /* 边框 */
-  --border-color: #EDE9E4;
-  --border-light: #E5E0DA;
+  --border-color: #E5E5E5;
+  --border-light: #EBEBEB;
 
   /* 语义色覆盖 */
-  --color-success: #6B8E5A;
-  --color-warning: #D4A04A;
-  --color-danger: #C45B4A;
-  --color-info: #5A7A8A;
+  --color-success: #2D5A27;
+  --color-warning: #8B6914;
+  --color-danger: #A63D3D;
+  --color-info: #3D5A7A;
 
   /* Element Plus 语义色覆盖 */
-  --el-color-success: #6B8E5A;
-  --el-color-warning: #D4A04A;
-  --el-color-danger: #C45B4A;
-  --el-color-info: #5A7A8A;
+  --el-color-success: #2D5A27;
+  --el-color-warning: #8B6914;
+  --el-color-danger: #A63D3D;
+  --el-color-info: #3D5A7A;
 
   /* 字体 */
   --font-family-base: "SF Pro Text", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -60,6 +60,6 @@
   --radius-lg: 16px;
 
   /* 阴影 */
-  --shadow-sm: 0 1px 2px rgba(45, 42, 38, 0.04);
-  --shadow-md: 0 2px 8px rgba(45, 42, 38, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
 }

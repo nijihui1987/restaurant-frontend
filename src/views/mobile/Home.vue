@@ -6,21 +6,13 @@
         <div class="hero-visual">
           <div class="hero-icon">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <!-- 相机镜头光晕效果 -->
-              <circle cx="24" cy="24" r="20" fill="url(#heroGrad)" opacity="0.1"/>
               <!-- 相机轮廓 -->
-              <circle cx="24" cy="24" r="14" stroke="currentColor" stroke-width="2" stroke-opacity="0.8"/>
+              <circle cx="24" cy="24" r="14" stroke="currentColor" stroke-width="2" stroke-opacity="0.6"/>
               <!-- 光圈叶片 -->
-              <path d="M24 14 L26 20 L32 20 L27 24 L29 30 L24 26 L19 30 L21 24 L16 20 L22 20 Z" fill="currentColor" opacity="0.6"/>
+              <path d="M24 14 L26 20 L32 20 L27 24 L29 30 L24 26 L19 30 L21 24 L16 20 L22 20 Z" fill="currentColor" opacity="0.5"/>
               <!-- 中心点 -->
               <circle cx="24" cy="24" r="3" fill="currentColor"/>
             </svg>
-            <defs>
-              <radialGradient id="heroGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="var(--color-primary)"/>
-                <stop offset="100%" stop-color="var(--color-secondary)"/>
-              </radialGradient>
-            </defs>
           </div>
           <h1 class="hero-title">让每一道菜品</h1>
           <p class="hero-subtitle">都成为艺术</p>

@@ -9,76 +9,76 @@
 :root {
   /* ==================== 品牌色彩 ==================== */
 
-  /* 主色调 - 暖琥珀色（烹饪的温暖感） */
-  --color-primary: #C8854A;
-  --color-primary-hover: #B8733F;
-  --color-primary-active: #A66335;
-  --color-primary-light: #D9A07A;
+  /* 主色调 - 经典黑色系（专业摄影器材感） */
+  --color-primary: #1a1a1a;
+  --color-primary-hover: #333333;
+  --color-primary-active: #000000;
+  --color-primary-light: #404040;
 
-  /* 深辅助色 - 赭石色（土地的沉稳感） */
-  --color-secondary: #8B5A3C;
-  --color-secondary-hover: #7A4E35;
-  --color-secondary-active: #694230;
+  /* 深辅助色 - 深灰 */
+  --color-secondary: #595959;
+  --color-secondary-hover: #4A4A4A;
+  --color-secondary-active: #3A3A3A;
 
-  /* 点缀色 - 奶油白（新鲜、纯净） */
-  --color-accent: #E8D5C4;
-  --color-accent-hover: #DEC9B5;
-  --color-accent-active: #D4BDA6;
+  /* 点缀色 - 浅灰 */
+  --color-accent: #E5E5E5;
+  --color-accent-hover: #D4D4D4;
+  --color-accent-active: #C4C4C4;
 
-  /* ==================== 文字色（暖棕调） ==================== */
+  /* ==================== 文字色（中性灰调） ==================== */
 
-  --color-text-primary: #2D2A26;     /* 深棕黑 - 主要文字 */
-  --color-text-regular: #5C5650;     /* 中棕 - 常规文字 */
-  --color-text-secondary: #8A8279;   /* 浅棕 - 次要文字 */
-  --color-text-placeholder: #B5AEA4; /* 暖灰 - 占位文字 */
-  --color-text-disabled: #D1CBC3;   /* 淡灰 - 禁用文字 */
+  --color-text-primary: #1a1a1a;     /* 深黑 - 主要文字 */
+  --color-text-regular: #595959;     /* 中灰 - 常规文字 */
+  --color-text-secondary: #8C8C8C;   /* 浅灰 - 次要文字 */
+  --color-text-placeholder: #B3B3B3; /* 淡灰 - 占位文字 */
+  --color-text-disabled: #D1D1D1;   /* 极淡灰 - 禁用文字 */
 
-  /* ==================== 背景色（暖米色调） ==================== */
+  /* ==================== 背景色（纯净白灰调） ==================== */
 
-  --color-bg-page: #FAF8F6;    /* 米白 - 页面背景 */
+  --color-bg-page: #FAFAFA;    /* 极浅灰 - 页面背景 */
   --color-bg-surface: #FFFFFF;  /* 纯白 - 卡片/表面 */
-  --color-bg-elevated: #F5F2EE; /* 暖白 - 提升层级 */
-  --color-bg-masked: #EDE9E4;  /* 暖灰 - 分割线/边框 */
-  --color-bg-hover: #FAF8F6;    /* 悬停背景 */
-  --color-bg-active: #F0ECE7;  /* 激活背景 */
+  --color-bg-elevated: #F5F5F5; /* 浅灰 - 提升层级 */
+  --color-bg-masked: #EBEBEB;  /* 分割灰 - 分割线/边框 */
+  --color-bg-hover: #F5F5F5;    /* 悬停背景 */
+  --color-bg-active: #EEEEEE;  /* 激活背景 */
 
-  /* ==================== 边框色（暖调） ==================== */
+  /* ==================== 边框色（精致灰调） ==================== */
 
-  --color-border: #EDE9E4;
-  --color-border-light: #E5E0DA;
-  --color-border-medium: #D5CFC7;
+  --color-border: #E5E5E5;
+  --color-border-light: #EBEBEB;
+  --color-border-medium: #D4D4D4;
 
-  /* ==================== 语义色（温暖调） ==================== */
+  /* ==================== 语义色（专业摄影调） ==================== */
 
-  /* 成功 - 橄榄绿（自然、健康） */
-  --color-success: #6B8E5A;
-  --color-success-bg: #F0F5ED;
-  --color-success-border: #C5D4B8;
+  /* 成功 - 墨绿（沉稳、自然） */
+  --color-success: #2D5A27;
+  --color-success-bg: #F0F5EE;
+  --color-success-border: #B8D4A8;
 
-  /* 警告 - 琥珀金（温暖、警示） */
-  --color-warning: #D4A04A;
-  --color-warning-bg: #FBF6EC;
-  --color-warning-border: #E8D5A8;
+  /* 警告 - 深金（沉稳、警示） */
+  --color-warning: #8B6914;
+  --color-warning-bg: #FBF8EE;
+  --color-warning-border: #D4C896;
 
-  /* 危险 - 珊瑚红（新鲜、紧急） */
-  --color-danger: #C45B4A;
-  --color-danger-bg: #FBF0ED;
-  --color-danger-border: #E8C4B8;
+  /* 危险 - 深红（沉稳、紧急） */
+  --color-danger: #A63D3D;
+  --color-danger-bg: #FBF0F0;
+  --color-danger-border: #D4A8A8;
 
   /* 信息 - 深蓝灰（沉稳、专业） */
-  --color-info: #5A7A8A;
-  --color-info-bg: #EDF2F5;
-  --color-info-border: #B8C8D4;
+  --color-info: #3D5A7A;
+  --color-info-bg: #EEF2F5;
+  --color-info-border: #A8B8CC;
 
   /* ==================== 功能色（摄影专业） ==================== */
 
   /* 高光强调 - 用于重要操作和焦点 */
-  --color-highlight: #C8854A;
-  --color-highlight-bg: #FDF8F3;
+  --color-highlight: #1a1a1a;
+  --color-highlight-bg: #F5F5F5;
 
   /* 图片相关 - 用于图片预览和展示 */
-  --color-image-bg: #F8F5F2;
-  --color-image-placeholder: #E8E2DC;
+  --color-image-bg: #F8F8F8;
+  --color-image-placeholder: #E0E0E0;
 
   /* ==================== 字体系统 ==================== */
 
