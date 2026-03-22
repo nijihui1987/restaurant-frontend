@@ -157,6 +157,11 @@ async function loadConfig() {
 }
 
 async function saveAnnouncement() {
+  // 验证：开启时内容不能为空
+  if (announcement.value.enabled && !announcement.value.content.trim()) {
+    ElMessage.warning('开启公告时，内容不能为空')
+    return
+  }
   savingAnnouncement.value = true
   try {
     const result = await saveAnnouncementApi(announcement.value)
