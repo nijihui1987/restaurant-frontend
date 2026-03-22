@@ -1,56 +1,55 @@
 /**
  * 主厨相机 - 项目变量覆盖
- * 用于覆盖 design-system.css 中的默认值
- * 保持与项目实际设计的一致性
+ * Element Plus 主题色覆盖
  */
 
 :root {
-  /* 主色调 - 近黑色系（覆盖 design-system 默认值） */
-  --color-primary: #1a1a1a;
-  --color-primary-hover: #333333;
-  --color-primary-active: #000000;
+  /* 主色调覆盖 - 暖琥珀色 */
+  --color-primary: #C8854A;
+  --color-primary-hover: #B8733F;
+  --color-primary-active: #A66335;
 
-  /* Element Plus 主题色覆盖（保持兼容性） */
-  --el-color-primary: #1a1a1a;
-  --el-color-primary-light-3: #404040;
-  --el-color-primary-light-5: #595959;
-  --el-color-primary-light-7: #808080;
-  --el-color-primary-light-8: #999999;
-  --el-color-primary-light-9: #b3b3b3;
-  --el-color-primary-dark-2: #000000;
+  /* Element Plus 主题色覆盖 */
+  --el-color-primary: #C8854A;
+  --el-color-primary-light-3: #D9A07A;
+  --el-color-primary-light-5: #E5C4A8;
+  --el-color-primary-light-7: #F0DBCB;
+  --el-color-primary-light-8: #F5E6D8;
+  --el-color-primary-light-9: #FAF0E6;
+  --el-color-primary-dark-2: #A66335;
 
   /* 文字颜色 */
-  --text-primary: #1a1a1a;
-  --text-regular: #595959;
-  --text-secondary: #8c8c8c;
-  --text-tertiary: #b3b3b3;
+  --text-primary: #2D2A26;
+  --text-regular: #5C5650;
+  --text-secondary: #8A8279;
+  --text-tertiary: #B5AEA4;
 
   /* 背景颜色 */
   --bg-white: #ffffff;
-  --bg-gray-50: #fafbfc;
-  --bg-gray-100: #f5f5f5;
-  --bg-gray-200: #f0f0f0;
+  --bg-gray-50: #FAF8F6;
+  --bg-gray-100: #F5F2EE;
+  --bg-gray-200: #EDE9E4;
 
-  /* 侧边栏 - 管理后台深色侧边栏 */
+  /* 侧边栏 */
   --sidebar-bg: #ffffff;
-  --sidebar-hover: #fafbfc;
-  --sidebar-active: #f5f5f5;
+  --sidebar-hover: #FAF8F6;
+  --sidebar-active: #F0ECE7;
 
   /* 边框 */
-  --border-color: #f0f0f0;
-  --border-light: #e6e6e6;
+  --border-color: #EDE9E4;
+  --border-light: #E5E0DA;
 
-  /* 成功/警告/危险色 */
-  --color-success: #52c41a;
-  --color-warning: #faad14;
-  --color-danger: #ff4d4f;
-  --color-info: #1890ff;
+  /* 语义色覆盖 */
+  --color-success: #6B8E5A;
+  --color-warning: #D4A04A;
+  --color-danger: #C45B4A;
+  --color-info: #5A7A8A;
 
-  /* Element Plus 覆盖 */
-  --el-color-success: #52c41a;
-  --el-color-warning: #faad14;
-  --el-color-danger: #ff4d4f;
-  --el-color-info: #1890ff;
+  /* Element Plus 语义色覆盖 */
+  --el-color-success: #6B8E5A;
+  --el-color-warning: #D4A04A;
+  --el-color-danger: #C45B4A;
+  --el-color-info: #5A7A8A;
 
   /* 字体 */
   --font-family-base: "SF Pro Text", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -61,6 +60,6 @@
   --radius-lg: 16px;
 
   /* 阴影 */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 1px 2px rgba(45, 42, 38, 0.04);
+  --shadow-md: 0 2px 8px rgba(45, 42, 38, 0.06);
 }
