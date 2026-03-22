@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useUserStore } from '@/stores/user'
 
 const api = axios.create({
   baseURL: '/api/v1',
@@ -43,8 +44,14 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
+      // 清除所有认证信息
       localStorage.removeItem('token')
-      // 如果当前已经在登录/注册页，不进行重定向
+      localStorage.removeItem('refresh_token')
+      // 清除 Pinia store 中的用户信息
+      const userStore = useUserStore()
+      userStore.token = ''
+      userStore.userInfo = null
+      // 如果当前不在登录/注册页，跳转到登录页
       if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
         window.location.href = '/login'
       }
