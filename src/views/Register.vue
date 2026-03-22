@@ -109,7 +109,7 @@ const form = ref({
   confirmPassword: ''
 })
 const loading = ref(false)
-const logoUrl = ref('/images/logo.svg')
+const logoUrl = ref('/images/logo.png')
 
 async function fetchLogo() {
   try {

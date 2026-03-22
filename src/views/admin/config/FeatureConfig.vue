@@ -41,14 +41,14 @@
         </el-form>
       </div>
 
-      <!-- 首页功能管理 -->
+      <!-- 功能显示管理 -->
       <div class="config-card">
-        <h2>首页功能管理</h2>
-        <p class="config-desc">拖拽排序，调整功能显示状态和内容</p>
+        <h2>功能显示管理</h2>
+        <p class="config-desc">拖拽排序，调整功能显示状态、内容及列表可见性</p>
 
         <div class="feature-list">
           <div
-            v-for="(feature, index) in featureStore.features"
+            v-for="feature in featureStore.features"
             :key="feature.id"
             class="feature-item"
           >
@@ -75,6 +75,12 @@
                 </el-form-item>
                 <el-form-item label="图片URL">
                   <el-input v-model="feature.image" style="width: 200px" />
+                </el-form-item>
+                <el-form-item label="用户列表">
+                  <el-switch v-model="feature.showInUserList" />
+                </el-form-item>
+                <el-form-item label="VIP列表">
+                  <el-switch v-model="feature.showInVipList" />
                 </el-form-item>
               </el-form>
             </div>
@@ -105,7 +111,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial, defaultFeatures } from '@/api/config'
+import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial } from '@/api/config'
 import { useFeatureStore } from '@/stores/feature'
 import { Rank, Delete, Plus } from '@element-plus/icons-vue'
 
@@ -180,7 +186,9 @@ function addNewFeature() {
     desc: '功能描述',
     image: 'https://picsum.photos/seed/new/600/300',
     status: 'enabled',
-    order: featureStore.features.length + 1
+    order: featureStore.features.length + 1,
+    showInUserList: true,
+    showInVipList: true
   })
 }
 

@@ -200,7 +200,7 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const announcement = ref('')
-const logoUrl = ref('/images/logo.svg')
+const logoUrl = ref('/images/logo.png')
 
 function isActive(path: string) {
   if (path === '/') {

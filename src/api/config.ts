@@ -89,6 +89,8 @@ export interface FeatureItem {
   image: string
   status: 'enabled' | 'blocked' | 'hidden'
   order: number
+  showInUserList: boolean  // 是否在用户功能列表显示
+  showInVipList: boolean  // 是否在VIP功能列表显示
 }
 
 // 默认功能列表
@@ -100,7 +102,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: 'AI 智能识别，菜品图秒变专业摄影作品',
     image: 'https://picsum.photos/seed/masterpiece/600/300',
     status: 'enabled',
-    order: 1
+    order: 1,
+    showInUserList: true,
+    showInVipList: true
   },
   {
     id: 'batch',
@@ -109,7 +113,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: '一次上传多张，批量处理成专业素材',
     image: 'https://picsum.photos/seed/batch/600/300',
     status: 'enabled',
-    order: 2
+    order: 2,
+    showInUserList: true,
+    showInVipList: true
   },
   {
     id: 'enhance',
@@ -118,7 +124,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: 'AI 提升清晰度，还原图片细节',
     image: 'https://picsum.photos/seed/enhance/600/300',
     status: 'enabled',
-    order: 3
+    order: 3,
+    showInUserList: true,
+    showInVipList: true
   },
   {
     id: 'wechat',
@@ -127,7 +135,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: '生成适合微信分享的高质量图片',
     image: 'https://picsum.photos/seed/wechat/600/300',
     status: 'enabled',
-    order: 4
+    order: 4,
+    showInUserList: true,
+    showInVipList: true
   },
   {
     id: 'dianping',
@@ -136,7 +146,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: '为店铺生成专业的头图和菜单',
     image: 'https://picsum.photos/seed/dianping/600/300',
     status: 'enabled',
-    order: 5
+    order: 5,
+    showInUserList: true,
+    showInVipList: true
   },
   {
     id: 'douyin',
@@ -145,7 +157,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: '为抖音店铺生成吸睛视觉素材',
     image: 'https://picsum.photos/seed/douyin/600/300',
     status: 'enabled',
-    order: 6
+    order: 6,
+    showInUserList: true,
+    showInVipList: true
   },
   {
     id: 'menu',
@@ -154,7 +168,9 @@ export const defaultFeatures: FeatureItem[] = [
     desc: '生成适合印刷的高清菜单图片',
     image: 'https://picsum.photos/seed/menu/600/300',
     status: 'enabled',
-    order: 7
+    order: 7,
+    showInUserList: true,
+    showInVipList: true
   }
 ]
 

@@ -70,6 +70,16 @@ export const useFeatureStore = defineStore('feature', () => {
       .sort((a, b) => a.order - b.order)
   }
 
+  // 获取用户功能列表
+  function getUserFeatures() {
+    return getVisibleFeatures().filter(f => f.showInUserList)
+  }
+
+  // 获取VIP功能列表
+  function getVipFeatures() {
+    return getVisibleFeatures().filter(f => f.showInVipList)
+  }
+
   return {
     features,
     isLoading,
@@ -80,6 +90,8 @@ export const useFeatureStore = defineStore('feature', () => {
     removeFeature,
     addFeature,
     reorderFeatures,
-    getVisibleFeatures
+    getVisibleFeatures,
+    getUserFeatures,
+    getVipFeatures
   }
 })

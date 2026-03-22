@@ -101,7 +101,7 @@ const showBottomNav = computed(() => {
 
 const showLoginTip = ref(false)
 const announcement = ref('')
-const logoUrl = ref('/images/logo.svg')
+const logoUrl = ref('/images/logo.png')
 
 async function fetchAnnouncement() {
   try {
