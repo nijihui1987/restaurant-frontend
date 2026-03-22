@@ -1,14 +1,14 @@
 <template>
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
-    <!-- Before 图片 - 显示斜线左侧 -->
+    <!-- Before 图片 (底层) -->
     <div class="layer before">
-      <img :src="beforeImage" alt="Before" :style="{ clipPath: beforeClip }" />
+      <img :src="beforeImage" alt="Before" />
     </div>
-    <!-- After 图片 - 显示斜线右侧 -->
-    <div class="layer after">
-      <img :src="afterImage" alt="After" :style="{ clipPath: afterClip }" />
+    <!-- After 图片 (上层，通过宽度控制显示范围) -->
+    <div class="layer after" :style="{ width: `${position}%` }">
+      <img :src="afterImage" alt="After" />
     </div>
-    <!-- 滑块 -->
+    <!-- 滑块线 -->
     <div class="slider" :style="{ left: `${position}%` }">
       <div class="slider-line"></div>
     </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 const props = withDefaults(defineProps<{
   beforeImage: string
@@ -31,30 +31,6 @@ const props = withDefaults(defineProps<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const position = ref(50)
-const angleDeg = 15
-const angleRad = (angleDeg * Math.PI) / 180
-
-// 计算斜线裁剪
-const beforeClip = computed(() => {
-  const p = position.value
-  // 斜线方程: y = tan(angle) * (x - p) + 50
-  // 在 x=0 时: y = 50 - p * tan(angle)
-  // 在 x=100 时: y = 50 + (100-p) * tan(angle)
-  const y0 = 50 - p * Math.tan(angleRad)
-  const y1 = 50 + (100 - p) * Math.tan(angleRad)
-
-  // Before 图片: 显示斜线左下方的区域
-  return `polygon(0% ${y0}%, 0% 100%, 100% 100%, 100% ${y1}%)`
-})
-
-const afterClip = computed(() => {
-  const p = position.value
-  const y0 = 50 - p * Math.tan(angleRad)
-  const y1 = 50 + (100 - p) * Math.tan(angleRad)
-
-  // After 图片: 显示斜线右上方的区域
-  return `polygon(0% 0%, 0% ${y0}%, 100% ${y1}%, 100% 0%)`
-})
 
 function updatePosition(clientX: number) {
   if (!containerRef.value) return
@@ -105,28 +81,32 @@ function onLeave() {
 
 .layer.after {
   z-index: 2;
+  width: 50%;
+  overflow: hidden;
+}
+
+.layer.after img {
+  width: calc(100% / var(--reveal-width, 0.5));
 }
 
 .slider {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 0;
+  width: 40px;
+  margin-left: -20px;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
 }
 
 .slider-line {
-  position: absolute;
-  top: -10%;
-  bottom: -10%;
-  left: 50%;
   width: 2px;
-  margin-left: -1px;
+  height: 100%;
   background: white;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
-  transform: rotate(var(--angle, 15deg));
-  transform-origin: center center;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 .label {
