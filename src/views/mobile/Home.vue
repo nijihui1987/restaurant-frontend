@@ -221,23 +221,41 @@ function goToLogin() {
 
 /* ==================== 响应式适配 ==================== */
 
-/* 移动端 - 单列 */
+/* 移动端 */
 @media (max-width: 640px) {
   .features-section {
     grid-template-columns: 1fr;
   }
 
   .feature-card {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .card-image {
-    width: 100%;
+    width: 40%;
     aspect-ratio: 6 / 3;
   }
 
   .card-info {
-    padding: var(--space-md);
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .card-title {
+    font-size: var(--font-size-base);
+  }
+
+  .card-desc {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--space-xs);
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-action {
+    font-size: var(--font-size-xs);
   }
 }
 </style>
