@@ -32,12 +32,18 @@ const angle = 15 // 斜线角度
 // 计算斜线切割的裁剪路径
 const beforeClipPath = computed(() => {
   const p = position.value
-  // 斜线从左下到右上的交点
-  const yAt0 = 50 + p * 0.268  // 在x=0处的y
-  const yAt100 = 50 - (100 - p) * 0.268  // 在x=100处的y
+  const tanAngle = Math.tan((angle * Math.PI) / 180)
 
-  // 裁剪区域：沿着左边缘向下到yAt0，斜切到右下，再回到左上
-  return `polygon(0% ${yAt0}%, 100% ${yAt100}%, 100% 0%, 0% 0%)`
+  // 斜线通过位置P和中心点，斜率是tanAngle
+  // y = tanAngle * (x - p) + 50
+  // 在x=0处: y = 50 - p * tanAngle
+  // 在x=100处: y = 50 + (100 - p) * tanAngle
+
+  const yAt0 = 50 - p * tanAngle
+  const yAt100 = 50 + (100 - p) * tanAngle
+
+  // 裁剪显示斜线左下方的区域
+  return `polygon(0% ${yAt0}%, 0% 100%, 100% 100%, 100% ${yAt100}%)`
 })
 
 function updatePosition(clientX: number) {
