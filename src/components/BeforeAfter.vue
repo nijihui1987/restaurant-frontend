@@ -1,5 +1,5 @@
 <template>
-  <div class="before-after" ref="containerRef" @mousedown="startDrag" @touchstart="startDrag">
+  <div class="before-after" ref="containerRef" @mousedown.stop="startDrag" @touchstart.stop="startDrag" @click.stop>
     <div class="image-container">
       <img :src="afterImage" class="image after-image" alt="After" />
       <div class="image before-container" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }">

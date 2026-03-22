@@ -9,7 +9,7 @@
           :to="feature.path"
           class="feature-card"
         >
-          <div class="card-image">
+          <div class="card-image" @click.stop>
             <BeforeAfter
               :before-image="feature.beforeImage"
               :after-image="feature.afterImage"
