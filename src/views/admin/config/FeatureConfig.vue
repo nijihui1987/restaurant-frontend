@@ -59,6 +59,19 @@
               <img :src="feature.image" :alt="feature.title" class="preview-img" />
             </div>
             <div class="feature-form">
+              <div class="feature-header">
+                <el-form-item label="标题" class="feature-title-item">
+                  <el-input v-model="feature.title" style="width: 160px" />
+                </el-form-item>
+                <el-button
+                  type="primary"
+                  size="small"
+                  :loading="savingFeatures[feature.id]"
+                  @click="saveFeature(feature)"
+                >
+                  保存
+                </el-button>
+              </div>
               <el-form label-width="80px" size="small">
                 <el-form-item label="状态">
                   <el-select v-model="feature.status" style="width: 120px">
@@ -66,9 +79,6 @@
                     <el-option label="遮挡" value="blocked" />
                     <el-option label="隐藏" value="hidden" />
                   </el-select>
-                </el-form-item>
-                <el-form-item label="标题">
-                  <el-input v-model="feature.title" style="width: 160px" />
                 </el-form-item>
                 <el-form-item label="描述">
                   <el-input v-model="feature.desc" type="textarea" :rows="2" style="width: 200px" />
@@ -109,13 +119,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial } from '@/api/config'
+import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial, type FeatureItem } from '@/api/config'
 import { useFeatureStore } from '@/stores/feature'
 import { Rank, Delete, Plus } from '@element-plus/icons-vue'
 
 const saving = ref(false)
+const savingFeatures = reactive<Record<string, boolean>>({})
 const featureStore = useFeatureStore()
 
 // 公告配置
@@ -159,17 +170,29 @@ async function saveConfig() {
       throw new Error('教程内容保存失败')
     }
 
-    // 保存功能配置
-    const featureResult = await featureStore.saveFeatureConfig()
-    if (!featureResult) {
-      throw new Error('功能配置保存失败')
-    }
-
     ElMessage.success('配置保存成功')
   } catch (error: any) {
     ElMessage.error(error.message || '配置保存失败')
   } finally {
     saving.value = false
+  }
+}
+
+async function saveFeature(feature: FeatureItem) {
+  savingFeatures[feature.id] = true
+  try {
+    // 更新 store 中的数据
+    featureStore.updateFeature(feature.id, feature)
+    // 保存整个配置
+    const result = await featureStore.saveFeatureConfig()
+    if (!result) {
+      throw new Error('保存失败')
+    }
+    ElMessage.success('保存成功')
+  } catch (error: any) {
+    ElMessage.error(error.message || '保存失败')
+  } finally {
+    savingFeatures[feature.id] = false
   }
 }
 
@@ -280,6 +303,21 @@ onMounted(() => {
 
 .feature-form {
   flex: 1;
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.feature-title-item {
+  margin-bottom: 0 !important;
+}
+
+.feature-header :deep(.el-form-item__content) {
+  flex: none;
 }
 
 .feature-form :deep(.el-form-item) {
