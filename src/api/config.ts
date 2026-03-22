@@ -23,6 +23,19 @@ export async function getConfig(groupKey: string, configKey: string): Promise<st
   }
 }
 
+// 保存配置项
+export async function saveConfig(groupKey: string, configKey: string, value: string): Promise<boolean> {
+  try {
+    await api.put(`/config/${groupKey}/${configKey}`, {
+      config_value: value
+    })
+    return true
+  } catch (error) {
+    console.error(`Failed to save config ${groupKey}/${configKey}:`, error)
+    return false
+  }
+}
+
 // 获取公告配置
 export async function getAnnouncement(): Promise<AnnouncementConfig | null> {
   try {
@@ -35,6 +48,21 @@ export async function getAnnouncement(): Promise<AnnouncementConfig | null> {
   }
 }
 
+// 保存公告配置
+export async function saveAnnouncement(config: AnnouncementConfig): Promise<boolean> {
+  return saveConfig('system', 'announcement', JSON.stringify(config))
+}
+
+// 获取教程内容
+export async function getTutorial(): Promise<string | null> {
+  return getConfig('system', 'tutorial')
+}
+
+// 保存教程内容
+export async function saveTutorial(content: string): Promise<boolean> {
+  return saveConfig('system', 'tutorial', content)
+}
+
 // 获取Logo配置
 export async function getLogoConfig(): Promise<{ logo_url: string; logo_text: string } | null> {
   try {
@@ -45,4 +73,9 @@ export async function getLogoConfig(): Promise<{ logo_url: string; logo_text: st
     console.error('Failed to get logo config:', error)
     return null
   }
+}
+
+// 保存Logo配置
+export async function saveLogoConfig(config: { logo_url: string; logo_text: string }): Promise<boolean> {
+  return saveConfig('system', 'logo', JSON.stringify(config))
 }

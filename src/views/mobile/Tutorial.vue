@@ -25,6 +25,7 @@
 import { ref, onMounted } from 'vue'
 import { marked } from 'marked'
 import { Loading, Warning } from '@element-plus/icons-vue'
+import { getTutorial } from '@/api/config'
 
 const content = ref('')
 const loading = ref(true)
@@ -34,13 +35,32 @@ const renderedContent = ref('')
 async function fetchTutorial() {
   loading.value = true
   try {
+    // 优先从API获取教程内容
+    const apiContent = await getTutorial()
+    if (apiContent) {
+      content.value = apiContent
+      renderedContent.value = await marked.parse(content.value)
+      return
+    }
+
+    // API没有内容时使用静态文件作为后备
     const response = await fetch('/tutorials/tutorial.md')
-    if (!response.ok) throw new Error('Failed to fetch')
-    content.value = await response.text()
-    renderedContent.value = await marked.parse(content.value)
+    if (response.ok) {
+      content.value = await response.text()
+      renderedContent.value = await marked.parse(content.value)
+    }
   } catch (error) {
     console.error('Failed to load tutorial:', error)
-    content.value = ''
+    // 尝试加载静态文件
+    try {
+      const response = await fetch('/tutorials/tutorial.md')
+      if (response.ok) {
+        content.value = await response.text()
+        renderedContent.value = await marked.parse(content.value)
+      }
+    } catch (e) {
+      console.error('Failed to load static tutorial:', e)
+    }
   } finally {
     loading.value = false
   }
