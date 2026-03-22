@@ -1,4 +1,5 @@
 import api from './request'
+import { getUserList } from './user'
 
 export interface VipInfo {
   id: number
@@ -80,8 +81,10 @@ export async function deleteVip(id: number): Promise<void> {
 
 /**
  * 获取专业组下的用户列表 (admin)
+ * 使用 /users?vip_id= 接口
  */
 export async function getVipUsers(vipId: number): Promise<any[]> {
-  const res = await api.get<any[]>(`/vips/${vipId}/users`)
-  return res.data
+  // 后端暂未实现 /vips/{id}/users，使用 /users?vip_id= 替代
+  const res = await getUserList({ vip_id: vipId, page_size: 100 })
+  return res.users
 }
