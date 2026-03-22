@@ -215,7 +215,7 @@ function goToLogin() {
 }
 
 .coin-star {
-  color: #f59e0b;
+  color: #1a1a1a;
 }
 
 .coin-num {
