@@ -155,7 +155,7 @@ function goToLogin() {
 }
 
 .title-text {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
   white-space: nowrap;
@@ -267,7 +267,7 @@ function goToLogin() {
   }
 
   .title-text {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .card-info {
