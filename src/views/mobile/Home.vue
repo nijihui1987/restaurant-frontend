@@ -35,8 +35,8 @@
             <div class="card-info">
               <p class="card-desc">{{ feature.desc }}</p>
               <div class="card-action">
-                <span class="action-text">立即体验</span>
-                <el-icon :size="16"><ArrowRight /></el-icon>
+                <span class="action-text">进入</span>
+                <el-icon :size="14"><ArrowRight /></el-icon>
               </div>
             </div>
           </router-link>
@@ -203,6 +203,7 @@ function goToLogin() {
 .card-action {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--space-xs);
   color: var(--color-primary);
   font-size: var(--font-size-sm);
@@ -211,7 +212,7 @@ function goToLogin() {
 }
 
 .feature-card:hover .card-action {
-  gap: var(--space-sm);
+  gap: 4px;
 }
 
 /* ==================== 登录提示 ==================== */
