@@ -4,7 +4,12 @@
 
       <!-- 公告设置 -->
       <div class="config-card">
-        <h2>顶通公告</h2>
+        <div class="card-header">
+          <h2>顶通公告</h2>
+          <el-button type="primary" size="small" :loading="savingAnnouncement" @click="saveAnnouncement">
+            保存
+          </el-button>
+        </div>
         <el-form label-width="100px">
           <el-form-item label="开启公告">
             <el-switch v-model="announcement.enabled" />
@@ -25,7 +30,12 @@
 
       <!-- 教程设置 -->
       <div class="config-card">
-        <h2>使用教程</h2>
+        <div class="card-header">
+          <h2>使用教程</h2>
+          <el-button type="primary" size="small" :loading="savingTutorial" @click="saveTutorialContent">
+            保存
+          </el-button>
+        </div>
         <el-form label-width="100px">
           <el-form-item label="教程内容">
             <el-input
@@ -43,7 +53,12 @@
 
       <!-- 功能显示管理 -->
       <div class="config-card">
-        <h2>功能显示管理</h2>
+        <div class="card-header">
+          <h2>功能显示管理</h2>
+          <el-button type="primary" size="small" :loading="savingFeaturesAll" @click="saveAllFeatures">
+            保存全部
+          </el-button>
+        </div>
         <p class="config-desc">拖拽排序，调整功能显示状态、内容及列表可见性</p>
 
         <div class="feature-list">
@@ -59,20 +74,10 @@
               <img :src="feature.image" :alt="feature.title" class="preview-img" />
             </div>
             <div class="feature-form">
-              <div class="feature-header">
-                <el-form-item label="标题" class="feature-title-item">
+              <el-form label-width="80px" size="small">
+                <el-form-item label="标题">
                   <el-input v-model="feature.title" style="width: 160px" />
                 </el-form-item>
-                <el-button
-                  type="primary"
-                  size="small"
-                  :loading="savingFeatures[feature.id]"
-                  @click="saveFeature(feature)"
-                >
-                  保存
-                </el-button>
-              </div>
-              <el-form label-width="80px" size="small">
                 <el-form-item label="状态">
                   <el-select v-model="feature.status" style="width: 120px">
                     <el-option label="正常" value="enabled" />
@@ -109,24 +114,20 @@
           </el-button>
         </div>
       </div>
-
-      <div class="config-actions">
-        <el-button @click="loadConfig">重置</el-button>
-        <el-button type="primary" :loading="saving" @click="saveConfig">保存配置</el-button>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getAnnouncement, saveAnnouncement, getTutorial, saveTutorial, type FeatureItem } from '@/api/config'
+import { getAnnouncement, saveAnnouncement as saveAnnouncementApi, getTutorial, saveTutorial as saveTutorialApi } from '@/api/config'
 import { useFeatureStore } from '@/stores/feature'
 import { Rank, Delete, Plus } from '@element-plus/icons-vue'
 
-const saving = ref(false)
-const savingFeatures = reactive<Record<string, boolean>>({})
+const savingAnnouncement = ref(false)
+const savingTutorial = ref(false)
+const savingFeaturesAll = ref(false)
 const featureStore = useFeatureStore()
 
 // 公告配置
@@ -155,44 +156,48 @@ async function loadConfig() {
   await featureStore.loadFeatures()
 }
 
-async function saveConfig() {
-  saving.value = true
+async function saveAnnouncement() {
+  savingAnnouncement.value = true
   try {
-    // 保存公告配置
-    const annResult = await saveAnnouncement(announcement.value)
-    if (!annResult) {
-      throw new Error('公告配置保存失败')
+    const result = await saveAnnouncementApi(announcement.value)
+    if (!result) {
+      throw new Error('保存失败')
     }
-
-    // 保存教程内容
-    const tutResult = await saveTutorial(tutorialContent.value)
-    if (!tutResult) {
-      throw new Error('教程内容保存失败')
-    }
-
-    ElMessage.success('配置保存成功')
+    ElMessage.success('公告保存成功')
   } catch (error: any) {
-    ElMessage.error(error.message || '配置保存失败')
+    ElMessage.error(error.message || '保存失败')
   } finally {
-    saving.value = false
+    savingAnnouncement.value = false
   }
 }
 
-async function saveFeature(feature: FeatureItem) {
-  savingFeatures[feature.id] = true
+async function saveTutorialContent() {
+  savingTutorial.value = true
   try {
-    // 更新 store 中的数据
-    featureStore.updateFeature(feature.id, feature)
-    // 保存整个配置
+    const result = await saveTutorialApi(tutorialContent.value)
+    if (!result) {
+      throw new Error('保存失败')
+    }
+    ElMessage.success('教程保存成功')
+  } catch (error: any) {
+    ElMessage.error(error.message || '保存失败')
+  } finally {
+    savingTutorial.value = false
+  }
+}
+
+async function saveAllFeatures() {
+  savingFeaturesAll.value = true
+  try {
     const result = await featureStore.saveFeatureConfig()
     if (!result) {
       throw new Error('保存失败')
     }
-    ElMessage.success('保存成功')
+    ElMessage.success('功能配置保存成功')
   } catch (error: any) {
     ElMessage.error(error.message || '保存失败')
   } finally {
-    savingFeatures[feature.id] = false
+    savingFeaturesAll.value = false
   }
 }
 
@@ -239,12 +244,23 @@ onMounted(() => {
 }
 
 .config-card h2 {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 15px;
   font-weight: 600;
   color: #1a1a1a;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 12px;
   border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.card-header h2 {
+  margin: 0;
 }
 
 .config-desc {
@@ -305,21 +321,6 @@ onMounted(() => {
   flex: 1;
 }
 
-.feature-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.feature-title-item {
-  margin-bottom: 0 !important;
-}
-
-.feature-header :deep(.el-form-item__content) {
-  flex: none;
-}
-
 .feature-form :deep(.el-form-item) {
   margin-bottom: 8px;
 }
@@ -335,22 +336,6 @@ onMounted(() => {
 
 .add-feature {
   margin-top: 12px;
-}
-
-.config-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-.config-actions :deep(.el-button--primary) {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-}
-
-.config-actions :deep(.el-button--primary:hover) {
-  background: #333;
-  border-color: #333;
 }
 
 :deep(.el-textarea__inner) {
