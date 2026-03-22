@@ -45,33 +45,15 @@
           <!-- ========== 用户功能（登录后可见，与导航同级）========== -->
           <div class="nav-section" v-if="userStore.isLoggedIn">
             <span class="nav-section-title">用户功能</span>
-            <router-link to="/masterpiece" class="nav-item" :class="{ active: isActive('/masterpiece') }">
-              <el-icon :size="18"><MagicStick /></el-icon>
-              <span class="nav-label">手机随拍成片</span>
-            </router-link>
-            <router-link to="/batch" class="nav-item" :class="{ active: isActive('/batch') }">
-              <el-icon :size="18"><Collection /></el-icon>
-              <span class="nav-label">批量套图成片</span>
-            </router-link>
-            <router-link to="/enhance" class="nav-item" :class="{ active: isActive('/enhance') }">
-              <el-icon :size="18"><Aim /></el-icon>
-              <span class="nav-label">智能高清优化</span>
-            </router-link>
-            <router-link to="/wechat" class="nav-item" :class="{ active: isActive('/wechat') }">
-              <el-icon :size="18"><ChatDotRound /></el-icon>
-              <span class="nav-label">微信营销出图</span>
-            </router-link>
-            <router-link to="/dianping" class="nav-item" :class="{ active: isActive('/dianping') }">
-              <el-icon :size="18"><Shop /></el-icon>
-              <span class="nav-label">大众点评装修</span>
-            </router-link>
-            <router-link to="/douyin" class="nav-item" :class="{ active: isActive('/douyin') }">
-              <el-icon :size="18"><VideoCamera /></el-icon>
-              <span class="nav-label">抖音门店装修</span>
-            </router-link>
-            <router-link to="/menu" class="nav-item" :class="{ active: isActive('/menu') }">
-              <el-icon :size="18"><Tickets /></el-icon>
-              <span class="nav-label">印刷菜单出图</span>
+            <router-link
+              v-for="feature in visibleFeatures"
+              :key="feature.id"
+              :to="feature.path"
+              class="nav-item"
+              :class="{ active: isActive(feature.path) }"
+            >
+              <el-icon :size="18"><component :is="getFeatureIcon(feature.path)" /></el-icon>
+              <span class="nav-label">{{ feature.title }}</span>
             </router-link>
             <router-link to="/gallery" class="nav-item" :class="{ active: isActive('/gallery') }">
               <el-icon :size="18"><Picture /></el-icon>
@@ -165,10 +147,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
+import { useFeatureStore } from '@/stores/feature'
 import {
   HomeFilled,
   Reading,
@@ -198,15 +181,39 @@ import { getAnnouncement, getLogoConfig } from '@/api/config'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const featureStore = useFeatureStore()
 
 const announcement = ref('')
 const logoUrl = ref('/images/logo.png')
+
+// 功能图标映射
+const featureIcons: Record<string, any> = {
+  '/masterpiece': MagicStick,
+  '/batch': Collection,
+  '/enhance': Aim,
+  '/wechat': ChatDotRound,
+  '/dianping': Shop,
+  '/douyin': VideoCamera,
+  '/menu': Tickets
+}
 
 function isActive(path: string) {
   if (path === '/') {
     return route.path === '/'
   }
   return route.path.startsWith(path)
+}
+
+// 根据用户类型获取功能列表
+const visibleFeatures = computed(() => {
+  if (userStore.isVip) {
+    return featureStore.getVipFeatures()
+  }
+  return featureStore.getUserFeatures()
+})
+
+function getFeatureIcon(path: string) {
+  return featureIcons[path] || Picture
 }
 
 async function fetchAnnouncement() {
@@ -244,6 +251,7 @@ async function handleLogout() {
 
 fetchAnnouncement()
 fetchLogo()
+featureStore.loadFeatures()
 </script>
 
 <style scoped>
