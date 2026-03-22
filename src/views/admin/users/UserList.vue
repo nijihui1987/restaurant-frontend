@@ -1,19 +1,9 @@
 <template>
   <div class="user-management">
+    <!-- 页面标题 -->
     <div class="page-header">
       <div class="header-left">
-        <el-input
-          v-model="searchKeyword"
-          placeholder="搜索用户名"
-          size="default"
-          style="width: 200px"
-          clearable
-          @input="handleSearch"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
-          </template>
-        </el-input>
+        <h2>用户管理</h2>
       </div>
       <div class="header-right">
         <el-button type="primary" @click="openCreateDialog">
@@ -23,15 +13,67 @@
       </div>
     </div>
 
+    <!-- 搜索和筛选 -->
+    <div class="filter-bar">
+      <el-input
+        v-model="searchKeyword"
+        placeholder="搜索用户名、手机号、显示名称"
+        size="large"
+        style="width: 320px"
+        clearable
+        @input="handleSearch"
+      >
+        <template #prefix>
+          <el-icon><Search /></el-icon>
+        </template>
+      </el-input>
+      <el-select v-model="filterRole" placeholder="全部角色" clearable style="width: 140px" @change="handleSearch">
+        <el-option label="全部角色" value="" />
+        <el-option label="管理员" value="admin" />
+        <el-option label="专业组" value="vip" />
+        <el-option label="普通用户" value="user" />
+      </el-select>
+    </div>
+
+    <!-- 用户列表卡片 -->
     <div class="content-card">
       <el-table v-loading="loading" :data="users" style="width: 100%">
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" width="120" />
-        <el-table-column prop="anonymous_name" label="显示名称" width="120" />
-        <el-table-column prop="real_name" label="真实姓名" width="100" />
-        <el-table-column prop="phone" label="手机号" width="130" />
-        <el-table-column prop="company_name" label="公司" min-width="120" />
-        <el-table-column prop="position" label="职位" width="100" />
+        <el-table-column prop="id" label="ID" width="70" />
+        <el-table-column prop="username" label="用户名" width="120">
+          <template #default="{ row }">
+            <div class="user-cell">
+              <span class="username">{{ row.username }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="anonymous_name" label="显示名称" width="120">
+          <template #default="{ row }">
+            <span class="anonymous-name">{{ row.anonymous_name || '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="vip_name" label="所属上级" width="120">
+          <template #default="{ row }">
+            <span class="parent-vip">{{ row.vip_name || '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="余额信息" min-width="200">
+          <template #default="{ row }">
+            <div class="balance-info">
+              <div class="balance-item">
+                <span class="balance-label">余额</span>
+                <span class="balance-value">{{ row.balance ?? '-' }}</span>
+              </div>
+              <div class="balance-item">
+                <span class="balance-label">近7日消耗</span>
+                <span class="balance-value consumption">{{ row.consumption_7d ?? '-' }}</span>
+              </div>
+              <div class="balance-item">
+                <span class="balance-label">累计充值</span>
+                <span class="balance-value">{{ row.total_recharge ?? '-' }}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="role" label="角色" width="100">
           <template #default="{ row }">
             <el-tag :type="getRoleTagType(row.role)" size="small">
@@ -46,18 +88,17 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" fixed="right">
+        <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" text size="small" @click="openEditDialog(row)">编辑</el-button>
             <el-button
-              type="danger"
+              :type="row.is_active ? 'danger' : 'success'"
               text
               size="small"
               @click="toggleUserStatus(row)"
             >
               {{ row.is_active ? '禁用' : '启用' }}
             </el-button>
-            <el-button type="danger" text size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -79,7 +120,7 @@
     <el-dialog
       v-model="dialogVisible"
       :title="isEdit ? '编辑用户' : '新增用户'"
-      width="500px"
+      width="480px"
       @closed="resetForm"
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
@@ -92,20 +133,11 @@
         <el-form-item label="显示名称" prop="anonymous_name">
           <el-input v-model="form.anonymous_name" placeholder="请输入显示名称" />
         </el-form-item>
-        <el-form-item label="真实姓名" prop="real_name">
-          <el-input v-model="form.real_name" placeholder="请输入真实姓名" />
-        </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" />
-        </el-form-item>
-        <el-form-item label="公司名称" prop="company_name">
-          <el-input v-model="form.company_name" placeholder="请输入公司名称" />
-        </el-form-item>
-        <el-form-item label="职位" prop="position">
-          <el-input v-model="form.position" placeholder="请输入职位" />
         </el-form-item>
         <el-form-item label="角色" prop="role">
           <el-select v-model="form.role" placeholder="请选择角色" style="width: 100%">
@@ -127,8 +159,15 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 import { Search, Plus } from '@element-plus/icons-vue'
-import { getUserList, createUser, updateUser, deleteUser, updateUserStatus, type UserListItem } from '@/api/user'
+import { getUserList, createUser, updateUser, updateUserStatus, type UserListItem } from '@/api/user'
 import type { UserRole } from '@/api/auth'
+
+// 扩展 UserListItem 类型以包含余额信息
+interface UserWithBalance extends UserListItem {
+  balance?: number
+  consumption_7d?: number
+  total_recharge?: number
+}
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -137,23 +176,21 @@ const isEdit = ref(false)
 const formRef = ref<FormInstance>()
 
 const searchKeyword = ref('')
+const filterRole = ref('')
 const currentPage = ref(1)
 const pageSize = ref(20)
 const total = ref(0)
 
-const users = ref<UserListItem[]>([])
+const users = ref<UserWithBalance[]>([])
 const currentUserId = ref<number | null>(null)
 
 const form = reactive({
   username: '',
   password: '',
   anonymous_name: '',
-  real_name: '',
   phone: '',
   email: '',
-  role: 'user' as UserRole,
-  company_name: '',
-  position: ''
+  role: 'user' as UserRole
 })
 
 const rules: FormRules = {
@@ -186,7 +223,8 @@ async function fetchUsers() {
     const res = await getUserList({
       page: currentPage.value,
       page_size: pageSize.value,
-      keyword: searchKeyword.value || undefined
+      keyword: searchKeyword.value || undefined,
+      role: filterRole.value as UserRole || undefined
     })
     users.value = res.users
     total.value = res.total
@@ -212,17 +250,14 @@ function openCreateDialog() {
   dialogVisible.value = true
 }
 
-function openEditDialog(row: UserListItem) {
+function openEditDialog(row: UserWithBalance) {
   isEdit.value = true
   currentUserId.value = row.id
   form.username = row.username
   form.anonymous_name = row.anonymous_name || ''
-  form.real_name = row.real_name || ''
   form.phone = row.phone || ''
   form.email = row.email || ''
   form.role = row.role
-  form.company_name = row.company_name || ''
-  form.position = row.position || ''
   dialogVisible.value = true
 }
 
@@ -231,12 +266,9 @@ function resetForm() {
   form.username = ''
   form.password = ''
   form.anonymous_name = ''
-  form.real_name = ''
   form.phone = ''
   form.email = ''
   form.role = 'user'
-  form.company_name = ''
-  form.position = ''
   currentUserId.value = null
 }
 
@@ -253,10 +285,7 @@ async function handleSubmit() {
           phone: form.phone || undefined,
           email: form.email || undefined,
           role: form.role,
-          company_name: form.company_name || undefined,
-          anonymous_name: form.anonymous_name || undefined,
-          real_name: form.real_name || undefined,
-          position: form.position || undefined
+          anonymous_name: form.anonymous_name || undefined
         })
         ElMessage.success('更新成功')
       } else {
@@ -266,10 +295,7 @@ async function handleSubmit() {
           phone: form.phone || undefined,
           email: form.email || undefined,
           role: form.role,
-          company_name: form.company_name || undefined,
-          anonymous_name: form.anonymous_name || undefined,
-          real_name: form.real_name || undefined,
-          position: form.position || undefined
+          anonymous_name: form.anonymous_name || undefined
         })
         ElMessage.success('创建成功')
       }
@@ -283,22 +309,7 @@ async function handleSubmit() {
   })
 }
 
-async function handleDelete(row: UserListItem) {
-  try {
-    await ElMessageBox.confirm(`确定删除用户 ${row.username}？`, '警告', {
-      type: 'warning',
-      confirmButtonText: '删除',
-      cancelButtonText: '取消'
-    })
-    await deleteUser(row.id)
-    ElMessage.success('删除成功')
-    fetchUsers()
-  } catch {
-    // 取消
-  }
-}
-
-async function toggleUserStatus(row: UserListItem) {
+async function toggleUserStatus(row: UserWithBalance) {
   const action = row.is_active ? '禁用' : '启用'
   try {
     await ElMessageBox.confirm(`确定${action}用户 ${row.username}？`, '提示', {
@@ -328,7 +339,14 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 .header-right :deep(.el-button) {
@@ -336,11 +354,65 @@ onMounted(() => {
   border-color: #1a1a1a;
 }
 
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .content-card {
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
-  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.user-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.anonymous-name {
+  color: #595959;
+  font-size: 13px;
+}
+
+.parent-vip {
+  color: #8c8c8c;
+  font-size: 13px;
+}
+
+.balance-info {
+  display: flex;
+  gap: 16px;
+}
+
+.balance-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 60px;
+}
+
+.balance-label {
+  font-size: 11px;
+  color: #8c8c8c;
+  margin-bottom: 2px;
+}
+
+.balance-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.balance-value.consumption {
+  color: #ff4d4f;
 }
 
 .content-card :deep(.el-table th) {
@@ -348,11 +420,11 @@ onMounted(() => {
   color: #595959;
   font-weight: 500;
   font-size: 13px;
-  padding: 14px 0;
+  padding: 12px 0;
 }
 
 .content-card :deep(.el-table td) {
-  padding: 14px 0;
+  padding: 12px 0;
   font-size: 14px;
   color: #1a1a1a;
 }
