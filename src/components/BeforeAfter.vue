@@ -2,12 +2,12 @@
   <div class="before-after" ref="containerRef" @mousemove="onHover" @mouseleave="onLeave">
     <div class="image-container">
       <img :src="afterImage" class="image after-image" alt="After" />
-      <div class="image before-container" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }">
+      <div class="image before-container" :style="{ clipPath: beforeClipPath }">
         <img :src="beforeImage" class="image before-image" alt="Before" />
       </div>
     </div>
-    <div class="slider-handle" :style="{ left: `${position}%` }">
-      <div class="handle-line"></div>
+    <div class="slider-handle">
+      <div class="handle-line" :style="{ left: `${position}%` }"></div>
     </div>
     <div class="label before-label">处理前</div>
     <div class="label after-label">处理后</div>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = withDefaults(defineProps<{
   beforeImage: string
@@ -27,6 +27,21 @@ const props = withDefaults(defineProps<{
 
 const containerRef = ref<HTMLElement | null>(null)
 const position = ref(50)
+const angle = 15 // 斜线角度
+
+// 计算斜线切割的裁剪路径
+const beforeClipPath = computed(() => {
+  const p = position.value
+  const rad = (angle * Math.PI) / 180
+  const tanAngle = Math.tan(rad)
+
+  // 在x=0处，斜线对应的y值
+  const yAt0 = 50 - p * tanAngle
+  // 在x=100处，斜线对应的y值
+  const yAt100 = 50 + (100 - p) * tanAngle
+
+  return `polygon(0% 0%, 0% ${yAt0}%, 100% ${yAt100}%, 100% 0%)`
+})
 
 function updatePosition(clientX: number) {
   if (!containerRef.value) return
@@ -41,7 +56,6 @@ function onHover(e: MouseEvent) {
 }
 
 function onLeave() {
-  // 鼠标离开时恢复50%位置
   position.value = 50
 }
 </script>
@@ -93,23 +107,21 @@ function onLeave() {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 3px;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   z-index: 10;
-  cursor: ew-resize;
+  pointer-events: none;
 }
 
 .handle-line {
   position: absolute;
   top: -10%;
   bottom: -10%;
-  left: 50%;
-  width: 3px;
-  margin-left: -1.5px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 2px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  width: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   transform: rotate(15deg);
+  left: 50%;
 }
 
 .label {
