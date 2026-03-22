@@ -58,7 +58,7 @@
           <div class="nav-section" v-if="userStore.isLoggedIn">
             <span class="nav-section-title">用户功能</span>
             <router-link
-              v-for="feature in visibleFeatures"
+              v-for="feature in sidebarFeatures"
               :key="feature.id"
               :to="feature.path"
               class="nav-item"
@@ -235,6 +235,11 @@ const visibleFeatures = computed(() => {
     return featureStore.getVipFeatures()
   }
   return featureStore.getUserFeatures()
+})
+
+// 侧边栏功能导航：过滤掉空路径的功能
+const sidebarFeatures = computed(() => {
+  return visibleFeatures.value.filter(f => f.path && f.path.trim() !== '')
 })
 
 function getFeatureIcon(path: string) {
