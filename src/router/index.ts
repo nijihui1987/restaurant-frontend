@@ -19,10 +19,10 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
 
-    // ========== 移动端/客户端路由 ==========
+    // ========== 用户端路由（响应式：PC 左侧导航 / 移动端底部导航） ==========
     {
       path: '/',
-      component: () => import('@/layouts/MobileLayout.vue'),
+      component: () => import('@/layouts/ResponsiveLayout.vue'),
       meta: { requiresAuth: false },
       children: [
         {
