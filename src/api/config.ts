@@ -17,7 +17,11 @@ export async function getConfig(groupKey: string, configKey: string): Promise<st
   try {
     const res = await api.get<ConfigItem>(`/config/${groupKey}/${configKey}`)
     return res.data.config_value
-  } catch (error) {
+  } catch (error: any) {
+    // 404 表示配置不存在，不是错误，不需要打印
+    if (error?.response?.status === 404) {
+      return null
+    }
     console.error(`Failed to get config ${groupKey}/${configKey}:`, error)
     return null
   }
