@@ -85,7 +85,7 @@
           <template #item="{ element: feature }">
             <div class="feature-row">
               <div class="col-drag">
-                <el-icon class="drag-icon" :size="16"><Rank /></el-icon>
+                <el-icon class="drag-icon feature-drag" :size="16"><Rank /></el-icon>
               </div>
               <div class="col-preview">
                 <img :src="feature.image" :alt="feature.title" class="preview-img" />
