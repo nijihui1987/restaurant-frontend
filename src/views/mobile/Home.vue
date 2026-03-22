@@ -3,23 +3,22 @@
     <main class="home-content">
       <!-- 功能入口 -->
       <section class="features-section">
-        <router-link
+        <div
           v-for="feature in features"
           :key="feature.path"
-          :to="feature.path"
           class="feature-card"
         >
-          <div class="card-image" @click.stop>
+          <div class="card-image">
             <BeforeAfter
               :before-image="feature.beforeImage"
               :after-image="feature.afterImage"
             />
           </div>
-          <div class="card-content">
+          <router-link :to="feature.path" class="card-content">
             <h3 class="feature-title">{{ feature.title }}</h3>
             <p class="feature-desc">{{ feature.desc }}</p>
-          </div>
-        </router-link>
+          </router-link>
+        </div>
       </section>
 
       <!-- 登录提示 -->

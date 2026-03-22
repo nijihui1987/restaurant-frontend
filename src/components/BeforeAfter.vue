@@ -1,5 +1,5 @@
 <template>
-  <div class="before-after" ref="containerRef" @mousedown.stop="startDrag" @touchstart.stop="startDrag" @click.stop>
+  <div class="before-after" ref="containerRef" @mousedown.prevent="startDrag" @touchstart.prevent="startDrag" @click.stop="handleClick">
     <div class="image-container">
       <img :src="afterImage" class="image after-image" alt="After" />
       <div class="image before-container" :style="{ clipPath: `inset(0 ${100 - position}% 0 0)` }">
@@ -47,6 +47,7 @@ function updatePosition(clientX: number) {
 }
 
 function startDrag(e: MouseEvent | TouchEvent) {
+  e.stopPropagation()
   isDragging.value = true
   const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
   updatePosition(clientX)
@@ -60,6 +61,10 @@ function onDrag(e: MouseEvent | TouchEvent) {
 
 function stopDrag() {
   isDragging.value = false
+}
+
+function handleClick(e: Event) {
+  e.stopPropagation()
 }
 
 onMounted(() => {
