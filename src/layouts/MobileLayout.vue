@@ -150,40 +150,40 @@ fetchLogo()
 }
 
 .header-brand {
-  padding: var(--space-md) var(--space-lg) var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-xs);
+  gap: 2px;
 }
 
 .brand-logo {
-  height: 36px;
+  height: 28px;
   width: auto;
   object-fit: contain;
 }
 
 .brand-text {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-tight);
 }
 
 .brand-tagline {
-  font-size: var(--font-size-xs);
+  font-size: 10px;
   color: var(--color-text-secondary);
   letter-spacing: var(--letter-spacing-wide);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .header-announcement {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-lg);
+  padding: 6px var(--space-lg);
   background: var(--color-bg-elevated);
   border-top: 1px solid var(--color-border);
 }
