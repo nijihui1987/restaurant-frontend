@@ -16,9 +16,6 @@
             />
           </div>
           <div class="card-content">
-            <div class="feature-icon">
-              <el-icon :size="20"><component :is="feature.icon" /></el-icon>
-            </div>
             <h3 class="feature-title">{{ feature.title }}</h3>
             <p class="feature-desc">{{ feature.desc }}</p>
           </div>
@@ -40,16 +37,6 @@
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import BeforeAfter from '@/components/BeforeAfter.vue'
-import {
-  MagicStick,
-  Collection,
-  Aim,
-  ChatDotRound,
-  Shop,
-  VideoCamera,
-  Tickets,
-  Picture
-} from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -57,7 +44,6 @@ const userStore = useUserStore()
 const features = [
   {
     path: '/masterpiece',
-    icon: MagicStick,
     title: '手机随拍成片',
     desc: 'AI 智能识别，菜品图秒变专业摄影作品',
     beforeImage: 'https://picsum.photos/seed/dish1before/400/300',
@@ -65,7 +51,6 @@ const features = [
   },
   {
     path: '/batch',
-    icon: Collection,
     title: '批量套图成片',
     desc: '一次上传多张，批量处理成专业素材',
     beforeImage: 'https://picsum.photos/seed/batchbefore/400/300',
@@ -73,7 +58,6 @@ const features = [
   },
   {
     path: '/enhance',
-    icon: Aim,
     title: '智能高清优化',
     desc: 'AI 提升清晰度，还原图片细节',
     beforeImage: 'https://picsum.photos/seed/enhancebefore/400/300',
@@ -81,7 +65,6 @@ const features = [
   },
   {
     path: '/wechat',
-    icon: ChatDotRound,
     title: '微信营销出图',
     desc: '生成适合微信分享的高质量图片',
     beforeImage: 'https://picsum.photos/seed/wechatbefore/400/300',
@@ -89,7 +72,6 @@ const features = [
   },
   {
     path: '/dianping',
-    icon: Shop,
     title: '大众点评装修',
     desc: '为店铺生成专业的头图和菜单',
     beforeImage: 'https://picsum.photos/seed/dianpingbefore/400/300',
@@ -97,15 +79,13 @@ const features = [
   },
   {
     path: '/douyin',
-    icon: VideoCamera,
     title: '抖音门店装修',
     desc: '为抖音店铺生成吸睛视觉素材',
     beforeImage: 'https://picsum.photos/seed/douyinbefore/400/300',
-    afterImage: 'https://picsum.photos/seed/douyinafter/400/300'
+    afterImage: 'https://picsum.photos/seed/douyifinal/400/300'
   },
   {
     path: '/menu',
-    icon: Tickets,
     title: '印刷菜单出图',
     desc: '生成适合印刷的高清菜单图片',
     beforeImage: 'https://picsum.photos/seed/menubefore/400/300',
@@ -171,31 +151,20 @@ function goToLogin() {
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex: 1;
 }
 
-.feature-icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-bg-elevated);
-  border-radius: var(--radius-md);
-  color: var(--color-primary);
-  margin-bottom: var(--space-sm);
-}
-
 .feature-title {
-  margin: 0 0 var(--space-xs);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
 }
 
 .feature-desc {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
 }
