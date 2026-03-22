@@ -226,6 +226,7 @@ function goToLogin() {
   .features-section {
     grid-template-columns: 1fr;
     gap: var(--space-lg);
+    padding-top: var(--space-lg);
   }
 
   .feature-card {
