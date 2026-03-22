@@ -13,9 +13,6 @@ export interface Transaction {
   amount: number
   balance_after: number
   description: string
-  related_user_id?: number
-  related_user_name?: string  // 用户名（登录账号）
-  related_user_anonymous_name?: string  // 显示名称
   created_at: string
 }
 
