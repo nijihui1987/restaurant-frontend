@@ -4,25 +4,8 @@
       <!-- 功能入口 -->
       <section class="features-section">
         <template v-for="feature in visibleFeatures" :key="feature.id">
-          <div
-            v-if="feature.status === 'blocked' || !feature.path"
-            class="feature-card disabled"
-          >
-            <div class="card-image blocked">
-              <img :src="feature.image" :alt="feature.title" />
-              <div class="blocked-overlay">
-                <span class="blocked-text">{{ feature.blockedText || (!feature.path ? '链接为空' : '即将上线') }}</span>
-              </div>
-              <div class="title-box">
-                <span class="title-text">{{ feature.title }}</span>
-              </div>
-            </div>
-            <div class="card-info">
-              <p class="card-desc">{{ feature.desc }}</p>
-            </div>
-          </div>
           <router-link
-            v-else
+            v-if="feature.path && feature.status !== 'blocked'"
             :to="feature.path"
             class="feature-card"
           >
@@ -40,6 +23,37 @@
               </div>
             </div>
           </router-link>
+          <div
+            v-else-if="feature.status === 'blocked'"
+            class="feature-card disabled"
+          >
+            <div class="card-image blocked">
+              <img :src="feature.image" :alt="feature.title" />
+              <div class="blocked-overlay">
+                <span class="blocked-text">{{ feature.blockedText || '即将上线' }}</span>
+              </div>
+              <div class="title-box">
+                <span class="title-text">{{ feature.title }}</span>
+              </div>
+            </div>
+            <div class="card-info">
+              <p class="card-desc">{{ feature.desc }}</p>
+            </div>
+          </div>
+          <div
+            v-else
+            class="feature-card"
+          >
+            <div class="card-image">
+              <img :src="feature.image" :alt="feature.title" />
+              <div class="title-box">
+                <span class="title-text">{{ feature.title }}</span>
+              </div>
+            </div>
+            <div class="card-info">
+              <p class="card-desc">{{ feature.desc }}</p>
+            </div>
+          </div>
         </template>
       </section>
 
