@@ -67,7 +67,7 @@ export const useFeatureStore = defineStore('feature', () => {
   function getVisibleFeatures() {
     return features.value
       .filter(f => f.status !== 'hidden')
-      .sort((a, b) => a.order - b.order)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   }
 
   // 获取用户功能列表
