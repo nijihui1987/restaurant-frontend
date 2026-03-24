@@ -84,6 +84,32 @@
         </el-form>
       </div>
 
+      <div class="config-card">
+        <h2>防恶意提交（速率限制）</h2>
+        <el-form label-width="160px">
+          <el-form-item label="时间窗口">
+            <el-input-number v-model="rateLimit.window_seconds" :min="60" :max="3600" :step="60" controls-position="right" />
+            <span class="form-tip">单位：秒，范围 60-3600</span>
+          </el-form-item>
+          <el-form-item label="最大尝试次数">
+            <el-input-number v-model="rateLimit.max_attempts" :min="1" :max="10" controls-position="right" />
+            <span class="form-tip">范围 1-10</span>
+          </el-form-item>
+          <el-form-item label="阻止时间">
+            <el-input-number v-model="rateLimit.block_seconds" :min="60" :max="7200" :step="60" controls-position="right" />
+            <span class="form-tip">单位：秒，范围 60-7200</span>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="small" :loading="savingRateLimit" @click="saveRateLimitConfig">
+              保存配置
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <span class="form-tip">规则：在时间窗口内失败达到最大尝试次数后，将被阻止指定时间</span>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <div class="config-card info-card">
         <h2>配置说明</h2>
         <div class="info-content">
@@ -102,7 +128,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getConfig, saveConfig, getLogoConfig, saveLogoConfig, type LogoConfig } from '@/api/config'
+import { getConfig, saveConfig, getLogoConfig, saveLogoConfig, type LogoConfig, getRateLimitConfig, updateRateLimitConfig, type RateLimitConfig } from '@/api/config'
 import { uploadFile } from '@/api/oss'
 
 const config = ref({
@@ -217,7 +243,40 @@ function triggerLogoUpload(target: 'pc' | 'mobile' | 'login') {
 onMounted(() => {
   loadConfig()
   loadLogoConfig()
+  loadRateLimitConfig()
 })
+
+// 速率限制配置
+const rateLimit = ref<RateLimitConfig>({
+  window_seconds: 300,
+  max_attempts: 3,
+  block_seconds: 900
+})
+const savingRateLimit = ref(false)
+
+async function loadRateLimitConfig() {
+  try {
+    const data = await getRateLimitConfig()
+    if (data) {
+      rateLimit.value = data
+    }
+  } catch (error) {
+    console.error('加载速率限制配置失败', error)
+  }
+}
+
+async function saveRateLimitConfig() {
+  try {
+    savingRateLimit.value = true
+    await updateRateLimitConfig(rateLimit.value)
+    ElMessage.success('速率限制配置已更新')
+  } catch (error) {
+    ElMessage.error('配置更新失败')
+    await loadRateLimitConfig()
+  } finally {
+    savingRateLimit.value = false
+  }
+}
 </script>
 
 <style scoped>

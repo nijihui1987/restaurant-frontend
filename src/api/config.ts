@@ -221,3 +221,33 @@ export async function getFeatures(): Promise<FeatureItem[]> {
 export async function saveFeatures(features: FeatureItem[]): Promise<boolean> {
   return saveConfig('home', 'features', JSON.stringify({ features }))
 }
+
+// ============ 速率限制配置 ============
+
+export interface RateLimitConfig {
+  window_seconds: number  // 时间窗口（秒）
+  max_attempts: number     // 最大尝试次数
+  block_seconds: number    // 阻止时间（秒）
+}
+
+// 获取速率限制配置
+export async function getRateLimitConfig(): Promise<RateLimitConfig | null> {
+  try {
+    const res = await api.get<RateLimitConfig>('/config/rate_limit')
+    return res.data
+  } catch (error) {
+    console.error('Failed to get rate limit config:', error)
+    return null
+  }
+}
+
+// 更新速率限制配置
+export async function updateRateLimitConfig(config: Partial<RateLimitConfig>): Promise<RateLimitConfig | null> {
+  try {
+    const res = await api.put<RateLimitConfig>('/config/rate_limit', config)
+    return res.data
+  } catch (error) {
+    console.error('Failed to update rate limit config:', error)
+    return null
+  }
+}

@@ -194,6 +194,37 @@
         </el-form>
       </div>
 
+      <!-- ========== 防恶意提交（速率限制）========== -->
+      <div class="config-card">
+        <div class="card-header">
+          <h3>防恶意提交（速率限制）</h3>
+          <el-button type="primary" size="small" :loading="savingRateLimit" @click="saveRateLimit">
+            保存
+          </el-button>
+        </div>
+
+        <el-form label-width="140px" label-position="left">
+          <el-form-item label="时间窗口">
+            <el-input-number v-model="rateLimit.window_seconds" :min="60" :max="3600" :step="60" controls-position="right" />
+            <div class="form-tip">单位：秒，范围 60-3600</div>
+          </el-form-item>
+
+          <el-form-item label="最大尝试次数">
+            <el-input-number v-model="rateLimit.max_attempts" :min="1" :max="10" controls-position="right" />
+            <div class="form-tip">范围 1-10</div>
+          </el-form-item>
+
+          <el-form-item label="阻止时间">
+            <el-input-number v-model="rateLimit.block_seconds" :min="60" :max="7200" :step="60" controls-position="right" />
+            <div class="form-tip">单位：秒，范围 60-7200</div>
+          </el-form-item>
+
+          <el-form-item>
+            <div class="form-tip">规则：在时间窗口内失败达到最大尝试次数后，将被阻止指定时间</div>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <!-- ========== 背景图库管理 ========== -->
       <div class="config-card">
         <div class="card-header">
@@ -268,11 +299,20 @@ import { ElMessage } from 'element-plus'
 import { Plus, Delete, UploadFilled } from '@element-plus/icons-vue'
 import { uploadFile } from '@/api/oss'
 import { getConfig, updateConfig } from '@/api/masterpiece'
+import { getRateLimitConfig, updateRateLimitConfig, type RateLimitConfig } from '@/api/config'
 
 const savingStep1 = ref(false)
 const savingStep2 = ref(false)
 const savingStep3 = ref(false)
+const savingRateLimit = ref(false)
 const watermarkInputRef = ref<HTMLInputElement | null>(null)
+
+// 速率限制配置
+const rateLimit = ref<RateLimitConfig>({
+  window_seconds: 300,
+  max_attempts: 3,
+  block_seconds: 900
+})
 
 // 配置数据
 const config = reactive({
@@ -468,7 +508,31 @@ function removeBg(id: string) {
 
 onMounted(() => {
   loadConfig()
+  loadRateLimitConfig()
 })
+
+async function loadRateLimitConfig() {
+  try {
+    const data = await getRateLimitConfig()
+    if (data) {
+      rateLimit.value = data
+    }
+  } catch (error) {
+    console.error('加载速率限制配置失败', error)
+  }
+}
+
+async function saveRateLimit() {
+  savingRateLimit.value = true
+  try {
+    await updateRateLimitConfig(rateLimit.value)
+    ElMessage.success('速率限制配置已更新')
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data?.detail || '配置更新失败')
+  } finally {
+    savingRateLimit.value = false
+  }
+}
 
 async function loadConfig() {
   try {
