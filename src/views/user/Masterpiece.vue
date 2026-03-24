@@ -198,7 +198,7 @@
           <h2 class="failed-title">任务失败</h2>
           <p class="failed-desc">{{ currentTaskDetail.error_message || '未找到匹配的背景图，请稍后重试' }}</p>
           <div class="failed-actions">
-            <el-button type="primary" @click="handleRetryCurrentTask">重新识别</el-button>
+            <el-button type="primary" @click="handleRetryCurrentTask">重新上传</el-button>
           </div>
         </div>
         <div v-else-if="currentTaskDetail?.status === 'pending_select'" class="step2-panel">
