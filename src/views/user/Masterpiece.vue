@@ -12,7 +12,7 @@
 
     <!-- 步骤条 -->
     <div class="steps-container">
-      <el-steps :active="currentStep" align-center finish-status="success">
+      <el-steps :active="currentStep" align-center finish-status="success" :inline="true">
         <el-step title="上传识别" description="上传图片并确认信息" />
         <el-step title="选择背景" description="挑选合适的背景图" />
         <el-step title="确认获取" description="选择并付费获取" />
@@ -1586,6 +1586,14 @@ async function restoreTaskDetails(task: any) {
   .steps-container {
     padding: var(--space-sm) var(--space-md);
     margin-bottom: var(--space-md);
+  }
+
+  .steps-container :deep(.el-step__title) {
+    font-size: 12px;
+  }
+
+  .steps-container :deep(.el-step__description) {
+    display: none;
   }
 
   .step2-panel {
