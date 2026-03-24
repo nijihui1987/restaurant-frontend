@@ -1083,12 +1083,17 @@ async function handleGenerate() {
       }
       // 开始轮询
       startPolling()
+    } else if (res.status === 'pending_consume') {
+      // 如果后端直接返回 pending_consume（生成很快完成），停止轮询
+      stopPolling()
+      ElMessage.success('图片生成完成')
     }
 
     ElMessage.success(res.message || '已提交生成任务')
   } catch (error: any) {
     const msg = error?.response?.data?.detail || '生成失败'
     ElMessage.error(msg)
+  } finally {
     isGenerating.value = false
   }
 }
