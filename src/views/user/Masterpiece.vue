@@ -119,7 +119,7 @@
               <div class="result-actions">
                 <el-button @click="handleReset">重新上传</el-button>
                 <el-button type="primary" @click="handleSubmit" :disabled="!canSubmit">
-                  提交任务
+                  {{ isResultModified ? '确认并继续' : '继续' }}
                 </el-button>
               </div>
             </div>
@@ -348,7 +348,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { uploadFile } from '@/api/oss'
-import { recognizeImage, createTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask } from '@/api/masterpiece'
+import { recognizeImage, createTask, updateTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask } from '@/api/masterpiece'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -361,6 +361,7 @@ const fileInputRef = ref<HTMLInputElement | null>(null)
 const previewUrl = ref('')
 const isRecognizing = ref(false)
 const recognizeResult = ref<Record<string, string> | null>(null)
+const originalRecognizeResult = ref<Record<string, string> | null>(null)  // 原始识别结果，用于对比是否修改
 const recognizeError = ref<{ code: string; message: string } | null>(null)
 
 // 防恶意提交状态
@@ -472,6 +473,12 @@ const editableFields = ref([
 
 const canSubmit = computed(() => {
   return recognizeResult.value && recognizeResult.value.dish_name
+})
+
+// 识别结果是否被用户修改过
+const isResultModified = computed(() => {
+  if (!originalRecognizeResult.value || !recognizeResult.value) return false
+  return JSON.stringify(originalRecognizeResult.value) !== JSON.stringify(recognizeResult.value)
 })
 
 // 第二步相关
@@ -709,7 +716,9 @@ function handleReset() {
   previewUrl.value = ''
   uploadedImageUrl.value = ''
   recognizeResult.value = null
+  originalRecognizeResult.value = null
   recognizeError.value = null
+  taskId.value = null
   currentStep.value = 0
 }
 
@@ -738,6 +747,12 @@ async function handleRecognize() {
         cooking_method: res.data.cooking_method || '',
         description: res.data.description || '',
         photo_tips: res.data.photo_tips || ''
+      }
+      // 保存原始识别结果（用于对比是否修改）
+      originalRecognizeResult.value = JSON.parse(JSON.stringify(recognizeResult.value))
+      // 保存任务ID（识别成功时后端已自动创建任务）
+      if (res.task_id) {
+        taskId.value = res.task_id
       }
       ElMessage.success('识别完成')
     } else if (res.status === 'error') {
@@ -788,27 +803,29 @@ async function handleRecognize() {
 
 // 提交任务
 async function handleSubmit() {
-  if (!canSubmit.value || !uploadedImageUrl.value) return
+  if (!canSubmit.value || !taskId.value) return
 
   try {
-    const res = await createTask({
-      image_url: uploadedImageUrl.value,
-      dish_name: recognizeResult.value?.dish_name || '',
-      recognized_items: []
-    })
-
-    taskId.value = res.task_id
-    // 背景图列表从后端返回
-    backgroundImages.value = res.backgrounds || []
-    ElMessage.success('任务已创建')
+    // 如果用户修改了识别结果，先更新任务
+    if (isResultModified.value) {
+      const res = await updateTask(taskId.value, {
+        dish_name: recognizeResult.value?.dish_name || '',
+        recognized_items: recognizeResult.value?.main_ingredients
+          ? recognizeResult.value.main_ingredients.split('、')
+          : []
+      })
+      taskId.value = res.task_id
+      backgroundImages.value = res.backgrounds || []
+      ElMessage.success('已更新任务信息')
+    }
 
     // 刷新任务列表
     loadTaskList()
 
-    // 进入第二步
+    // 进入第二步（选择背景图）
     currentStep.value = 1
   } catch (error: any) {
-    const msg = error?.response?.data?.detail || '创建任务失败'
+    const msg = error?.response?.data?.detail || '操作失败'
     ElMessage.error(msg)
   }
 }
@@ -899,6 +916,7 @@ function handleStartNew() {
   previewUrl.value = ''
   uploadedImageUrl.value = ''
   recognizeResult.value = null
+  originalRecognizeResult.value = null
   taskId.value = null
   backgroundImages.value = []
   selectedBackgrounds.value = []

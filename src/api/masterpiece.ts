@@ -44,6 +44,7 @@ export interface RecognizeResult {
 // 识别响应
 export interface RecognizeResponse {
   status: 'success' | 'error'
+  task_id?: string  // 识别成功后自动创建的任务ID
   data?: RecognizeResult
   error_code?: 'VIOLATION_IMAGE' | 'NON_DISH_IMAGE' | 'MULTIPLE_DISHES' | 'UNSUPPORTED_IMAGE_FORMAT' | 'disabled'
   error_message?: string
@@ -84,6 +85,25 @@ export interface CreateTaskResponse {
 // 创建任务（提交识别结果）
 export async function createTask(data: CreateTaskRequest): Promise<CreateTaskResponse> {
   const res = await api.post<CreateTaskResponse>('/masterpiece/tasks', data)
+  return res.data
+}
+
+// 更新任务请求
+export interface UpdateTaskRequest {
+  dish_name: string
+  recognized_items?: string[]
+}
+
+// 更新任务响应
+export interface UpdateTaskResponse {
+  task_id: string
+  status: MasterpieceTaskStatus
+  backgrounds: BackgroundImage[]
+}
+
+// 更新任务（修改识别结果后提交）
+export async function updateTask(taskId: string, data: UpdateTaskRequest): Promise<UpdateTaskResponse> {
+  const res = await api.put<UpdateTaskResponse>(`/masterpiece/tasks/${taskId}`, data)
   return res.data
 }
 
