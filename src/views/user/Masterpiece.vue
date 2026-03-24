@@ -1355,9 +1355,7 @@ async function restoreTaskDetails(task: any) {
 
 .bg-item {
   position: relative;
-  width: calc(19% - var(--space-md));
-  min-width: 120px;
-  max-width: 160px;
+  flex: 0 0 calc((100% - 4 * var(--space-md)) / 5);
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -1574,8 +1572,7 @@ async function restoreTaskDetails(task: any) {
   }
 
   .bg-item {
-    width: calc(24% - var(--space-md));
-    min-width: 100px;
+    flex: 0 0 calc((100% - 3 * var(--space-md)) / 4);
   }
 
   .generation-grid {
@@ -1594,8 +1591,7 @@ async function restoreTaskDetails(task: any) {
   }
 
   .bg-item {
-    width: calc(48% - var(--space-sm));
-    min-width: 80px;
+    flex: 0 0 calc((100% - 2 * var(--space-sm)) / 3);
   }
 
   .step2-footer {
