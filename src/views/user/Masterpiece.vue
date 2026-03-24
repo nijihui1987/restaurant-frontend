@@ -154,7 +154,7 @@
         <div class="step2-footer">
           <span class="selected-count">已选择：{{ selectedBackgrounds.length }} / {{ maxSelect }} 张</span>
           <div class="action-buttons">
-            <el-button @click="handleBackToStep1">上一步</el-button>
+            <el-button size="large" @click="handleBackToStep1">上一步</el-button>
             <el-button
               type="primary"
               size="large"
