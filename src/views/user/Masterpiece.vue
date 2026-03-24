@@ -68,10 +68,10 @@
                 type="primary"
                 size="large"
                 :loading="isRecognizing"
-                :disabled="!previewUrl"
+                :disabled="!previewUrl || isRecognizeDone"
                 @click="handleRecognize"
               >
-                {{ isRecognizing ? '识别中...' : '开始识别' }}
+                {{ isRecognizing ? '识别中...' : (isRecognizeDone ? '识别完成' : '开始识别') }}
               </el-button>
             </div>
           </div>
@@ -346,6 +346,7 @@ const currentStep = ref(0)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const previewUrl = ref('')
 const isRecognizing = ref(false)
+const isRecognizeDone = ref(false)  // 识别是否已完成
 const recognizeResult = ref<Record<string, string> | null>(null)
 const originalRecognizeResult = ref<Record<string, string> | null>(null)  // 原始识别结果，用于对比是否修改
 const recognizeError = ref<{ code: string; message: string } | null>(null)
@@ -736,12 +737,19 @@ async function handleFile(file: File) {
 }
 
 function handleReset() {
+  // 如果有已创建的任务，先删除
+  if (taskId.value) {
+    cancelTask(taskId.value).catch(console.error)
+  }
   previewUrl.value = ''
   uploadedImageUrl.value = ''
   recognizeResult.value = null
   originalRecognizeResult.value = null
   recognizeError.value = null
+  isRecognizeDone.value = false
   taskId.value = null
+  backgroundImages.value = []
+  selectedBackgrounds.value = []
   currentStep.value = 0
 }
 
@@ -779,6 +787,8 @@ async function handleRecognize() {
         // 加载任务详情以获取背景图列表
         loadTaskBackgrounds(res.task_id)
       }
+      // 标记识别已完成
+      isRecognizeDone.value = true
       ElMessage.success('识别完成')
     } else if (res.status === 'error') {
       // 识别失败
