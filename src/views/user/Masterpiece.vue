@@ -548,6 +548,7 @@ async function loadMasterpieceConfig() {
   try {
     const data = await getConfig()
     showBackgroundName.value = data.show_background_name ?? true
+    maxSelect.value = data.select_count_max ?? 6
   } catch (error) {
     console.error('加载配置失败', error)
   }
