@@ -615,6 +615,7 @@ function scrollTabs(direction: 'left' | 'right') {
 
 // Tab 切换
 function switchToCreateTab() {
+  stopPolling()  // 停止轮询
   activeTabId.value = 'create'
   currentTaskDetail.value = null
   resetTaskState()
