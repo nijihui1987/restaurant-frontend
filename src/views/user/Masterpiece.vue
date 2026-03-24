@@ -560,12 +560,11 @@ async function loadTaskList() {
 async function loadTaskBackgrounds(tid: string) {
   try {
     const detail = await getTask(tid)
-    if (detail.recognized_data && detail.recognized_data.background_urls) {
-      // 从 recognized_data 中恢复背景图列表
-      const urls = detail.recognized_data.background_urls
-      backgroundImages.value = urls.map((url: string, index: number) => ({
+    // 优先从 backgrounds 字段获取
+    if (detail.backgrounds && detail.backgrounds.length > 0) {
+      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => ({
         id: String(index),
-        url: url
+        url: bg.url
       }))
     }
   } catch (error) {
