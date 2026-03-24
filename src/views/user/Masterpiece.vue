@@ -191,7 +191,17 @@
         </div>
 
         <!-- 步骤二：选择背景图（pending_select 状态） -->
-        <div v-if="currentTaskDetail?.status === 'pending_select'" class="step2-panel">
+        <div v-if="currentTaskDetail?.status === 'failed'" class="failed-section">
+          <div class="failed-icon">
+            <el-icon :size="64" color="#f56c6c"><CircleCloseFilled /></el-icon>
+          </div>
+          <h2 class="failed-title">任务失败</h2>
+          <p class="failed-desc">{{ currentTaskDetail.error_message || '未找到匹配的背景图，请稍后重试' }}</p>
+          <div class="failed-actions">
+            <el-button type="primary" @click="handleRetryCurrentTask">重新识别</el-button>
+          </div>
+        </div>
+        <div v-else-if="currentTaskDetail?.status === 'pending_select'" class="step2-panel">
           <h4 class="step-title">选择背景图</h4>
           <p class="step-desc">当前显示 {{ backgroundImages.length }} 张，可选 {{ maxSelect }} 张</p>
           <div class="background-grid">
