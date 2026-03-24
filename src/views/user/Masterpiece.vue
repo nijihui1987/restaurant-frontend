@@ -1303,8 +1303,8 @@ async function restoreTaskDetails(task: any) {
 
 .background-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-lg);
   margin-bottom: var(--space-xl);
 }
 
@@ -1316,6 +1316,7 @@ async function restoreTaskDetails(task: any) {
   cursor: pointer;
   border: 2px solid transparent;
   transition: all var(--transition-fast);
+  background: var(--color-bg-page);
 }
 
 .bg-item img {
@@ -1326,10 +1327,13 @@ async function restoreTaskDetails(task: any) {
 
 .bg-item:hover {
   border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .bg-item.selected {
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
 }
 
 .bg-select-badge {
@@ -1510,10 +1514,6 @@ async function restoreTaskDetails(task: any) {
     flex-direction: column;
   }
 
-  .background-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .generation-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1522,6 +1522,7 @@ async function restoreTaskDetails(task: any) {
 @media (max-width: 640px) {
   .background-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
   }
 
   .generation-grid {
