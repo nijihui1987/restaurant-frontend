@@ -14,7 +14,7 @@
     </div>
 
     <!-- Tab 导航区 -->
-    <div class="tab-nav">
+    <div class="tab-nav" v-if="taskTabs.length > 0">
       <!-- 左箭头 -->
       <div class="tab-arrow left" v-if="showLeftArrow && !isMobile" @click="scrollTabs('left')">
         <el-icon><ArrowLeft /></el-icon>
