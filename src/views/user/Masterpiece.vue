@@ -133,17 +133,10 @@
       <!-- ========== 第二步：选择背景 ========== -->
       <div v-show="currentStep === 1" class="step-panel">
         <div class="step-inner">
-          <div class="step-info">
-            <el-alert
-              title="选择背景图"
-              type="info"
-              :closable="false"
-              show-icon
-            >
-              <template #default>
-                从以下背景图中选择 {{ maxSelect }} 张作为参考，AI 将结合您的菜品图生成全新作品
-              </template>
-            </el-alert>
+          <!-- 说明信息 -->
+          <div class="step-title">
+            <h3>选择背景图</h3>
+            <p>从以下背景图中选择 {{ maxSelect }} 张作为参考，AI 将结合您的菜品图生成全新作品</p>
           </div>
 
           <!-- 背景图网格 -->
@@ -162,6 +155,7 @@
             </div>
           </div>
 
+          <!-- 按钮区域 -->
           <div class="step-actions">
             <div class="selected-count">
               已选择：{{ selectedBackgrounds.length }} / {{ maxSelect }} 张
@@ -1333,19 +1327,37 @@ async function restoreTaskDetails(task: any) {
 }
 
 /* ========== 第二步：选择背景 ========== */
-.step-info {
+.step-title {
+  text-align: center;
   margin-bottom: var(--space-xl);
 }
 
+.step-title h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.step-title p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
 .background-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: var(--space-lg);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
   margin-bottom: var(--space-xl);
 }
 
 .bg-item {
   position: relative;
+  width: calc(20% - var(--space-md));
+  min-width: 140px;
+  max-width: 180px;
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -1550,6 +1562,11 @@ async function restoreTaskDetails(task: any) {
     flex-direction: column;
   }
 
+  .bg-item {
+    width: calc(25% - var(--space-md));
+    min-width: 120px;
+  }
+
   .generation-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1557,8 +1574,12 @@ async function restoreTaskDetails(task: any) {
 
 @media (max-width: 640px) {
   .background-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-sm);
+  }
+
+  .bg-item {
+    width: calc(33.33% - var(--space-sm));
+    min-width: 100px;
   }
 
   .generation-grid {
