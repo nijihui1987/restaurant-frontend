@@ -1382,14 +1382,14 @@ async function restoreTaskDetails(task: any) {
 
 .bg-item-name {
   position: absolute;
-  bottom: var(--space-xs);
-  left: var(--space-xs);
+  bottom: 0;
+  left: 0;
+  right: 0;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(0, 0, 0, 0.3);
-  padding: 1px 4px;
-  border-radius: 2px;
-  max-width: 90%;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 6px;
+  z-index: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
