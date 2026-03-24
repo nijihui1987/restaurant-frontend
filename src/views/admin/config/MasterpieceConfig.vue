@@ -15,15 +15,6 @@
         </div>
 
         <el-form label-width="140px" label-position="left">
-          <el-form-item label="LLM 模型">
-            <el-select v-model="config.model" placeholder="选择 LLM 模型" style="width: 300px">
-              <el-option label="GPT-4o" value="gpt-4o" />
-              <el-option label="GPT-4o-mini" value="gpt-4o-mini" />
-              <el-option label="Claude-3.5-Sonnet" value="claude-3.5-sonnet" />
-              <el-option label="Claude-3-Haiku" value="claude-3-haiku" />
-            </el-select>
-          </el-form-item>
-
           <el-form-item label="系统提示词">
             <el-input
               v-model="config.system_prompt"
@@ -38,10 +29,10 @@
             <el-input
               v-model="config.user_template"
               type="textarea"
-              :rows="4"
-              placeholder="输入用户提示词模板，支持占位符：{{dish_name}}, {{category}}, {{image_url}}"
+              :rows="10"
+              placeholder="输入用户提示词模板"
             />
-            <div class="form-tip">在拼接用户输入时使用的模板，占位符会被实际值替换</div>
+            <div class="form-tip">在拼接用户输入时使用的模板</div>
           </el-form-item>
 
           <el-form-item label="固定后缀">
@@ -57,11 +48,27 @@
           <el-form-item label="可编辑字段">
             <el-checkbox-group v-model="config.editable_fields">
               <el-checkbox label="dish_name">菜品名称</el-checkbox>
-              <el-checkbox label="category">分类</el-checkbox>
-              <el-checkbox label="tags">标签</el-checkbox>
-              <el-checkbox label="description">描述</el-checkbox>
+              <el-checkbox label="business_type">所属业态</el-checkbox>
+              <el-checkbox label="cuisine_type">所属菜系</el-checkbox>
+              <el-checkbox label="main_ingredients">主要原材料</el-checkbox>
+              <el-checkbox label="cooking_method">主要做法</el-checkbox>
+              <el-checkbox label="description">整体详细描述</el-checkbox>
+              <el-checkbox label="photo_tips">摄影建议</el-checkbox>
             </el-checkbox-group>
             <div class="form-tip">用户可以在识别结果中编辑哪些字段</div>
+          </el-form-item>
+
+          <el-form-item label="显示字段">
+            <el-checkbox-group v-model="config.visible_fields">
+              <el-checkbox label="dish_name">菜品名称</el-checkbox>
+              <el-checkbox label="business_type">所属业态</el-checkbox>
+              <el-checkbox label="cuisine_type">所属菜系</el-checkbox>
+              <el-checkbox label="main_ingredients">主要原材料</el-checkbox>
+              <el-checkbox label="cooking_method">主要做法</el-checkbox>
+              <el-checkbox label="description">整体详细描述</el-checkbox>
+              <el-checkbox label="photo_tips">摄影建议</el-checkbox>
+            </el-checkbox-group>
+            <div class="form-tip">哪些字段显示给客户看</div>
           </el-form-item>
 
           <el-form-item label="预览消耗积分">
@@ -91,13 +98,9 @@
             <div class="form-tip">客户最多可以选择多少张背景图，默认 6</div>
           </el-form-item>
 
-          <el-form-item label="视觉生成模型">
-            <el-select v-model="config.generation_model" placeholder="选择生成模型" style="width: 300px">
-              <el-option label="DALL-E 3" value="dalle-3" />
-              <el-option label="DALL-E 2" value="dalle-2" />
-              <el-option label="Midjourney" value="midjourney" />
-              <el-option label="Stable Diffusion" value="sd" />
-            </el-select>
+          <el-form-item label="显示图片名称">
+            <el-switch v-model="config.show_background_name" />
+            <div class="form-tip">在背景图左下角显示文件名</div>
           </el-form-item>
 
           <el-divider>水印配置</el-divider>
@@ -247,6 +250,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus, Delete, UploadFilled } from '@element-plus/icons-vue'
 import { uploadFile } from '@/api/oss'
+import { getConfig, updateConfig } from '@/api/masterpiece'
 
 const savingStep1 = ref(false)
 const savingStep2 = ref(false)
@@ -256,17 +260,43 @@ const watermarkInputRef = ref<HTMLInputElement | null>(null)
 // 配置数据
 const config = reactive({
   // 第一步
-  model: 'gpt-4o',
   system_prompt: '你是一个专业的菜品识别助手。请分析用户上传的菜品图片，返回详细的菜品信息。',
-  user_template: '请识别这张菜品图片，返回JSON格式：\n菜品名称：{{dish_name}}\n分类：{{category}}\n标签：{{tags}}\n描述：{{description}}',
-  suffix: '请用简洁的语言描述，注重色彩和摆盘。',
-  editable_fields: ['dish_name', 'category', 'tags'],
+  user_template: `你是一个专业的菜品识别专家。请分析用户上传的菜品图片，返回详细的菜品信息。
+
+我需要识别以下信息：
+- 菜品名称（提供最可能的一个）
+- 所属业态（中式餐饮、西餐或多国料理、日韩料理、烧烤、烤肉、无法判断选其一）
+- 所属菜系（淮扬菜、粤菜、川菜等等可以根据实际情况，提供最可能的一个）
+- 主要原材料（最多列出五种）
+- 主要做法（越详细越好）
+- 对此菜品的整体详细描述（越详细越好，最好从味道、口感、客群、意境等方面尽情发挥）
+- 如果要拍摄好这道菜，摄影师的布光、相机参数建议（给出专业建议）
+
+请严格以 JSON 格式返回，格式如下：
+{
+  "dish_name": "菜品名称",
+  "business_type": "所属业态",
+  "cuisine_type": "所属菜系",
+  "main_ingredients": ["原料1", "原料2", ...],
+  "cooking_method": "主要做法",
+  "description": "整体详细描述",
+  "photo_tips": "摄影建议"
+}
+
+【重要】在识别菜品之前，请先判断图片中是否包含多个独立的菜品：
+- 如果图片中有且只有一个菜品 → 按照上面的 JSON 格式返回识别结果
+- 如果图片中有多个菜品 → 返回：{"error": true, "code": "MULTIPLE_DISHES", "message": "检测到多个菜品，请上传单一菜品的图片"}
+- 如果图片中没有菜品 → 返回：{"error": true, "code": "NON_DISH_IMAGE", "message": "未检测到菜品主体，请上传菜品图片"}
+- 如果图片内容违规 → 返回：{"error": true, "code": "VIOLATION_IMAGE", "message": "图片内容违规，请更换图片后重试"}`,
+  suffix: '',
+  editable_fields: ['dish_name', 'business_type', 'cuisine_type'],
+  visible_fields: ['dish_name', 'business_type', 'cuisine_type', 'main_ingredients', 'cooking_method', 'description', 'photo_tips'],
   coin_cost_preview: 0,
 
   // 第二步
   background_count_x: 10,
   select_count_max: 6,
-  generation_model: 'dalle-3',
+  show_background_name: true,
   watermark_text: '预览水印',
   watermark_image: '',
   watermark_position: 'bottom-right',
@@ -327,11 +357,16 @@ async function onWatermarkChange(e: Event) {
 async function saveStep1() {
   savingStep1.value = true
   try {
-    // TODO: 调用 API 保存
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await updateConfig({
+      system_prompt: config.system_prompt,
+      user_template: config.user_template,
+      suffix: config.suffix,
+      editable_fields: config.editable_fields,
+      visible_fields: config.visible_fields
+    })
     ElMessage.success('第一步配置已保存')
-  } catch (error) {
-    ElMessage.error('保存失败')
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data?.detail || '保存失败')
   } finally {
     savingStep1.value = false
   }
@@ -340,10 +375,17 @@ async function saveStep1() {
 async function saveStep2() {
   savingStep2.value = true
   try {
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await updateConfig({
+      background_count_x: config.background_count_x,
+      select_count_max: config.select_count_max,
+      show_background_name: config.show_background_name,
+      watermark_text: config.watermark_text,
+      watermark_position: config.watermark_position,
+      watermark_opacity: config.watermark_opacity
+    })
     ElMessage.success('第二步配置已保存')
-  } catch (error) {
-    ElMessage.error('保存失败')
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data?.detail || '保存失败')
   } finally {
     savingStep2.value = false
   }
@@ -352,10 +394,14 @@ async function saveStep2() {
 async function saveStep3() {
   savingStep3.value = true
   try {
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await updateConfig({
+      coin_cost_per_image: config.coin_cost_per_image,
+      max_select_output: config.max_select_output,
+      hd_enhance_coin: config.hd_enhance_coin
+    })
     ElMessage.success('第三步配置已保存')
-  } catch (error) {
-    ElMessage.error('保存失败')
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data?.detail || '保存失败')
   } finally {
     savingStep3.value = false
   }
@@ -400,8 +446,32 @@ function removeBg(id: string) {
 }
 
 onMounted(() => {
-  // TODO: 加载配置数据
+  loadConfig()
 })
+
+async function loadConfig() {
+  try {
+    const data = await getConfig()
+    // 填充配置数据
+    config.system_prompt = data.system_prompt || config.system_prompt
+    config.user_template = data.user_template || config.user_template
+    config.suffix = data.suffix ?? ''
+    config.editable_fields = data.editable_fields || config.editable_fields
+    config.visible_fields = data.visible_fields || config.visible_fields
+    config.background_count_x = data.background_count_x ?? 10
+    config.select_count_max = data.select_count_max ?? 6
+    config.show_background_name = data.show_background_name ?? true
+    config.watermark_text = data.watermark_text || '预览水印'
+    config.watermark_image = data.watermark_image || ''
+    config.watermark_position = data.watermark_position || 'bottom-right'
+    config.watermark_opacity = data.watermark_opacity ?? 50
+    config.coin_cost_per_image = data.coin_cost_per_image ?? 5
+    config.max_select_output = data.max_select_output ?? 3
+    config.hd_enhance_coin = data.hd_enhance_coin ?? 5
+  } catch (error) {
+    console.error('加载配置失败', error)
+  }
+}
 </script>
 
 <style scoped>

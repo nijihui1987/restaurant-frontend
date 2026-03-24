@@ -143,7 +143,7 @@
             @click="toggleBackground(bg.id)"
           >
             <img :src="bg.url" :alt="`背景图 ${bg.name}`" />
-            <div class="bg-item-name">{{ bg.name }}</div>
+            <div class="bg-item-name" v-if="showBackgroundName">{{ bg.name }}</div>
             <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
               <el-icon><Check /></el-icon>
             </div>
@@ -334,7 +334,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { uploadFile } from '@/api/oss'
-import { recognizeImage, createTask, updateTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask } from '@/api/masterpiece'
+import { recognizeImage, createTask, updateTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask, getConfig } from '@/api/masterpiece'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -472,6 +472,7 @@ const taskId = ref<string | null>(null)  // 任务ID，后端返回
 const backgroundImages = ref<Array<{ id: string; url: string }>>([])  // 背景图列表（含编号）
 const selectedBackgrounds = ref<string[]>([])  // 选中的背景图编号
 const maxSelect = ref(6)
+const showBackgroundName = ref(true)  // 是否显示背景图文件名
 const isGenerating = ref(false)
 
 // 第三步相关
@@ -542,8 +543,21 @@ async function loadTaskList() {
   }
 }
 
+// 加载大师成相配置
+async function loadMasterpieceConfig() {
+  try {
+    const data = await getConfig()
+    showBackgroundName.value = data.show_background_name ?? true
+  } catch (error) {
+    console.error('加载配置失败', error)
+  }
+}
+
 // 加载任务的背景图列表
 async function loadTaskBackgrounds(tid: string) {
+  // 先加载配置
+  await loadMasterpieceConfig()
+
   try {
     const detail = await getTask(tid)
     // 优先从 backgrounds 字段获取
