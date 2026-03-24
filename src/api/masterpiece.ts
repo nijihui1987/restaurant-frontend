@@ -7,10 +7,36 @@ export type MasterpieceTaskStatus =
   | 'matching'
   | 'generating'
   | 'pending_select'
+  | 'pending_consume'
   | 'enhancing'
   | 'pending_audit'
   | 'done'
   | 'failed'
+
+// ========== 类型定义 ==========
+
+// 生成图片项
+export interface GeneratedImageItem {
+  index: number
+  url: string | null
+  status: 'success' | 'failed' | 'pending'
+  error?: string
+}
+
+// 生成进度
+export interface GenerationProgress {
+  current: number
+  total: number
+  message: string
+}
+
+// 背景图
+export interface BackgroundImage {
+  id: string
+  url: string
+  name?: string
+  score?: number
+}
 
 // 大师成相任务
 export interface MasterpieceTask {
@@ -19,12 +45,18 @@ export interface MasterpieceTask {
   dish_name: string
   status: MasterpieceTaskStatus
   recognized_items: string[]
-  generated_images: string[]
-  selected_images: number[]
+  recognized_data?: any
+  generated_images: GeneratedImageItem[]
+  generated_images_detail?: GeneratedImageItem[]  // 后端返回的详细状态
+  selected_images: string[]
   hd_images: string[]
+  backgrounds?: BackgroundImage[]  // 匹配的背景图列表
+  generation_progress?: GenerationProgress
+  success_count?: number
+  failed_count?: number
   created_at: string
   completed_at?: string
-  error?: string
+  error_message?: string
 }
 
 // ========== 识别相关 ==========
@@ -44,7 +76,7 @@ export interface RecognizeResult {
 // 识别响应
 export interface RecognizeResponse {
   status: 'success' | 'error'
-  task_id?: string  // 识别成功后自动创建的任务ID
+  task_id?: string
   data?: RecognizeResult
   error_code?: 'VIOLATION_IMAGE' | 'NON_DISH_IMAGE' | 'MULTIPLE_DISHES' | 'UNSUPPORTED_IMAGE_FORMAT' | 'disabled'
   error_message?: string
@@ -60,12 +92,6 @@ export async function recognizeImage(imageUrl: string): Promise<RecognizeRespons
 }
 
 // ========== 任务相关 ==========
-
-// 背景图
-export interface BackgroundImage {
-  id: string
-  url: string
-}
 
 // 创建任务请求
 export interface CreateTaskRequest {
@@ -108,8 +134,8 @@ export async function updateTask(taskId: string, data: UpdateTaskRequest): Promi
 }
 
 // 获取任务详情
-export async function getTask(taskId: string): Promise<any> {
-  const res = await api.get(`/masterpiece/tasks/${taskId}`)
+export async function getTask(taskId: string): Promise<MasterpieceTask> {
+  const res = await api.get<MasterpieceTask>(`/masterpiece/tasks/${taskId}`)
   return res.data
 }
 
@@ -120,41 +146,50 @@ export async function getTasks(status?: string): Promise<any> {
   return res.data
 }
 
-// 选择背景图并触发生成（第二步）
-export interface SelectBackgroundsRequest {
-  background_ids: string[]
+// ========== 生成图片（第二步） ==========
+
+// 触发生成请求
+export interface GenerateImagesRequest {
+  selected_background_indices: number[]
 }
 
-export interface SelectBackgroundsResponse {
+// 触发生成响应
+export interface GenerateImagesResponse {
   task_id: string
-  status: MasterpieceTaskStatus
-  generated_images?: { url: string }[]
+  status: string
+  message: string
+  total_images: number
 }
 
-export async function selectBackgrounds(
+// 触发生成图片
+export async function generateImages(
   taskId: string,
-  data: SelectBackgroundsRequest
-): Promise<SelectBackgroundsResponse> {
-  const res = await api.post<SelectBackgroundsResponse>(
-    `/masterpiece/tasks/${taskId}/select`,
+  data: GenerateImagesRequest
+): Promise<GenerateImagesResponse> {
+  const res = await api.post<GenerateImagesResponse>(
+    `/masterpiece/tasks/${taskId}/generate`,
     data
   )
   return res.data
 }
 
-// 消费确认（第三步）
+// ========== 消费确认（第三步） ==========
+
+// 消费确认请求
 export interface ConsumeRequest {
   selected_indices: number[]
-  include_hd: boolean
 }
 
+// 消费确认响应
 export interface ConsumeResponse {
+  success: boolean
   task_id: string
-  status: MasterpieceTaskStatus
-  images: string[]
-  hd_images?: string[]
+  coin_cost: number
+  balance: number
+  selected_images: string[]
 }
 
+// 消费确认
 export async function consumeTask(
   taskId: string,
   data: ConsumeRequest

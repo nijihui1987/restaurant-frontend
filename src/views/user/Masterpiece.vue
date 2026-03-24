@@ -223,8 +223,59 @@
           </div>
         </div>
 
-        <!-- 步骤三：确认消费（generating/done 状态） -->
-        <div v-else-if="currentTaskDetail?.status === 'done' || generatedImages.length > 0" class="step3-panel">
+        <!-- 生成中状态（轮询进度） -->
+        <div v-else-if="currentTaskDetail?.status === 'generating'" class="generating-panel">
+          <div class="generating-progress">
+            <el-progress
+              :percentage="Math.round((generationProgress?.current || 0) / (generationProgress?.total || 1) * 100)"
+              :stroke-width="8"
+              status="success"
+            />
+            <p class="generating-message">{{ generationProgress?.message || '正在生成...' }}</p>
+          </div>
+
+          <div class="generation-grid">
+            <div
+              v-for="img in generatedImages"
+              :key="img.index"
+              class="gen-item"
+              :class="{
+                selected: selectedGenerations.includes(img.index),
+                failed: img.status === 'failed',
+                pending: img.status === 'pending'
+              }"
+              @click="img.status === 'success' && toggleGeneration(img.index)"
+            >
+              <div class="gen-image-wrapper">
+                <img v-if="img.url" :src="img.url" :alt="`生成图 ${img.index + 1}`" />
+                <div v-else class="gen-placeholder">
+                  <el-icon v-if="img.status === 'pending'" class="is-loading"><Loading /></el-icon>
+                  <el-icon v-else-if="img.status === 'failed'" color="#f56c6c"><CircleCloseFilled /></el-icon>
+                </div>
+                <div v-if="img.url" class="watermark-overlay">
+                  <span class="watermark-text">预览水印</span>
+                </div>
+              </div>
+              <div class="gen-status-badge" :class="img.status">
+                {{ img.status === 'success' ? '成功' : img.status === 'failed' ? '失败' : '生成中' }}
+              </div>
+              <div class="gen-select-badge" v-if="selectedGenerations.includes(img.index)">
+                <el-icon><Check /></el-icon>
+              </div>
+            </div>
+          </div>
+
+          <div class="generating-tip">
+            <el-alert type="info" :closable="false" show-icon>
+              <template #default>
+                图片生成中，请耐心等待...
+              </template>
+            </el-alert>
+          </div>
+        </div>
+
+        <!-- 待消费状态（pending_consume） -->
+        <div v-else-if="currentTaskDetail?.status === 'pending_consume'" class="step3-panel">
           <div class="step-info">
             <el-alert
               title="确认获取"
@@ -240,19 +291,26 @@
 
           <div class="generation-grid">
             <div
-              v-for="(img, index) in generatedImages"
-              :key="index"
+              v-for="img in generatedImages"
+              :key="img.index"
               class="gen-item"
-              :class="{ selected: selectedGenerations.includes(index) }"
-              @click="toggleGeneration(index)"
+              :class="{
+                selected: selectedGenerations.includes(img.index),
+                failed: img.status === 'failed'
+              }"
+              @click="img.status === 'success' && toggleGeneration(img.index)"
             >
               <div class="gen-image-wrapper">
-                <img :src="img.url" :alt="`生成图 ${index + 1}`" />
-                <div class="watermark-overlay">
+                <img v-if="img.url" :src="img.url" :alt="`生成图 ${img.index + 1}`" />
+                <div v-else class="gen-placeholder gen-placeholder-failed">
+                  <el-icon color="#f56c6c"><CircleCloseFilled /></el-icon>
+                  <span class="failed-text">{{ img.error || '生成失败' }}</span>
+                </div>
+                <div v-if="img.url" class="watermark-overlay">
                   <span class="watermark-text">预览水印</span>
                 </div>
               </div>
-              <div class="gen-select-badge" v-if="selectedGenerations.includes(index)">
+              <div class="gen-select-badge" v-if="selectedGenerations.includes(img.index) && img.status === 'success'">
                 <el-icon><Check /></el-icon>
               </div>
             </div>
@@ -272,10 +330,6 @@
                 <span class="summary-label">合计：</span>
                 <span class="summary-value">{{ totalCoin }} 积分</span>
               </div>
-            </div>
-
-            <div class="hd-option">
-              <el-checkbox v-model="includeHd">同时获取高清版本（+{{ hdEnhanceCoin }} 积分/张）</el-checkbox>
             </div>
 
             <div class="consume-actions">
@@ -325,10 +379,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock, ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock, ArrowLeft, ArrowRight, Loading } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { uploadFile } from '@/api/oss'
-import { recognizeImage, updateTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask, getConfig } from '@/api/masterpiece'
+import { recognizeImage, updateTask, generateImages, consumeTask, getTasks, getTask, cancelTask, getConfig } from '@/api/masterpiece'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -479,19 +533,22 @@ const showBackgroundName = ref(true)
 const subtitle = ref('')
 const isGenerating = ref(false)
 
+// 生成进度相关（轮询）
+const isPolling = ref(false)
+const pollingTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+const pollingStartTime = ref<number>(0)
+const POLLING_TIMEOUT = 10 * 60 * 1000 // 10分钟超时
+const generationProgress = ref<{ current: number; total: number; message: string } | null>(null)
+
 // 第三步相关
-const generatedImages = ref<Array<{ url: string }>>([])
+const generatedImages = ref<Array<{ index: number; url: string | null; status: string; error?: string }>>([])
 const selectedGenerations = ref<number[]>([])
 const coinCostPerImage = ref(5)
-const hdEnhanceCoin = ref(5)
-const includeHd = ref(false)
 
 const isConsuming = ref(false)
 
 const totalCoin = computed(() => {
-  const base = selectedGenerations.value.length * coinCostPerImage.value
-  const hd = includeHd.value ? selectedGenerations.value.length * hdEnhanceCoin.value : 0
-  return base + hd
+  return selectedGenerations.value.length * coinCostPerImage.value
 })
 
 // 当前上传到 OSS 的文件路径
@@ -607,11 +664,28 @@ async function loadTaskDetail(tid: string) {
       })
     }
 
-    // 恢复生成图
+    // 恢复生成图（新的格式：{index, url, status, error?}）
     if (detail.generated_images && detail.generated_images.length > 0) {
-      generatedImages.value = detail.generated_images.map((url: string) => ({ url }))
+      generatedImages.value = detail.generated_images.map((img: any) => ({
+        index: img.index,
+        url: img.url,
+        status: img.status,
+        error: img.error
+      }))
     } else {
       generatedImages.value = []
+    }
+
+    // 恢复生成进度
+    if (detail.generation_progress) {
+      generationProgress.value = detail.generation_progress
+    }
+
+    // 如果正在生成中，启动轮询
+    if (detail.status === 'generating') {
+      startPolling()
+    } else {
+      stopPolling()
     }
 
     selectedBackgrounds.value = []
@@ -634,7 +708,6 @@ function resetTaskState() {
   selectedBackgrounds.value = []
   generatedImages.value = []
   selectedGenerations.value = []
-  includeHd.value = false
   currentTaskDetail.value = null
 }
 
@@ -707,6 +780,7 @@ function getTaskStatusText(status: string): string {
     'matching': '匹配中',
     'generating': '生成中',
     'pending_select': '进行中',
+    'pending_consume': '待消费',
     'enhancing': '增强中',
     'done': '已完成',
     'failed': '已失败',
@@ -717,7 +791,9 @@ function getTaskStatusText(status: string): string {
 
 function getTaskStatusClass(status: string): string {
   const classMap: Record<string, string> = {
+    'generating': 'status-generating',
     'pending_select': 'status-active',
+    'pending_consume': 'status-active',
     'done': 'status-done',
     'failed': 'status-failed',
     'completed': 'status-done'
@@ -917,27 +993,102 @@ function toggleBackground(id: string) {
   }
 }
 
+// 轮询函数
+function startPolling() {
+  if (isPolling.value) return
+  isPolling.value = true
+  pollingStartTime.value = Date.now()
+
+  // 等待1秒后开始轮询
+  pollingTimer.value = setTimeout(() => {
+    pollTaskDetail()
+  }, 1000)
+}
+
+function stopPolling() {
+  isPolling.value = false
+  if (pollingTimer.value) {
+    clearTimeout(pollingTimer.value)
+    pollingTimer.value = null
+  }
+}
+
+async function pollTaskDetail() {
+  if (!isPolling.value || !taskId.value) return
+
+  // 检查超时
+  if (Date.now() - pollingStartTime.value > POLLING_TIMEOUT) {
+    stopPolling()
+    ElMessage.error('生成超时，请刷新页面重试')
+    return
+  }
+
+  try {
+    const detail = await getTask(taskId.value)
+    currentTaskDetail.value = detail
+
+    // 更新生成进度
+    if (detail.generation_progress) {
+      generationProgress.value = detail.generation_progress
+    }
+
+    // 更新生成图片状态
+    if (detail.generated_images && detail.generated_images.length > 0) {
+      generatedImages.value = detail.generated_images.map((img: any) => ({
+        index: img.index,
+        url: img.url,
+        status: img.status,
+        error: img.error
+      }))
+    }
+
+    // 根据状态处理
+    if (detail.status === 'generating') {
+      // 继续轮询，每3-5秒
+      pollingTimer.value = setTimeout(pollTaskDetail, 3000 + Math.random() * 2000)
+    } else if (detail.status === 'pending_consume') {
+      // 停止轮询
+      stopPolling()
+      ElMessage.success('图片生成完成')
+    } else if (detail.status === 'failed') {
+      // 停止轮询
+      stopPolling()
+      ElMessage.error(detail.error_message || '图片生成失败')
+    }
+  } catch (error) {
+    console.error('轮询失败', error)
+    // 继续轮询
+    pollingTimer.value = setTimeout(pollTaskDetail, 5000)
+  }
+}
+
 // 生成
 async function handleGenerate() {
   if (selectedBackgrounds.value.length === 0 || !taskId.value) return
 
   isGenerating.value = true
+  stopPolling() // 停止之前的轮询
 
   try {
-    const res = await selectBackgrounds(taskId.value, {
-      background_ids: selectedBackgrounds.value
+    const res = await generateImages(taskId.value, {
+      selected_background_indices: selectedBackgrounds.value.map(id => parseInt(id))
     })
 
-    if (res.generated_images && res.generated_images.length > 0) {
-      generatedImages.value = res.generated_images
+    // 立即返回后开始轮询
+    if (res.status === 'generating') {
+      generationProgress.value = {
+        current: 0,
+        total: res.total_images || selectedBackgrounds.value.length,
+        message: res.message || '已加入生成队列'
+      }
+      // 开始轮询
+      startPolling()
     }
-    ElMessage.success('生成完成')
-    // 刷新任务详情
-    await loadTaskDetail(taskId.value)
+
+    ElMessage.success(res.message || '已提交生成任务')
   } catch (error: any) {
     const msg = error?.response?.data?.detail || '生成失败'
     ElMessage.error(msg)
-  } finally {
     isGenerating.value = false
   }
 }
@@ -960,8 +1111,7 @@ async function handleConsume() {
 
   try {
     await consumeTask(taskId.value, {
-      selected_indices: selectedGenerations.value,
-      include_hd: includeHd.value
+      selected_indices: selectedGenerations.value
     })
     ElMessage.success('购买成功，图片已存入图库')
     // 刷新任务详情
@@ -1882,6 +2032,97 @@ onMounted(async () => {
   display: flex;
   gap: var(--space-md);
   justify-content: center;
+}
+
+/* 生成中面板 */
+.generating-panel {
+  padding: var(--space-lg) 0;
+}
+
+.generating-progress {
+  margin-bottom: var(--space-xl);
+}
+
+.generating-message {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-md);
+}
+
+.generating-tip {
+  margin-top: var(--space-lg);
+}
+
+/* 生成图片项 */
+.gen-item.failed {
+  border-color: #f56c6c;
+  background: rgba(245, 108, 108, 0.05);
+}
+
+.gen-item.pending {
+  border-color: var(--color-border);
+  background: var(--color-bg-page);
+}
+
+.gen-item .gen-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--color-bg-surface);
+  color: var(--color-text-placeholder);
+}
+
+.gen-item .gen-placeholder.is-loading {
+  color: var(--color-primary);
+}
+
+.gen-item .gen-placeholder-failed {
+  color: #f56c6c;
+  font-size: var(--font-size-sm);
+}
+
+.gen-item .failed-text {
+  color: #f56c6c;
+  font-size: var(--font-size-xs);
+  text-align: center;
+  max-width: 80%;
+}
+
+/* 生成状态徽章 */
+.gen-status-badge {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: var(--space-sm);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+}
+
+.gen-status-badge.success {
+  background: rgba(103, 194, 58, 0.9);
+  color: #fff;
+}
+
+.gen-status-badge.failed {
+  background: rgba(245, 108, 108, 0.9);
+  color: #fff;
+}
+
+.gen-status-badge.pending {
+  background: rgba(64, 158, 255, 0.9);
+  color: #fff;
+}
+
+/* 状态样式 */
+.status-generating {
+  background: rgba(64, 158, 255, 0.1);
+  color: var(--color-primary);
 }
 
 /* 响应式 */

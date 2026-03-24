@@ -49,11 +49,11 @@
                   class="selectable-image"
                   v-for="(img, idx) in task.generated_images"
                   :key="idx"
-                  :class="{ selected: task.selected_images.includes(idx) }"
+                  :class="{ selected: isImageSelected(task, idx) }"
                   @click="toggleImage(task, idx)"
                 >
-                  <img :src="img" alt="生成图片" />
-                  <div class="select-indicator" v-if="task.selected_images.includes(idx)">
+                  <img :src="typeof img === 'string' ? img : (img.url || '')" alt="生成图片" />
+                  <div class="select-indicator" v-if="isImageSelected(task, idx)">
                     <el-icon :size="16"><Check /></el-icon>
                   </div>
                 </div>
@@ -165,12 +165,17 @@ function goBack() {
 }
 
 function toggleImage(task: MasterpieceTask, index: number) {
-  const idx = task.selected_images.indexOf(index)
+  const key = String(index)
+  const idx = task.selected_images.indexOf(key)
   if (idx > -1) {
     task.selected_images.splice(idx, 1)
   } else {
-    task.selected_images.push(index)
+    task.selected_images.push(key)
   }
+}
+
+function isImageSelected(task: MasterpieceTask, index: number): boolean {
+  return task.selected_images.includes(String(index))
 }
 
 async function submitToHD(task: MasterpieceTask) {
@@ -205,6 +210,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
     matching: '背景匹配中',
     generating: '图片生成中',
     pending_select: '待选择',
+    pending_consume: '待消费',
     enhancing: '高清处理中',
     pending_audit: '审核中',
     done: '已完成',
