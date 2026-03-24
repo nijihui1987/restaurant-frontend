@@ -1606,7 +1606,11 @@ async function restoreTaskDetails(task: any) {
   }
 
   .bg-item {
-    flex: 0 0 calc((100% - 2 * var(--space-sm)) / 3);
+    flex: 0 0 calc((100% - var(--space-sm)) / 2);
+  }
+
+  .bg-item:nth-child(n+11) {
+    display: none;
   }
 
   .step2-footer {
