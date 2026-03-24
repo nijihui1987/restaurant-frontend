@@ -130,9 +130,9 @@
               <div class="error-icon">
                 <el-icon :size="48"><CircleCloseFilled /></el-icon>
               </div>
-              <h3 class="error-title">识别失败</h3>
+              <h3 class="error-title">{{ getErrorTitle(recognizeError.code) }}</h3>
               <p class="error-message">{{ recognizeError.message }}</p>
-              <p class="error-hint">请更换图片后重新上传识别</p>
+              <p class="error-hint">{{ recognizeError.action || '请更换图片后重新上传识别' }}</p>
               <el-button type="primary" @click="handleReset">重新上传</el-button>
             </div>
 
@@ -262,7 +262,7 @@
                   <el-icon v-if="img.status === 'pending'" class="is-loading"><Loading /></el-icon>
                   <el-icon v-else-if="img.status === 'failed'" color="#f56c6c"><CircleCloseFilled /></el-icon>
                 </div>
-                <div v-if="img.url" class="watermark-overlay">
+                <div v-if="img.url && watermarkEnabled" class="watermark-overlay">
                   <span class="watermark-text">预览水印</span>
                 </div>
               </div>
@@ -316,7 +316,7 @@
                   <el-icon color="#f56c6c"><CircleCloseFilled /></el-icon>
                   <span class="failed-text">{{ img.error || '生成失败' }}</span>
                 </div>
-                <div v-if="img.url" class="watermark-overlay">
+                <div v-if="img.url && watermarkEnabled" class="watermark-overlay">
                   <span class="watermark-text">预览水印</span>
                 </div>
               </div>
@@ -439,7 +439,61 @@ const isRecognizing = ref(false)
 const isRecognizeDone = ref(false)
 const recognizeResult = ref<Record<string, string> | null>(null)
 const originalRecognizeResult = ref<Record<string, string> | null>(null)
-const recognizeError = ref<{ code: string; message: string } | null>(null)
+const recognizeError = ref<{ code: string; message: string; action?: string } | null>(null)
+
+// 识别错误码定义
+const RECOGNIZE_ERROR_CODES = {
+  VIOLATION_IMAGE: {
+    code: 'VIOLATION_IMAGE',
+    message: '图片内容违规，请更换图片后重试',
+    action: '请上传合规的菜品图片'
+  },
+  NON_DISH_IMAGE: {
+    code: 'NON_DISH_IMAGE',
+    message: '未检测到菜品主体，请上传菜品图片',
+    action: '请上传包含单个菜品的图片'
+  },
+  MULTIPLE_DISHES: {
+    code: 'MULTIPLE_DISHES',
+    message: '检测到多个菜品，请上传单一菜品的图片',
+    action: '每次只上传一个菜品'
+  },
+  UNSUPPORTED_IMAGE_FORMAT: {
+    code: 'UNSUPPORTED_IMAGE_FORMAT',
+    message: '图片格式不支持，请上传 jpg、png 等常见格式的图片',
+    action: '请使用 JPG、PNG 格式'
+  },
+  PARSE_ERROR: {
+    code: 'PARSE_ERROR',
+    message: '无法识别菜品，请上传清晰的菜品图片',
+    action: '确保图片清晰，菜品占据主体'
+  },
+  RATE_LIMITED: {
+    code: 'RATE_LIMITED',
+    message: '操作过于频繁，请稍后重试',
+    action: '请等待片刻后再试'
+  },
+  UNKNOWN_ERROR: {
+    code: 'UNKNOWN_ERROR',
+    message: '识别失败，请重试',
+    action: '如持续失败请联系管理员'
+  }
+} as const
+
+// 根据错误码获取错误标题
+function getErrorTitle(errorCode: string): string {
+  const titles: Record<string, string> = {
+    VIOLATION_IMAGE: '图片内容违规',
+    NON_DISH_IMAGE: '未检测到菜品',
+    MULTIPLE_DISHES: '检测到多个菜品',
+    UNSUPPORTED_IMAGE_FORMAT: '图片格式不支持',
+    PARSE_ERROR: '无法识别菜品',
+    RATE_LIMITED: '操作过于频繁',
+    NETWORK_ERROR: '网络错误',
+    UNKNOWN_ERROR: '识别失败'
+  }
+  return titles[errorCode] || '识别失败'
+}
 
 // 防恶意提交状态
 const isDisabled = ref(false)
@@ -541,6 +595,7 @@ const selectedBackgrounds = ref<string[]>([])
 const maxSelect = ref(6)
 const showBackgroundName = ref(true)
 const subtitle = ref('')
+const watermarkEnabled = ref(true)
 const isGenerating = ref(false)
 
 // 生成进度相关（轮询）
@@ -588,6 +643,7 @@ async function loadMasterpieceConfig() {
     showBackgroundName.value = data.show_background_name ?? true
     maxSelect.value = data.select_count_max ?? 6
     subtitle.value = data.subtitle ?? ''
+    watermarkEnabled.value = data.watermark_enabled ?? true
   } catch (error) {
     console.error('加载配置失败', error)
   }
@@ -675,9 +731,9 @@ async function loadTaskDetail(tid: string) {
       })
     }
 
-    // 恢复生成图（新的格式：{index, url, status, error?}）
-    if (detail.generated_images && detail.generated_images.length > 0) {
-      generatedImages.value = detail.generated_images.map((img: any) => ({
+    // 恢复生成图（使用 generated_images_detail）
+    if (detail.generated_images_detail && detail.generated_images_detail.length > 0) {
+      generatedImages.value = detail.generated_images_detail.map((img: any) => ({
         index: img.index,
         url: img.url,
         status: img.status,
@@ -895,33 +951,67 @@ async function handleRecognize() {
       if (res.error_code === 'disabled') {
         isDisabled.value = true
         ElMessage.warning(res.error_message || '功能暂时停用')
-      } else if (res.error_code === 'UNSUPPORTED_IMAGE_FORMAT') {
+      } else if (res.error_code === 'RATE_LIMITED') {
+        // 速率限制错误
+        const remaining = res.remaining_seconds || 60
+        ElMessage.warning(`操作过于频繁，请在 ${remaining} 秒后重试`)
         recognizeError.value = {
-          code: res.error_code,
-          message: res.error_message || '图片格式不支持，请上传 JPG/PNG 格式的图片'
+          code: 'RATE_LIMITED',
+          message: `操作过于频繁，请在 ${remaining} 秒后重试`,
+          action: '请稍后再试'
         }
         recordError()
       } else {
-        recognizeError.value = {
-          code: res.error_code || 'UNKNOWN',
-          message: res.error_message || '识别失败，请重试'
+        // 使用预定义错误消息或回退到后端返回的消息
+        const errorInfo = RECOGNIZE_ERROR_CODES[res.error_code as keyof typeof RECOGNIZE_ERROR_CODES]
+        if (errorInfo) {
+          recognizeError.value = {
+            code: errorInfo.code,
+            message: res.error_message || errorInfo.message,
+            action: errorInfo.action
+          }
+        } else {
+          // 完全未知的错误
+          recognizeError.value = {
+            code: res.error_code || 'UNKNOWN',
+            message: res.error_message || '识别失败，请重试',
+            action: '请更换图片后重试'
+          }
         }
         recordError()
       }
     }
   } catch (error: any) {
+    // 检查是否是 429 速率限制错误
+    if (error?.response?.status === 429) {
+      const data = error?.response?.data
+      const remaining = data?.remaining_seconds || data?.error_message?.match(/\d+/)?.[0] || 60
+      ElMessage.warning(`操作过于频繁，请在 ${remaining} 秒后重试`)
+      recognizeError.value = {
+        code: 'RATE_LIMITED',
+        message: `操作过于频繁，请在 ${remaining} 秒后重试`,
+        action: '请稍后再试'
+      }
+      recordError()
+      return
+    }
+
     let msg = error?.response?.data?.detail || '识别请求失败'
     let errorCode = 'NETWORK_ERROR'
+    let errorAction = '请检查网络后重试'
     if (msg.includes('media format') || msg.includes('data inspection') || msg.includes('UnsupportedMediaType')) {
       msg = '图片格式不支持，请上传 JPG/PNG 格式的图片'
       errorCode = 'UNSUPPORTED_IMAGE_FORMAT'
+      errorAction = '请使用 JPG、PNG 格式'
     } else if (msg.includes('百炼API错误')) {
       msg = '图片无法被 AI 访问，请联系管理员检查图床配置'
+      errorAction = '请联系管理员'
     }
     ElMessage.error(msg)
     recognizeError.value = {
       code: errorCode,
-      message: msg
+      message: msg,
+      action: errorAction
     }
     recordError()
   } finally {
@@ -985,6 +1075,13 @@ async function handleSubmit() {
       }
     }
   } catch (error: any) {
+    // 检查是否是 429 速率限制错误
+    if (error?.response?.status === 429) {
+      const data = error?.response?.data
+      const remaining = data?.remaining_seconds || 60
+      ElMessage.warning(`操作过于频繁，请在 ${remaining} 秒后重试`)
+      return
+    }
     const msg = error?.response?.data?.detail || '操作失败'
     ElMessage.error(msg)
   }
@@ -1044,8 +1141,8 @@ async function pollTaskDetail() {
     }
 
     // 更新生成图片状态
-    if (detail.generated_images && detail.generated_images.length > 0) {
-      generatedImages.value = detail.generated_images.map((img: any) => ({
+    if (detail.generated_images_detail && detail.generated_images_detail.length > 0) {
+      generatedImages.value = detail.generated_images_detail.map((img: any) => ({
         index: img.index,
         url: img.url,
         status: img.status,

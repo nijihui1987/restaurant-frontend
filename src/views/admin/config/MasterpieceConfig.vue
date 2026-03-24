@@ -64,26 +64,26 @@
 
           <el-form-item label="可编辑字段">
             <el-checkbox-group v-model="config.editable_fields">
-              <el-checkbox label="dish_name">菜品名称</el-checkbox>
-              <el-checkbox label="business_type">所属业态</el-checkbox>
-              <el-checkbox label="cuisine_type">所属菜系</el-checkbox>
-              <el-checkbox label="main_ingredients">主要原材料</el-checkbox>
-              <el-checkbox label="cooking_method">主要做法</el-checkbox>
-              <el-checkbox label="description">整体详细描述</el-checkbox>
-              <el-checkbox label="photo_tips">摄影建议</el-checkbox>
+              <el-checkbox value="dish_name">菜品名称</el-checkbox>
+              <el-checkbox value="business_type">所属业态</el-checkbox>
+              <el-checkbox value="cuisine_type">所属菜系</el-checkbox>
+              <el-checkbox value="main_ingredients">主要原材料</el-checkbox>
+              <el-checkbox value="cooking_method">主要做法</el-checkbox>
+              <el-checkbox value="description">整体详细描述</el-checkbox>
+              <el-checkbox value="photo_tips">摄影建议</el-checkbox>
             </el-checkbox-group>
             <div class="form-tip">用户可以在识别结果中编辑哪些字段</div>
           </el-form-item>
 
           <el-form-item label="显示字段">
             <el-checkbox-group v-model="config.visible_fields">
-              <el-checkbox label="dish_name">菜品名称</el-checkbox>
-              <el-checkbox label="business_type">所属业态</el-checkbox>
-              <el-checkbox label="cuisine_type">所属菜系</el-checkbox>
-              <el-checkbox label="main_ingredients">主要原材料</el-checkbox>
-              <el-checkbox label="cooking_method">主要做法</el-checkbox>
-              <el-checkbox label="description">整体详细描述</el-checkbox>
-              <el-checkbox label="photo_tips">摄影建议</el-checkbox>
+              <el-checkbox value="dish_name">菜品名称</el-checkbox>
+              <el-checkbox value="business_type">所属业态</el-checkbox>
+              <el-checkbox value="cuisine_type">所属菜系</el-checkbox>
+              <el-checkbox value="main_ingredients">主要原材料</el-checkbox>
+              <el-checkbox value="cooking_method">主要做法</el-checkbox>
+              <el-checkbox value="description">整体详细描述</el-checkbox>
+              <el-checkbox value="photo_tips">摄影建议</el-checkbox>
             </el-checkbox-group>
             <div class="form-tip">哪些字段显示给客户看</div>
           </el-form-item>
@@ -120,7 +120,22 @@
             <div class="form-tip">在背景图左下角显示文件名</div>
           </el-form-item>
 
+          <el-form-item label="生成提示词">
+            <el-input
+              v-model="config.generate_prompt"
+              type="textarea"
+              :rows="3"
+              placeholder="输入图片生成提示词模板"
+            />
+            <div class="form-tip">生成时使用的提示词，{dish_name} 会替换为菜品名称</div>
+          </el-form-item>
+
           <el-divider>水印配置</el-divider>
+
+          <el-form-item label="启用预览水印">
+            <el-switch v-model="config.watermark_enabled" />
+            <div class="form-tip">关闭后生成图片将不显示预览水印</div>
+          </el-form-item>
 
           <el-form-item label="水印文字">
             <el-input v-model="config.watermark_text" placeholder="输入水印文字" style="width: 300px" />
@@ -357,10 +372,12 @@ const config = reactive({
   background_count_x: 10,
   select_count_max: 6,
   show_background_name: true,
+  generate_prompt: '专业美食摄影，{dish_name}，暖色调，精美摆盘，高清细节',
   watermark_text: '预览水印',
   watermark_image: '',
   watermark_position: 'bottom-right',
   watermark_opacity: 50,
+  watermark_enabled: true,
 
   // 第三步
   coin_cost_per_image: 5,
@@ -440,9 +457,11 @@ async function saveStep2() {
       background_count_x: config.background_count_x,
       select_count_max: config.select_count_max,
       show_background_name: config.show_background_name,
+      generate_prompt: config.generate_prompt,
       watermark_text: config.watermark_text,
       watermark_position: config.watermark_position,
-      watermark_opacity: config.watermark_opacity
+      watermark_opacity: config.watermark_opacity,
+      watermark_enabled: config.watermark_enabled
     })
     ElMessage.success('第二步配置已保存')
   } catch (error: any) {
@@ -547,10 +566,12 @@ async function loadConfig() {
     config.background_count_x = data.background_count_x ?? 10
     config.select_count_max = data.select_count_max ?? 6
     config.show_background_name = data.show_background_name ?? true
+    config.generate_prompt = data.generate_prompt || '专业美食摄影，{dish_name}，暖色调，精美摆盘，高清细节'
     config.watermark_text = data.watermark_text || '预览水印'
     config.watermark_image = data.watermark_image || ''
     config.watermark_position = data.watermark_position || 'bottom-right'
     config.watermark_opacity = data.watermark_opacity ?? 50
+    config.watermark_enabled = data.watermark_enabled ?? true
     config.coin_cost_per_image = data.coin_cost_per_image ?? 5
     config.max_select_output = data.max_select_output ?? 3
     config.hd_enhance_coin = data.hd_enhance_coin ?? 5

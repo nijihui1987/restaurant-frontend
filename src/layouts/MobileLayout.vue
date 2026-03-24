@@ -18,7 +18,19 @@
           <span class="balance-num">{{ userBalance.toFixed(0) }}</span>
         </div>
       </div>
-      <div class="header-announcement" v-if="announcement">
+      <div class="header-announcement" v-if="rateLimitRemaining > 0">
+        <span class="announcement-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="announcement-text rate-limit-warning">
+          您的操作过于频繁，请 {{ rateLimitRemaining }} 秒后重试
+        </span>
+      </div>
+      <div class="header-announcement" v-else-if="announcement">
         <span class="announcement-icon">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
             <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -96,6 +108,7 @@ import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
 import { getAnnouncement, getLogoConfig } from '@/api/config'
 import { getBalance } from '@/api/billing'
+import { getRateLimitStatus } from '@/api/masterpiece'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -109,6 +122,50 @@ const showLoginTip = ref(false)
 const announcement = ref('')
 const logoUrl = ref('/images/logo.png')
 const userBalance = ref(0)
+
+// 速率限制状态
+const rateLimitRemaining = ref(0)
+let rateLimitTimer: ReturnType<typeof setInterval> | null = null
+
+async function loadRateLimitStatus() {
+  if (!userStore.isLoggedIn) {
+    rateLimitRemaining.value = 0
+    stopRateLimitTimer()
+    return
+  }
+
+  try {
+    const data = await getRateLimitStatus()
+    if (data && data.is_blocked) {
+      rateLimitRemaining.value = data.remaining_seconds
+      startRateLimitTimer()
+    } else {
+      rateLimitRemaining.value = 0
+      stopRateLimitTimer()
+    }
+  } catch (error) {
+    console.error('Failed to fetch rate limit status:', error)
+  }
+}
+
+function startRateLimitTimer() {
+  stopRateLimitTimer()
+  rateLimitTimer = setInterval(() => {
+    if (rateLimitRemaining.value > 0) {
+      rateLimitRemaining.value--
+    } else {
+      stopRateLimitTimer()
+      loadRateLimitStatus()
+    }
+  }, 1000)
+}
+
+function stopRateLimitTimer() {
+  if (rateLimitTimer) {
+    clearInterval(rateLimitTimer)
+    rateLimitTimer = null
+  }
+}
 
 async function loadUserBalance() {
   if (userStore.isLoggedIn) {
@@ -152,6 +209,7 @@ function handleLogoError() {
 fetchAnnouncement()
 fetchLogo()
 loadUserBalance()
+loadRateLimitStatus()
 </script>
 
 <style scoped>
@@ -242,6 +300,11 @@ loadUserBalance()
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.announcement-text.rate-limit-warning {
+  color: #e6a23c;
+  font-weight: 500;
 }
 
 /* ==================== 主内容区 ==================== */

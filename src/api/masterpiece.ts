@@ -13,6 +13,26 @@ export type MasterpieceTaskStatus =
   | 'done'
   | 'failed'
 
+// ========== 速率限制状态 ==========
+
+export interface RateLimitStatus {
+  is_blocked: boolean
+  remaining_seconds: number
+  window_seconds: number
+  max_attempts: number
+  block_seconds: number
+}
+
+export async function getRateLimitStatus(): Promise<RateLimitStatus | null> {
+  try {
+    const res = await api.get<RateLimitStatus>('/masterpiece/rate_limit_status')
+    return res.data
+  } catch (error) {
+    console.error('Failed to get rate limit status:', error)
+    return null
+  }
+}
+
 // ========== 类型定义 ==========
 
 // 生成图片项
