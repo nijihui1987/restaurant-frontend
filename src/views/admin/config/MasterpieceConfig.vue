@@ -5,13 +5,30 @@
     </div>
 
     <div class="config-sections">
+      <!-- ========== 页面配置 ========== -->
+      <div class="config-card">
+        <div class="card-header">
+          <h3>页面配置</h3>
+          <el-button type="primary" size="small" :loading="savingStep1" @click="saveStep1">
+            保存
+          </el-button>
+        </div>
+
+        <el-form label-width="140px" label-position="left">
+          <el-form-item label="功能副标题">
+            <el-input
+              v-model="config.subtitle"
+              placeholder="输入功能副标题，显示在大标题下方"
+            />
+            <div class="form-tip">留空则不显示副标题</div>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <!-- ========== 第一步配置（识别阶段）========== -->
       <div class="config-card">
         <div class="card-header">
           <h3>第一步 · 识别配置</h3>
-          <el-button type="primary" size="small" :loading="savingStep1" @click="saveStep1">
-            保存
-          </el-button>
         </div>
 
         <el-form label-width="140px" label-position="left">
@@ -259,6 +276,9 @@ const watermarkInputRef = ref<HTMLInputElement | null>(null)
 
 // 配置数据
 const config = reactive({
+  // 页面配置
+  subtitle: '',
+
   // 第一步
   system_prompt: '你是一个专业的菜品识别助手。请分析用户上传的菜品图片，返回详细的菜品信息。',
   user_template: `你是一个专业的菜品识别专家。请分析用户上传的菜品图片，返回详细的菜品信息。
@@ -358,13 +378,14 @@ async function saveStep1() {
   savingStep1.value = true
   try {
     await updateConfig({
+      subtitle: config.subtitle,
       system_prompt: config.system_prompt,
       user_template: config.user_template,
       suffix: config.suffix,
       editable_fields: config.editable_fields,
       visible_fields: config.visible_fields
     })
-    ElMessage.success('第一步配置已保存')
+    ElMessage.success('配置已保存')
   } catch (error: any) {
     ElMessage.error(error?.response?.data?.detail || '保存失败')
   } finally {
@@ -453,6 +474,7 @@ async function loadConfig() {
   try {
     const data = await getConfig()
     // 填充配置数据
+    config.subtitle = data.subtitle || ''
     config.system_prompt = data.system_prompt || config.system_prompt
     config.user_template = data.user_template || config.user_template
     config.suffix = data.suffix ?? ''

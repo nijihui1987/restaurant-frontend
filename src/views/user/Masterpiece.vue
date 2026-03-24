@@ -2,7 +2,10 @@
   <div class="page-container">
     <!-- 页面标题 -->
     <div class="page-header">
-      <h1 class="page-title">一键变身菜品图</h1>
+      <div class="page-title-wrap">
+        <h1 class="page-title">一键变身菜品图</h1>
+        <p class="page-subtitle" v-if="subtitle">{{ subtitle }}</p>
+      </div>
       <div class="header-right" v-if="userStore.isAdmin">
         <el-button @click="goToConfig">
           <el-icon><Setting /></el-icon>
@@ -10,19 +13,63 @@
       </div>
     </div>
 
-    <!-- 步骤条 -->
-    <div class="steps-container">
-      <el-steps :active="currentStep" align-center finish-status="success" :inline="true">
-        <el-step title="上传识别" description="上传图片并确认信息" />
-        <el-step title="选择背景" description="挑选合适的背景图" />
-        <el-step title="确认获取" description="选择并付费获取" />
-      </el-steps>
+    <!-- Tab 导航区 -->
+    <div class="tab-nav">
+      <!-- 左箭头 -->
+      <div class="tab-arrow left" v-if="showLeftArrow && !isMobile" @click="scrollTabs('left')">
+        <el-icon><ArrowLeft /></el-icon>
+      </div>
+      <div class="tab-list" ref="tabListRef" @scroll="updateScrollArrows">
+        <!-- 创建任务 Tab -->
+        <div
+          class="tab-item create-tab"
+          :class="{ active: activeTabId === 'create' }"
+          @click="switchToCreateTab"
+        >
+          <div class="tab-add-icon">
+            <span class="add-icon">+</span>
+            <span class="add-text">创建任务</span>
+          </div>
+        </div>
+
+        <!-- 任务 Tab 列表 -->
+        <div
+          v-for="task in displayedTasks"
+          :key="task.id"
+          class="tab-item task-tab"
+          :class="{ active: activeTabId === task.id }"
+        >
+          <div class="tab-thumb-wrap" @click="switchToTaskTab(task)">
+            <img :src="task.image_url" class="tab-thumb" />
+            <span class="tab-status" :class="getTaskStatusClass(task.status)"></span>
+          </div>
+          <div class="tab-info">
+            <span class="tab-label">{{ task.dish_name || '未命名' }}</span>
+          </div>
+          <div class="tab-actions">
+            <el-button size="small" type="primary" @click.stop="switchToTaskTab(task)">进入</el-button>
+            <el-button size="small" @click.stop="handleDeleteTask(task)">删除</el-button>
+          </div>
+        </div>
+
+        <!-- 加载更多 -->
+        <div v-if="hasMoreTasks" class="tab-item load-more" @click="loadMoreTasks">
+          <div class="load-more-icon">
+            <span class="load-icon">↓</span>
+            <span class="load-text">加载更多</span>
+          </div>
+        </div>
+      </div>
+      <!-- 右箭头 -->
+      <div class="tab-arrow right" v-if="showRightArrow && !isMobile" @click="scrollTabs('right')">
+        <el-icon><ArrowRight /></el-icon>
+      </div>
     </div>
 
-    <!-- 步骤内容区 -->
-    <div class="step-content">
-      <!-- ========== 第一步：上传与识别 ========== -->
-      <div v-show="currentStep === 0" class="step-panel">
+    <!-- 内容区 -->
+    <div class="content-area">
+      <!-- ========== 创建任务 Tab 内容 ========== -->
+      <div v-show="activeTabId === 'create'" class="tab-panel">
         <div class="step-inner">
           <!-- 左侧：上传区域 -->
           <div class="upload-section">
@@ -94,7 +141,7 @@
               <h3 class="result-title">识别结果</h3>
               <div class="result-tip">
                 <el-icon><InfoFilled /></el-icon>
-                <span>AI 识别结果仅供参考，如有不准确可自行修改；不可修改字段如有不准确一般不影响模型性能，若出入过于大请重新提交</span>
+                <span>AI 识别结果仅供参考，如有不准确可自行修改</span>
               </div>
               <div class="result-form">
                 <div class="form-item" v-for="field in editableFields" :key="field.key">
@@ -126,34 +173,44 @@
         </div>
       </div>
 
-      <!-- ========== 第二步：选择背景 ========== -->
-      <div v-show="currentStep === 1" class="step-panel step2-panel">
-        <!-- 说明信息 -->
-        <div class="step2-header">
-          <h3>选择背景图</h3>
+      <!-- ========== 任务详情 Tab 内容 ========== -->
+      <div v-show="activeTabId !== 'create'" class="tab-panel task-detail-panel">
+        <!-- 删除按钮 - 右上角 -->
+        <div class="task-detail-delete" v-if="currentTaskDetail">
+          <el-button size="small" type="danger" plain @click="handleDeleteCurrentTask">删除任务</el-button>
         </div>
 
-        <!-- 背景图网格 -->
-        <div class="background-grid">
-          <div
-            v-for="bg in backgroundImages"
-            :key="bg.id"
-            class="bg-item"
-            :class="{ selected: selectedBackgrounds.includes(bg.id) }"
-            @click="toggleBackground(bg.id)"
-          >
-            <img :src="bg.url" :alt="`背景图 ${bg.name}`" />
-            <div class="bg-item-name" v-if="showBackgroundName">{{ bg.name }}</div>
-            <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
-              <el-icon><Check /></el-icon>
-            </div>
+        <!-- 任务基本信息 -->
+        <div class="task-detail-topbar" v-if="currentTaskDetail">
+          <div class="task-detail-title">
+            <h3 class="task-detail-name">{{ currentTaskDetail.dish_name || '未知菜品' }}</h3>
+            <span class="task-status" :class="getTaskStatusClass(currentTaskDetail.status)">
+              {{ getTaskStatusText(currentTaskDetail.status) }}
+            </span>
           </div>
         </div>
 
-        <!-- 按钮区域 -->
-        <div class="step2-footer">
-          <span class="selected-count">已选择：{{ selectedBackgrounds.length }} / {{ maxSelect }} 张</span>
-          <div class="action-buttons">
+        <!-- 步骤二：选择背景图（pending_select 状态） -->
+        <div v-if="currentTaskDetail?.status === 'pending_select'" class="step2-panel">
+          <h4 class="step-title">选择背景图</h4>
+          <p class="step-desc">当前显示 {{ backgroundImages.length }} 张，可选 {{ maxSelect }} 张</p>
+          <div class="background-grid">
+            <div
+              v-for="bg in backgroundImages"
+              :key="bg.id"
+              class="bg-item"
+              :class="{ selected: selectedBackgrounds.includes(bg.id) }"
+              @click="toggleBackground(bg.id)"
+            >
+              <img :src="bg.url" :alt="`背景图 ${bg.name}`" />
+              <div class="bg-item-name" v-if="showBackgroundName">{{ bg.name }}</div>
+              <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
+                <el-icon><Check /></el-icon>
+              </div>
+            </div>
+          </div>
+          <div class="step2-footer">
+            <span class="selected-count">已选择：{{ selectedBackgrounds.length }} / {{ maxSelect }} 张</span>
             <el-button
               type="primary"
               size="large"
@@ -165,11 +222,9 @@
             </el-button>
           </div>
         </div>
-      </div>
 
-      <!-- ========== 第三步：选择与消费 ========== -->
-      <div v-show="currentStep === 2" class="step-panel">
-        <div class="step-inner">
+        <!-- 步骤三：确认消费（generating/done 状态） -->
+        <div v-else-if="currentTaskDetail?.status === 'done' || generatedImages.length > 0" class="step3-panel">
           <div class="step-info">
             <el-alert
               title="确认获取"
@@ -183,7 +238,6 @@
             </el-alert>
           </div>
 
-          <!-- 生成图网格 -->
           <div class="generation-grid">
             <div
               v-for="(img, index) in generatedImages"
@@ -204,7 +258,6 @@
             </div>
           </div>
 
-          <!-- 付费确认区 -->
           <div class="consume-section">
             <div class="consume-summary">
               <div class="summary-item">
@@ -226,7 +279,6 @@
             </div>
 
             <div class="consume-actions">
-              <el-button size="large" @click="handleBackToStep2">上一步</el-button>
               <el-button
                 type="primary"
                 size="large"
@@ -239,11 +291,9 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- ========== 完成状态 ========== -->
-      <div v-show="currentStep === 3" class="step-panel">
-        <div class="step-inner complete-section">
+        <!-- 完成状态 -->
+        <div v-else-if="currentTaskDetail?.status === 'completed'" class="complete-section">
           <div class="complete-icon">
             <el-icon :size="64" color="#67c23a"><CircleCheckFilled /></el-icon>
           </div>
@@ -254,71 +304,16 @@
             <el-button type="primary" @click="handleStartNew">开始新任务</el-button>
           </div>
         </div>
-      </div>
 
-      <!-- ========== 任务列表 ========== -->
-      <div class="task-list-section" v-if="taskList.length > 0">
-        <div class="task-list-header">
-          <h3>已创建的任务</h3>
-          <span class="task-list-tip">最新5条</span>
-        </div>
-        <div class="task-list-grid">
-          <div
-            v-for="task in taskList"
-            :key="task.id"
-            class="task-item"
-            :class="getTaskStatusClass(task.status)"
-          >
-            <img :src="task.image_url" class="task-thumb" />
-            <div class="task-info">
-              <div class="task-name">{{ task.dish_name || '未知菜品' }}</div>
-              <div class="task-meta">
-                <span class="task-status" :class="getTaskStatusClass(task.status)">
-                  {{ getTaskStatusText(task.status) }}
-                </span>
-                <span class="task-time">{{ formatTaskTime(task.created_at) }}</span>
-              </div>
-            </div>
-            <div class="task-actions">
-              <el-button
-                v-if="task.status === 'pending_select'"
-                size="small"
-                type="primary"
-                @click="continueTask(task)"
-              >
-                继续
-              </el-button>
-              <el-button
-                v-else-if="task.status === 'done'"
-                size="small"
-                @click="viewTask(task)"
-              >
-                查看
-              </el-button>
-              <el-button
-                v-else-if="task.status === 'failed'"
-                size="small"
-                type="warning"
-                @click="retryTask(task)"
-              >
-                重试
-              </el-button>
-              <el-button
-                v-else
-                size="small"
-                @click="viewTask(task)"
-              >
-                查看
-              </el-button>
-              <el-button
-                size="small"
-                type="danger"
-                plain
-                @click="deleteTask(task)"
-              >
-                删除
-              </el-button>
-            </div>
+        <!-- 失败状态 -->
+        <div v-else-if="currentTaskDetail?.status === 'failed'" class="failed-section">
+          <div class="failed-icon">
+            <el-icon :size="64" color="#f56c6c"><CircleCloseFilled /></el-icon>
+          </div>
+          <h2 class="failed-title">任务失败</h2>
+          <p class="failed-desc">{{ currentTaskDetail.error_message || '未知错误' }}</p>
+          <div class="failed-actions">
+            <el-button type="primary" @click="handleRetryCurrentTask">重新识别</el-button>
           </div>
         </div>
       </div>
@@ -330,37 +325,66 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue'
+import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock, ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { uploadFile } from '@/api/oss'
-import { recognizeImage, createTask, updateTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask, getConfig } from '@/api/masterpiece'
+import { recognizeImage, updateTask, selectBackgrounds, consumeTask, getTasks, getTask, cancelTask, getConfig } from '@/api/masterpiece'
 
 const router = useRouter()
 const userStore = useUserStore()
 
-// 步骤控制
-const currentStep = ref(0)
+// Tab 控制
+const activeTabId = ref('create')
+const taskTabs = ref<TaskItem[]>([])
+const displayedTaskCount = ref(10)
+const isMobile = ref(false)
+
+// 任务详情
+interface TaskItem {
+  id: string
+  image_url: string
+  dish_name: string
+  status: string
+  created_at: string
+}
+
+const currentTaskDetail = ref<any>(null)
+
+// 显示的任务（限制10个）
+const displayedTasks = computed(() => {
+  return taskTabs.value.slice(0, displayedTaskCount.value)
+})
+
+const hasMoreTasks = computed(() => {
+  return taskTabs.value.length > displayedTaskCount.value
+})
+
+function loadMoreTasks() {
+  displayedTaskCount.value += 10
+}
+
+// Tab 滚动相关
+const tabListRef = ref<HTMLElement | null>(null)
+const showLeftArrow = ref(false)
+const showRightArrow = ref(false)
 
 // 第一步相关
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const previewUrl = ref('')
 const isRecognizing = ref(false)
-const isRecognizeDone = ref(false)  // 识别是否已完成
+const isRecognizeDone = ref(false)
 const recognizeResult = ref<Record<string, string> | null>(null)
-const originalRecognizeResult = ref<Record<string, string> | null>(null)  // 原始识别结果，用于对比是否修改
+const originalRecognizeResult = ref<Record<string, string> | null>(null)
 const recognizeError = ref<{ code: string; message: string } | null>(null)
 
 // 防恶意提交状态
 const isDisabled = ref(false)
-const disableUntil = ref<number | null>(null)  // 毫秒时间戳
-const remainingTime = ref(0)  // 剩余秒数
+const disableUntil = ref<number | null>(null)
+const remainingTime = ref(0)
 let countdownTimer: ReturnType<typeof setInterval> | null = null
 
-// 检查是否在停用期内（从 localStorage 恢复）
 function checkDisableStatus() {
-  // Admin 用户不受停用限制
   if (userStore.isAdmin) return
-
   const stored = localStorage.getItem('masterpiece_disable')
   if (stored) {
     const data = JSON.parse(stored)
@@ -375,58 +399,39 @@ function checkDisableStatus() {
   }
 }
 
-// 记录错误并检查是否需要停用
 function recordError() {
-  // Admin 用户不受停用限制
   if (userStore.isAdmin) return
-
   const now = Date.now()
   const fiveMinutesAgo = now - 5 * 60 * 1000
-
-  // 获取历史错误记录
   const stored = localStorage.getItem('masterpiece_errors')
   const errors: number[] = stored ? JSON.parse(stored) : []
-
-  // 只保留5分钟内的错误
   const recentErrors = errors.filter(t => t > fiveMinutesAgo)
   recentErrors.push(now)
-
-  // 超过3次错误
   if (recentErrors.length >= 3) {
     const disableUntilTime = now + 15 * 60 * 1000
     isDisabled.value = true
     disableUntil.value = disableUntilTime
-
-    // 保存停用状态
     localStorage.setItem('masterpiece_disable', JSON.stringify({
       disableUntil: disableUntilTime
     }))
-    // 清除错误记录
     localStorage.removeItem('masterpiece_errors')
-
     startCountdown()
   } else {
-    // 保存错误记录
     localStorage.setItem('masterpiece_errors', JSON.stringify(recentErrors))
   }
 }
 
-// 开始倒计时
 function startCountdown() {
-  if (countdownTimer) {
-    clearInterval(countdownTimer)
-  }
+  if (countdownTimer) clearInterval(countdownTimer)
   updateRemainingTime()
   countdownTimer = setInterval(updateRemainingTime, 1000)
 }
 
-// 更新剩余时间
 function updateRemainingTime() {
   if (disableUntil.value) {
     const remaining = Math.max(0, Math.ceil((disableUntil.value - Date.now()) / 1000))
     remainingTime.value = remaining
     if (remaining <= 0) {
-      // 停用期结束
       isDisabled.value = false
       disableUntil.value = null
       remainingTime.value = 0
@@ -439,14 +444,13 @@ function updateRemainingTime() {
   }
 }
 
-// 格式化时间显示
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60)
   const secs = seconds % 60
   return `${mins}分${secs}秒`
 }
 
-// 可编辑字段配置（mock，实际从 Admin 配置读取）
+// 可编辑字段配置
 const editableFields = ref([
   { key: 'dish_name', label: '菜品名称', editable: true },
   { key: 'business_type', label: '所属业态', editable: true },
@@ -461,18 +465,18 @@ const canSubmit = computed(() => {
   return recognizeResult.value && recognizeResult.value.dish_name
 })
 
-// 识别结果是否被用户修改过
 const isResultModified = computed(() => {
   if (!originalRecognizeResult.value || !recognizeResult.value) return false
   return JSON.stringify(originalRecognizeResult.value) !== JSON.stringify(recognizeResult.value)
 })
 
 // 第二步相关
-const taskId = ref<string | null>(null)  // 任务ID，后端返回
-const backgroundImages = ref<Array<{ id: string; url: string }>>([])  // 背景图列表（含编号）
-const selectedBackgrounds = ref<string[]>([])  // 选中的背景图编号
+const taskId = ref<string | null>(null)
+const backgroundImages = ref<Array<{ id: string; url: string; name: string }>>([])
+const selectedBackgrounds = ref<string[]>([])
 const maxSelect = ref(6)
-const showBackgroundName = ref(true)  // 是否显示背景图文件名
+const showBackgroundName = ref(true)
+const subtitle = ref('')
 const isGenerating = ref(false)
 
 // 第三步相关
@@ -482,65 +486,32 @@ const coinCostPerImage = ref(5)
 const hdEnhanceCoin = ref(5)
 const includeHd = ref(false)
 
-// 任务列表
-interface TaskItem {
-  id: string
-  image_url: string
-  dish_name: string
-  status: string
-  created_at: string
-}
-const taskList = ref<TaskItem[]>([])
+const isConsuming = ref(false)
 
-// 任务状态文本
-function getTaskStatusText(status: string): string {
-  const statusMap: Record<string, string> = {
-    'pending': '等待中',
-    'recognizing': '识别中',
-    'matching': '匹配中',
-    'generating': '生成中',
-    'pending_select': '进行中',
-    'enhancing': '增强中',
-    'done': '已完成',
-    'failed': '已失败'
-  }
-  return statusMap[status] || status
-}
+const totalCoin = computed(() => {
+  const base = selectedGenerations.value.length * coinCostPerImage.value
+  const hd = includeHd.value ? selectedGenerations.value.length * hdEnhanceCoin.value : 0
+  return base + hd
+})
 
-// 任务状态样式
-function getTaskStatusClass(status: string): string {
-  const classMap: Record<string, string> = {
-    'pending_select': 'status-active',
-    'done': 'status-done',
-    'failed': 'status-failed'
-  }
-  return classMap[status] || 'status-default'
-}
-
-// 格式化任务时间
-function formatTaskTime(dateStr: string): string {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const minutes = Math.floor(diff / 60000)
-  const hours = Math.floor(diff / 3600000)
-  const days = Math.floor(diff / 86400000)
-  if (minutes < 1) return '刚刚'
-  if (minutes < 60) return `${minutes}分钟前`
-  if (hours < 24) return `${hours}小时前`
-  if (days < 7) return `${days}天前`
-  return date.toLocaleDateString()
-}
+// 当前上传到 OSS 的文件路径
+const uploadedImageUrl = ref<string>('')
 
 // 加载任务列表
 async function loadTaskList() {
   try {
     const data = await getTasks()
-    taskList.value = (data.tasks || []).slice(0, 5)
+    taskTabs.value = (data.tasks || []).map((t: any) => ({
+      id: t.id,
+      image_url: t.image_url,
+      dish_name: t.dish_name,
+      status: t.status,
+      created_at: t.created_at
+    }))
   } catch (error) {
     console.error('加载任务列表失败', error)
   }
+  updateScrollArrows()
 }
 
 // 加载大师成相配置
@@ -549,48 +520,51 @@ async function loadMasterpieceConfig() {
     const data = await getConfig()
     showBackgroundName.value = data.show_background_name ?? true
     maxSelect.value = data.select_count_max ?? 6
+    subtitle.value = data.subtitle ?? ''
   } catch (error) {
     console.error('加载配置失败', error)
   }
 }
 
-// 加载任务的背景图列表
-async function loadTaskBackgrounds(tid: string) {
-  // 先加载配置
-  await loadMasterpieceConfig()
+// Tab 滚动
+function updateScrollArrows() {
+  const el = tabListRef.value
+  if (!el) return
+  showLeftArrow.value = el.scrollLeft > 0
+  showRightArrow.value = el.scrollLeft < el.scrollWidth - el.clientWidth - 1
+}
 
-  try {
-    const detail = await getTask(tid)
-    // 优先从 backgrounds 字段获取
-    if (detail.backgrounds && detail.backgrounds.length > 0) {
-      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => {
-        // 从 URL 中提取文件名
-        const urlParts = bg.url.split('/')
-        const filename = urlParts[urlParts.length - 1] || String(index)
-        return {
-          id: String(index),
-          name: filename,
-          url: bg.url
-        }
-      })
-    }
-  } catch (error) {
-    console.error('加载背景图列表失败', error)
+function scrollTabs(direction: 'left' | 'right') {
+  const el = tabListRef.value
+  if (!el) return
+  const scrollAmount = 200
+  if (direction === 'left') {
+    el.scrollLeft -= scrollAmount
+  } else {
+    el.scrollLeft += scrollAmount
   }
+  setTimeout(updateScrollArrows, 50)
 }
 
-// 继续任务
-async function continueTask(task: TaskItem) {
-  await restoreTaskDetails(task)
+// Tab 切换
+function switchToCreateTab() {
+  activeTabId.value = 'create'
+  currentTaskDetail.value = null
+  resetTaskState()
 }
 
-// 查看任务 - 根据任务状态恢复到对应步骤
-async function viewTask(task: TaskItem) {
+async function switchToTaskTab(task: TaskItem) {
+  activeTabId.value = task.id
+  await loadTaskDetail(task.id)
+}
+
+// 加载任务详情
+async function loadTaskDetail(tid: string) {
   try {
-    const detail = await getTask(task.id)
-    taskId.value = task.id
-
-    // 恢复基础信息
+    await loadMasterpieceConfig()
+    const detail = await getTask(tid)
+    currentTaskDetail.value = detail
+    taskId.value = tid
     previewUrl.value = detail.image_url || ''
     uploadedImageUrl.value = detail.image_url || ''
 
@@ -609,58 +583,89 @@ async function viewTask(task: TaskItem) {
       }
     }
 
-    // 根据任务状态决定当前步骤
-    switch (detail.status) {
-      case 'pending_select':
-        // 等待选择背景图 → 第2步
-        if (detail.backgrounds && detail.backgrounds.length > 0) {
-          backgroundImages.value = detail.backgrounds
+    // 恢复背景图
+    if (detail.backgrounds && detail.backgrounds.length > 0) {
+      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => {
+        const url = bg.url || bg
+        const urlParts = url.split('/')
+        const filename = urlParts[urlParts.length - 1] || String(index)
+        return {
+          id: String(index),
+          name: filename,
+          url: url
         }
-        currentStep.value = 1
-        ElMessage.success('已加载任务，继续选择背景图')
-        break
-
-      case 'done':
-        // 已完成 → 第3步展示生成图
-        if (detail.generated_images && detail.generated_images.length > 0) {
-          generatedImages.value = detail.generated_images.map((url: string) => ({ url }))
-          currentStep.value = 2
-          ElMessage.success('已加载任务详情')
-        } else {
-          // 没有生成图，停留在第2步
-          currentStep.value = 1
-          ElMessage.info('任务已完成，无生成图')
+      })
+    } else if (detail.recognized_data && detail.recognized_data.background_urls) {
+      backgroundImages.value = detail.recognized_data.background_urls.map((url: string, index: number) => {
+        const urlParts = url.split('/')
+        const filename = urlParts[urlParts.length - 1] || String(index)
+        return {
+          id: String(index),
+          name: filename,
+          url: url
         }
-        break
-
-      case 'failed':
-        // 失败 → 留在第1步，可重新开始
-        currentStep.value = 0
-        ElMessage.error('任务失败：' + (detail.error || '未知错误'))
-        break
-
-      default:
-        // 其他状态默认到第1步
-        currentStep.value = 1
-        ElMessage.info('任务状态：' + detail.status)
+      })
     }
+
+    // 恢复生成图
+    if (detail.generated_images && detail.generated_images.length > 0) {
+      generatedImages.value = detail.generated_images.map((url: string) => ({ url }))
+    } else {
+      generatedImages.value = []
+    }
+
+    selectedBackgrounds.value = []
+    selectedGenerations.value = []
   } catch (error) {
-    ElMessage.error('获取任务详情失败')
+    console.error('加载任务详情失败', error)
   }
 }
 
-// 重试任务
-async function retryTask(task: TaskItem) {
-  // 重置当前状态，重新开始
-  handleStartNew()
-  // 恢复图片
-  previewUrl.value = task.image_url
-  uploadedImageUrl.value = task.image_url
-  ElMessage.success('已准备好重新识别，请点击开始识别')
+// 重置任务状态
+function resetTaskState() {
+  previewUrl.value = ''
+  uploadedImageUrl.value = ''
+  recognizeResult.value = null
+  originalRecognizeResult.value = null
+  recognizeError.value = null
+  isRecognizeDone.value = false
+  taskId.value = null
+  backgroundImages.value = []
+  selectedBackgrounds.value = []
+  generatedImages.value = []
+  selectedGenerations.value = []
+  includeHd.value = false
+  currentTaskDetail.value = null
 }
 
-// 删除任务
-async function deleteTask(task: TaskItem) {
+// 删除当前任务
+async function handleDeleteCurrentTask() {
+  if (!taskId.value) return
+  try {
+    await ElMessageBox.confirm(
+      '确定要删除该任务吗？删除后无法恢复。',
+      '确认删除',
+      {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+    await cancelTask(taskId.value)
+    ElMessage.success('任务已删除')
+    // 切换到创建任务 Tab
+    switchToCreateTab()
+    // 刷新任务列表
+    loadTaskList()
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error('删除失败')
+    }
+  }
+}
+
+// 删除指定任务
+async function handleDeleteTask(task: TaskItem) {
   try {
     await ElMessageBox.confirm(
       '确定要删除该任务吗？删除后无法恢复。',
@@ -673,37 +678,61 @@ async function deleteTask(task: TaskItem) {
     )
     await cancelTask(task.id)
     ElMessage.success('任务已删除')
-    // 刷新任务列表
-    loadTaskList()
+    // 从列表中移除
+    const idx = taskTabs.value.findIndex(t => t.id === task.id)
+    if (idx !== -1) {
+      taskTabs.value.splice(idx, 1)
+    }
+    // 如果当前选中的就是被删除的任务，切换到创建任务
+    if (activeTabId.value === task.id) {
+      switchToCreateTab()
+    }
   } catch (error: any) {
     if (error !== 'cancel') {
       ElMessage.error('删除失败')
     }
   }
 }
-const isConsuming = ref(false)
 
-const totalCoin = computed(() => {
-  const base = selectedGenerations.value.length * coinCostPerImage.value
-  const hd = includeHd.value ? selectedGenerations.value.length * hdEnhanceCoin.value : 0
-  return base + hd
-})
+// 重新识别当前任务
+function handleRetryCurrentTask() {
+  switchToCreateTab()
+}
 
-// 当前上传到 OSS 的文件路径
-const uploadedImageUrl = ref<string>('')
+// 任务状态文本
+function getTaskStatusText(status: string): string {
+  const statusMap: Record<string, string> = {
+    'pending': '等待中',
+    'recognizing': '识别中',
+    'matching': '匹配中',
+    'generating': '生成中',
+    'pending_select': '进行中',
+    'enhancing': '增强中',
+    'done': '已完成',
+    'failed': '已失败',
+    'completed': '已完成'
+  }
+  return statusMap[status] || status
+}
+
+function getTaskStatusClass(status: string): string {
+  const classMap: Record<string, string> = {
+    'pending_select': 'status-active',
+    'done': 'status-done',
+    'failed': 'status-failed',
+    'completed': 'status-done'
+  }
+  return classMap[status] || 'status-default'
+}
 
 // 上传相关
 function triggerUpload() {
   fileInputRef.value?.click()
 }
 
-function onDragOver(_e: DragEvent) {
-  // 添加拖拽样式
-}
+function onDragOver(_e: DragEvent) {}
 
-function onDragLeave(_e: DragEvent) {
-  // 移除拖拽样式
-}
+function onDragLeave(_e: DragEvent) {}
 
 function onDrop(e: DragEvent) {
   const files = e.dataTransfer?.files
@@ -736,20 +765,10 @@ async function handleFile(file: File) {
 }
 
 function handleReset() {
-  // 如果有已创建的任务，先删除
   if (taskId.value) {
     cancelTask(taskId.value).catch(console.error)
   }
-  previewUrl.value = ''
-  uploadedImageUrl.value = ''
-  recognizeResult.value = null
-  originalRecognizeResult.value = null
-  recognizeError.value = null
-  isRecognizeDone.value = false
-  taskId.value = null
-  backgroundImages.value = []
-  selectedBackgrounds.value = []
-  currentStep.value = 0
+  resetTaskState()
 }
 
 // 识别
@@ -778,52 +797,40 @@ async function handleRecognize() {
         description: res.data.description || '',
         photo_tips: res.data.photo_tips || ''
       }
-      // 保存原始识别结果（用于对比是否修改）
       originalRecognizeResult.value = JSON.parse(JSON.stringify(recognizeResult.value))
-      // 保存任务ID（识别成功时后端已自动创建任务）
       if (res.task_id) {
         taskId.value = res.task_id
-        // 加载任务详情以获取背景图列表
         loadTaskBackgrounds(res.task_id)
       }
-      // 标记识别已完成
       isRecognizeDone.value = true
       ElMessage.success('识别完成')
     } else if (res.status === 'error') {
-      // 识别失败
       if (res.error_code === 'disabled') {
-        // 被禁用
         isDisabled.value = true
         ElMessage.warning(res.error_message || '功能暂时停用')
       } else if (res.error_code === 'UNSUPPORTED_IMAGE_FORMAT') {
-        // 图片格式不支持
         recognizeError.value = {
           code: res.error_code,
           message: res.error_message || '图片格式不支持，请上传 JPG/PNG 格式的图片'
         }
         recordError()
       } else {
-        // 其他错误
         recognizeError.value = {
           code: res.error_code || 'UNKNOWN',
           message: res.error_message || '识别失败，请重试'
         }
-        // 记录错误
         recordError()
       }
     }
   } catch (error: any) {
     let msg = error?.response?.data?.detail || '识别请求失败'
     let errorCode = 'NETWORK_ERROR'
-
-    // 检测图片无法访问的错误
     if (msg.includes('media format') || msg.includes('data inspection') || msg.includes('UnsupportedMediaType')) {
       msg = '图片格式不支持，请上传 JPG/PNG 格式的图片'
       errorCode = 'UNSUPPORTED_IMAGE_FORMAT'
     } else if (msg.includes('百炼API错误')) {
       msg = '图片无法被 AI 访问，请联系管理员检查图床配置'
     }
-
     ElMessage.error(msg)
     recognizeError.value = {
       code: errorCode,
@@ -835,12 +842,33 @@ async function handleRecognize() {
   }
 }
 
+// 加载任务的背景图列表
+async function loadTaskBackgrounds(tid: string) {
+  await loadMasterpieceConfig()
+  try {
+    const detail = await getTask(tid)
+    if (detail.backgrounds && detail.backgrounds.length > 0) {
+      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => {
+        const url = bg.url || bg
+        const urlParts = url.split('/')
+        const filename = urlParts[urlParts.length - 1] || String(index)
+        return {
+          id: String(index),
+          name: filename,
+          url: url
+        }
+      })
+    }
+  } catch (error) {
+    console.error('加载背景图列表失败', error)
+  }
+}
+
 // 提交任务
 async function handleSubmit() {
   if (!canSubmit.value || !taskId.value) return
 
   try {
-    // 如果用户修改了识别结果，先更新任务
     if (isResultModified.value) {
       const res = await updateTask(taskId.value, {
         dish_name: recognizeResult.value?.dish_name || '',
@@ -849,15 +877,26 @@ async function handleSubmit() {
           : []
       })
       taskId.value = res.task_id
-      backgroundImages.value = res.backgrounds || []
+      backgroundImages.value = (res.backgrounds || []).map((bg: any, index: number) => ({
+        id: String(index),
+        name: bg.name || '',
+        url: bg.url
+      }))
       ElMessage.success('已更新任务信息')
     }
 
     // 刷新任务列表
-    loadTaskList()
+    await loadTaskList()
 
-    // 进入第二步（选择背景图）
-    currentStep.value = 1
+    // 切换到该任务的 Tab
+    if (taskId.value) {
+      const task = taskTabs.value.find(t => t.id === taskId.value)
+      if (task) {
+        await switchToTaskTab(task)
+      } else {
+        activeTabId.value = taskId.value
+      }
+    }
   } catch (error: any) {
     const msg = error?.response?.data?.detail || '操作失败'
     ElMessage.error(msg)
@@ -889,12 +928,12 @@ async function handleGenerate() {
       background_ids: selectedBackgrounds.value
     })
 
-    // 后端返回生成图列表
     if (res.generated_images && res.generated_images.length > 0) {
       generatedImages.value = res.generated_images
     }
     ElMessage.success('生成完成')
-    currentStep.value = 2
+    // 刷新任务详情
+    await loadTaskDetail(taskId.value)
   } catch (error: any) {
     const msg = error?.response?.data?.detail || '生成失败'
     ElMessage.error(msg)
@@ -925,7 +964,8 @@ async function handleConsume() {
       include_hd: includeHd.value
     })
     ElMessage.success('购买成功，图片已存入图库')
-    currentStep.value = 3
+    // 刷新任务详情
+    await loadTaskDetail(taskId.value)
   } catch (error: any) {
     const msg = error?.response?.data?.detail || '购买失败'
     ElMessage.error(msg)
@@ -934,30 +974,12 @@ async function handleConsume() {
   }
 }
 
-function handleBackToStep1() {
-  currentStep.value = 0
-}
-
-function handleBackToStep2() {
-  currentStep.value = 1
-}
-
 function goToGallery() {
   router.push('/gallery')
 }
 
 function handleStartNew() {
-  previewUrl.value = ''
-  uploadedImageUrl.value = ''
-  recognizeResult.value = null
-  originalRecognizeResult.value = null
-  taskId.value = null
-  backgroundImages.value = []
-  selectedBackgrounds.value = []
-  generatedImages.value = []
-  selectedGenerations.value = []
-  includeHd.value = false
-  currentStep.value = 0
+  switchToCreateTab()
 }
 
 function goToConfig() {
@@ -965,84 +987,12 @@ function goToConfig() {
 }
 
 // 页面加载时检查停用状态
-onMounted(() => {
+onMounted(async () => {
   checkDisableStatus()
-  restoreTask()
-  loadTaskList()
+  await loadMasterpieceConfig()
+  await loadTaskList()
+  updateScrollArrows()
 })
-
-// 恢复未完成的任务
-async function restoreTask() {
-  try {
-    // 获取 pending_select 状态的任务（等待选择背景图）
-    const data = await getTasks('pending_select')
-    if (data.tasks && data.tasks.length > 0) {
-      const task = data.tasks[0] // 取最新的一个
-      await restoreTaskDetails(task)
-    }
-  } catch (error) {
-    console.error('恢复任务失败', error)
-  }
-}
-
-async function restoreTaskDetails(task: any) {
-  try {
-    // 加载配置
-    await loadMasterpieceConfig()
-
-    // 获取任务详情
-    const detail = await getTask(task.id)
-    taskId.value = task.id
-    previewUrl.value = detail.image_url || ''
-    uploadedImageUrl.value = detail.image_url || ''
-
-    if (detail.recognized_data) {
-      // 恢复识别结果
-      recognizeResult.value = {
-        dish_name: detail.recognized_data.dish_name || '',
-        business_type: detail.recognized_data.business_type || '',
-        cuisine_type: detail.recognized_data.cuisine_type || '',
-        main_ingredients: Array.isArray(detail.recognized_data.main_ingredients)
-          ? detail.recognized_data.main_ingredients.join('、')
-          : (detail.recognized_data.main_ingredients || ''),
-        cooking_method: detail.recognized_data.cooking_method || '',
-        description: detail.recognized_data.description || '',
-        photo_tips: detail.recognized_data.photo_tips || ''
-      }
-    }
-
-    if (detail.backgrounds && detail.backgrounds.length > 0) {
-      // 恢复背景图列表（转换为标准格式）
-      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => {
-        const url = bg.url || bg
-        const urlParts = url.split('/')
-        const filename = urlParts[urlParts.length - 1] || String(index)
-        return {
-          id: String(index),
-          name: filename,
-          url: url
-        }
-      })
-    } else if (detail.recognized_data && detail.recognized_data.background_urls) {
-      // 从 recognized_data 恢复背景图
-      backgroundImages.value = detail.recognized_data.background_urls.map((url: string, index: number) => {
-        const urlParts = url.split('/')
-        const filename = urlParts[urlParts.length - 1] || String(index)
-        return {
-          id: String(index),
-          name: filename,
-          url: url
-        }
-      })
-    }
-
-    // 进入第二步
-    currentStep.value = 1
-    ElMessage.success('已恢复之前的任务，请继续选择背景图')
-  } catch (error) {
-    console.error('获取任务详情失败', error)
-  }
-}
 </script>
 
 <style scoped>
@@ -1059,8 +1009,8 @@ async function restoreTaskDetails(task: any) {
   padding: var(--space-md) 0;
 }
 
-.header-left {
-  flex: 1;
+.page-title-wrap {
+  text-align: center;
 }
 
 .header-right {
@@ -1068,60 +1018,302 @@ async function restoreTaskDetails(task: any) {
   right: 0;
 }
 
+@media (max-width: 640px) {
+  .header-right {
+    display: none;
+  }
+}
+
 .page-title {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0;
-  text-align: center;
 }
 
-.page-desc {
-  font-size: var(--font-size-base);
+.page-subtitle {
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin: 0;
+  margin: var(--space-xs) 0 0;
 }
 
-/* 步骤条 */
-.steps-container {
+/* Tab 导航 */
+.tab-nav {
   background: var(--color-bg-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
   margin-bottom: var(--space-lg);
+  position: relative;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* 步骤内容区 */
-.step-content {
+.tab-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background: var(--color-bg-page);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: all var(--transition-fast);
+  border: 1px solid var(--color-border);
+}
+
+.tab-arrow:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.tab-arrow.left {
+  left: -18px;
+}
+
+.tab-arrow.right {
+  right: -18px;
+}
+
+.tab-list {
+  display: flex;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.tab-list::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--color-border-light);
+  overflow: hidden;
+  background: var(--color-bg-page);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tab-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary-light);
+}
+
+.tab-item.active {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 16px rgba(64, 158, 255, 0.2);
+}
+
+.create-tab {
+  width: 160px;
+}
+
+.tab-add-icon {
+  width: 160px;
+  height: 180px;
+  background: linear-gradient(135deg, var(--color-bg-page) 0%, var(--color-bg-surface) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: all var(--transition-fast);
+}
+
+.tab-add-icon .add-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-bg-surface);
+  border: 2px dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--color-text-placeholder);
+  transition: all var(--transition-fast);
+}
+
+.tab-add-icon .add-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.create-tab:hover .tab-add-icon .add-icon {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(64, 158, 255, 0.05);
+}
+
+.create-tab.active .tab-add-icon .add-icon {
+  border-color: var(--color-primary);
+  background: rgba(64, 158, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.task-tab {
+  width: 160px;
+}
+
+.tab-thumb-wrap {
+  position: relative;
+  cursor: pointer;
+  width: 160px;
+  height: 180px;
+  overflow: hidden;
+}
+
+.tab-thumb {
+  width: 160px;
+  height: 180px;
+  object-fit: cover;
+  transition: transform var(--transition-fast);
+}
+
+.tab-item:hover .tab-thumb {
+  transform: scale(1.02);
+}
+
+.tab-status {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 2;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab-status.status-failed {
+  background: #f56c6c;
+}
+
+.tab-status.status-active {
+  background: #e6a23c;
+}
+
+.tab-status.status-done {
+  background: #67c23a;
+}
+
+.tab-info {
+  padding: var(--space-md) var(--space-sm) var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--color-bg-page);
+  width: 100%;
+}
+
+.tab-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0;
+  background: transparent;
+  width: 100%;
+}
+
+.tab-actions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  padding: 0 var(--space-sm) var(--space-md);
+  background: var(--color-bg-page);
+}
+
+.tab-actions .el-button {
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  padding: 4px 12px;
+}
+
+.load-more {
+  cursor: pointer;
+}
+
+.load-more-icon {
+  width: 160px;
+  height: 180px;
+  background: linear-gradient(135deg, var(--color-bg-page) 0%, var(--color-bg-surface) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: all var(--transition-fast);
+}
+
+.load-more-icon .load-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-bg-surface);
+  border: 2px dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--color-text-placeholder);
+  transition: all var(--transition-fast);
+}
+
+.load-more-icon .load-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.load-more:hover .load-more-icon {
+  border-color: var(--color-primary);
+}
+
+.load-more:hover .load-more-icon .load-icon {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* 内容区 */
+.content-area {
   min-height: 500px;
 }
 
-.step-panel {
+.tab-panel {
   animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .step-inner {
   background: var(--color-bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
-}
-
-/* ========== 第一步：上传与识别 ========== */
-.step-inner {
   display: flex;
   gap: var(--space-2xl);
 }
 
+/* 上传区域 */
 .upload-section {
   flex: 1;
   display: flex;
@@ -1214,7 +1406,7 @@ async function restoreTaskDetails(task: any) {
   justify-content: center;
 }
 
-/* 停用状态卡片 */
+/* 停用状态 */
 .disabled-card {
   width: 100%;
   padding: var(--space-xl);
@@ -1242,7 +1434,7 @@ async function restoreTaskDetails(task: any) {
   margin: 0;
 }
 
-/* 右侧识别结果 */
+/* 识别结果 */
 .result-section {
   flex: 1;
   display: flex;
@@ -1338,7 +1530,7 @@ async function restoreTaskDetails(task: any) {
   justify-content: center;
 }
 
-/* 错误提示卡片 */
+/* 错误提示 */
 .error-card {
   flex: 1;
   display: flex;
@@ -1375,34 +1567,99 @@ async function restoreTaskDetails(task: any) {
   margin: 0 0 var(--space-xl);
 }
 
-/* ========== 第二步：选择背景 ========== */
-.step2-panel {
-  padding: var(--space-2xl);
+/* 任务详情面板 */
+.task-detail-panel {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
 }
 
-.step2-header {
-  text-align: center;
-  margin-bottom: var(--space-lg);
+.task-detail-delete {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 10;
 }
 
-.step2-header h3 {
-  font-size: var(--font-size-base);
+.task-detail-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+
+.task-detail-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.task-detail-name {
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0;
 }
 
-.background-grid {
+.task-status {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: var(--font-size-xs);
+}
+
+.status-active {
+  background: rgba(64, 158, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.status-done {
+  background: rgba(103, 194, 58, 0.1);
+  color: #67c23a;
+}
+
+.status-failed {
+  background: rgba(245, 108, 108, 0.1);
+  color: #f56c6c;
+}
+
+.status-default {
+  background: var(--color-bg-page);
+  color: var(--color-text-secondary);
+}
+
+.task-detail-actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+/* 步骤二：选择背景 */
+.step2-panel {
+  padding: var(--space-lg) 0;
+}
+
+.step-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.step-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-lg);
+}
+
+.background-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
 }
 
 .bg-item {
   position: relative;
-  flex: 0 0 calc((100% - 4 * var(--space-md)) / 5);
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -1469,23 +1726,15 @@ async function restoreTaskDetails(task: any) {
   color: var(--color-text-secondary);
 }
 
-.step-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* 步骤三：选择与消费 */
+.step3-panel {
+  padding: var(--space-lg) 0;
 }
 
-.selected-count {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+.step-info {
+  margin-bottom: var(--space-lg);
 }
 
-.action-buttons {
-  display: flex;
-  gap: var(--space-md);
-}
-
-/* ========== 第三步：选择与消费 ========== */
 .generation-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1553,7 +1802,6 @@ async function restoreTaskDetails(task: any) {
   color: #fff;
 }
 
-/* 付费确认区 */
 .consume-section {
   background: var(--color-bg-page);
   border-radius: var(--radius-lg);
@@ -1598,30 +1846,39 @@ async function restoreTaskDetails(task: any) {
   justify-content: flex-end;
 }
 
-/* ========== 完成状态 ========== */
-.complete-section {
+/* 完成/失败状态 */
+.complete-section,
+.failed-section {
   text-align: center;
   padding: var(--space-3xl);
 }
 
-.complete-icon {
+.complete-icon,
+.failed-icon {
   margin-bottom: var(--space-lg);
 }
 
-.complete-title {
+.complete-title,
+.failed-title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
 }
 
-.complete-desc {
+.failed-title {
+  color: #f56c6c;
+}
+
+.complete-desc,
+.failed-desc {
   font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   margin: 0 0 var(--space-xl);
 }
 
-.complete-actions {
+.complete-actions,
+.failed-actions {
   display: flex;
   gap: var(--space-md);
   justify-content: center;
@@ -1633,8 +1890,8 @@ async function restoreTaskDetails(task: any) {
     flex-direction: column;
   }
 
-  .bg-item {
-    flex: 0 0 calc((100% - 3 * var(--space-md)) / 4);
+  .background-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .generation-grid {
@@ -1644,178 +1901,176 @@ async function restoreTaskDetails(task: any) {
 
 @media (max-width: 640px) {
   .page-header {
-    padding: var(--space-sm) 0;
+    padding: var(--space-lg) 0;
     margin-bottom: var(--space-md);
   }
 
   .page-title {
-    font-size: var(--font-size-base);
+    font-size: 18px;
   }
 
-  .steps-container {
-    padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-md);
-  }
-
-  .steps-container :deep(.el-step__title) {
+  .page-subtitle {
     font-size: 12px;
   }
 
-  .steps-container :deep(.el-step__description) {
+  .tab-nav {
+    padding: var(--space-sm);
+    margin-bottom: var(--space-md);
+    position: relative;
+  }
+
+  .tab-list {
+    display: flex;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+
+  .tab-list::-webkit-scrollbar {
     display: none;
   }
 
-  .step2-panel {
+  .tab-item {
+    flex-shrink: 0;
+  }
+
+  .create-tab,
+  .task-tab {
+    width: 100px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .create-tab:hover,
+  .task-tab:hover {
+    transform: none;
+    box-shadow: none;
+    border: none;
+  }
+
+  .tab-add-icon {
+    width: 100px;
+    height: 75px;
+    background: var(--color-bg-page);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tab-add-icon .add-icon {
+    display: none;
+  }
+
+  .tab-add-icon::before {
+    content: '+';
+    font-size: 28px;
+    color: var(--color-text-placeholder);
+  }
+
+  .tab-add-icon .add-text {
+    display: block;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-top: var(--space-xs);
+  }
+
+  .tab-thumb-wrap {
+    width: 100px;
+    height: 75px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .tab-thumb {
+    width: 100px;
+    height: 75px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-sm);
+  }
+
+  .tab-status {
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #fff;
+  }
+
+  .tab-info {
+    display: block;
+    padding: var(--space-xs) 0 0;
+    background: transparent;
+    width: 100px;
+    text-align: center;
+  }
+
+  .tab-label {
+    display: block;
+    font-size: 11px;
+    color: var(--color-text-primary);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100px;
+    padding: 0;
+  }
+
+  .tab-actions {
+    display: none;
+  }
+
+  .tab-arrow {
+    width: 24px;
+    height: 24px;
+  }
+
+  .tab-arrow.left {
+    left: 0;
+  }
+
+  .tab-arrow.right {
+    right: 0;
+  }
+
+  .load-more {
+    display: none;
+  }
+
+  .step-inner {
     padding: var(--space-md);
   }
 
   .background-grid {
-    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-sm);
-  }
-
-  .bg-item {
-    flex: 0 0 calc((100% - var(--space-sm)) / 2);
-  }
-
-  .bg-item:nth-child(n+11) {
-    display: none;
-  }
-
-  .step2-footer {
-    flex-direction: column;
-    gap: var(--space-md);
   }
 
   .generation-grid {
     grid-template-columns: 1fr;
   }
 
+  .task-detail-panel {
+    padding: var(--space-md);
+  }
+
+  .task-detail-topbar {
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+
   .consume-summary {
     flex-direction: column;
     gap: var(--space-sm);
-  }
-}
-
-/* ========== 任务列表 ========== */
-.task-list-section {
-  margin-top: var(--space-2xl);
-  background: var(--color-bg-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-}
-
-.task-list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-lg);
-}
-
-.task-list-header h3 {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin: 0;
-}
-
-.task-list-tip {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
-.task-list-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: var(--space-md);
-}
-
-.task-item {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: all var(--transition-fast);
-}
-
-.task-item:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.task-thumb {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
-}
-
-.task-info {
-  padding: var(--space-sm);
-}
-
-.task-name {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-xs);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.task-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: var(--font-size-xs);
-}
-
-.task-status {
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-.task-status.status-active {
-  background: rgba(64, 158, 255, 0.1);
-  color: var(--color-primary);
-}
-
-.task-status.status-done {
-  background: rgba(103, 194, 58, 0.1);
-  color: #67c23a;
-}
-
-.task-status.status-failed {
-  background: rgba(245, 108, 108, 0.1);
-  color: #f56c6c;
-}
-
-.task-status.status-default {
-  background: var(--color-bg-page);
-  color: var(--color-text-secondary);
-}
-
-.task-time {
-  color: var(--color-text-placeholder);
-}
-
-.task-actions {
-  padding: 0 var(--space-sm) var(--space-sm);
-  display: flex;
-  gap: var(--space-xs);
-  flex-wrap: wrap;
-}
-
-/* 响应式 */
-@media (max-width: 1024px) {
-  .task-list-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .task-list-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
