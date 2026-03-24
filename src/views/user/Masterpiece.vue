@@ -2,14 +2,10 @@
   <div class="page-container">
     <!-- 页面标题 -->
     <div class="page-header">
-      <div class="header-left">
-        <h1 class="page-title">一键变身菜品图</h1>
-        <p class="page-desc">上传菜品图片，AI 智能识别并生成专业摄影级作品</p>
-      </div>
+      <h1 class="page-title">一键变身菜品图</h1>
       <div class="header-right" v-if="userStore.isAdmin">
         <el-button @click="goToConfig">
           <el-icon><Setting /></el-icon>
-          功能配置
         </el-button>
       </div>
     </div>
@@ -135,7 +131,6 @@
         <!-- 说明信息 -->
         <div class="step2-header">
           <h3>选择背景图</h3>
-          <p>从以下背景图中选择 {{ maxSelect }} 张作为参考，AI 将结合您的菜品图生成全新作品</p>
         </div>
 
         <!-- 背景图网格 -->
@@ -1002,10 +997,12 @@ async function restoreTaskDetails(task: any) {
 }
 
 .page-header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: var(--space-md) 0;
 }
 
 .header-left {
@@ -1013,14 +1010,16 @@ async function restoreTaskDetails(task: any) {
 }
 
 .header-right {
-  flex-shrink: 0;
+  position: absolute;
+  right: 0;
 }
 
 .page-title {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
-  margin: 0 0 var(--space-sm);
+  margin: 0;
+  text-align: center;
 }
 
 .page-desc {
@@ -1033,8 +1032,8 @@ async function restoreTaskDetails(task: any) {
 .steps-container {
   background: var(--color-bg-surface);
   border-radius: var(--radius-lg);
-  padding: var(--space-xl) var(--space-2xl);
-  margin-bottom: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
 }
 
 /* 步骤内容区 */
@@ -1329,19 +1328,13 @@ async function restoreTaskDetails(task: any) {
 
 .step2-header {
   text-align: center;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .step2-header h3 {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
-  margin: 0 0 var(--space-xs);
-}
-
-.step2-header p {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -1581,8 +1574,22 @@ async function restoreTaskDetails(task: any) {
 }
 
 @media (max-width: 640px) {
+  .page-header {
+    padding: var(--space-sm) 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-base);
+  }
+
+  .steps-container {
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
   .step2-panel {
-    padding: var(--space-lg);
+    padding: var(--space-md);
   }
 
   .background-grid {
