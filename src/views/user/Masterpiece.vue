@@ -977,6 +977,9 @@ async function restoreTask() {
 
 async function restoreTaskDetails(task: any) {
   try {
+    // 加载配置
+    await loadMasterpieceConfig()
+
     // 获取任务详情
     const detail = await getTask(task.id)
     taskId.value = task.id
@@ -999,8 +1002,28 @@ async function restoreTaskDetails(task: any) {
     }
 
     if (detail.backgrounds && detail.backgrounds.length > 0) {
-      // 恢复背景图列表
-      backgroundImages.value = detail.backgrounds
+      // 恢复背景图列表（转换为标准格式）
+      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => {
+        const url = bg.url || bg
+        const urlParts = url.split('/')
+        const filename = urlParts[urlParts.length - 1] || String(index)
+        return {
+          id: String(index),
+          name: filename,
+          url: url
+        }
+      })
+    } else if (detail.recognized_data && detail.recognized_data.background_urls) {
+      // 从 recognized_data 恢复背景图
+      backgroundImages.value = detail.recognized_data.background_urls.map((url: string, index: number) => {
+        const urlParts = url.split('/')
+        const filename = urlParts[urlParts.length - 1] || String(index)
+        return {
+          id: String(index),
+          name: filename,
+          url: url
+        }
+      })
     }
 
     // 进入第二步
