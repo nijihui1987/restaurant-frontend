@@ -142,8 +142,8 @@
             :class="{ selected: selectedBackgrounds.includes(bg.id) }"
             @click="toggleBackground(bg.id)"
           >
-            <img :src="bg.url" :alt="`背景图 ${bg.id}`" />
-            <div class="bg-item-name">{{ bg.id }}</div>
+            <img :src="bg.url" :alt="`背景图 ${bg.name}`" />
+            <div class="bg-item-name">{{ bg.name }}</div>
             <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
               <el-icon><Check /></el-icon>
             </div>
@@ -548,10 +548,16 @@ async function loadTaskBackgrounds(tid: string) {
     const detail = await getTask(tid)
     // 优先从 backgrounds 字段获取
     if (detail.backgrounds && detail.backgrounds.length > 0) {
-      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => ({
-        id: String(index),
-        url: bg.url
-      }))
+      backgroundImages.value = detail.backgrounds.map((bg: any, index: number) => {
+        // 从 URL 中提取文件名
+        const urlParts = bg.url.split('/')
+        const filename = urlParts[urlParts.length - 1] || String(index)
+        return {
+          id: String(index),
+          name: filename,
+          url: bg.url
+        }
+      })
     }
   } catch (error) {
     console.error('加载背景图列表失败', error)
