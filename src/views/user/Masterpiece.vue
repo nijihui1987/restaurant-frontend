@@ -131,47 +131,43 @@
       </div>
 
       <!-- ========== 第二步：选择背景 ========== -->
-      <div v-show="currentStep === 1" class="step-panel">
-        <div class="step-inner">
-          <!-- 说明信息 -->
-          <div class="step-title">
-            <h3>选择背景图</h3>
-            <p>从以下背景图中选择 {{ maxSelect }} 张作为参考，AI 将结合您的菜品图生成全新作品</p>
-          </div>
+      <div v-show="currentStep === 1" class="step-panel step2-panel">
+        <!-- 说明信息 -->
+        <div class="step2-header">
+          <h3>选择背景图</h3>
+          <p>从以下背景图中选择 {{ maxSelect }} 张作为参考，AI 将结合您的菜品图生成全新作品</p>
+        </div>
 
-          <!-- 背景图网格 -->
-          <div class="background-grid">
-            <div
-              v-for="bg in backgroundImages"
-              :key="bg.id"
-              class="bg-item"
-              :class="{ selected: selectedBackgrounds.includes(bg.id) }"
-              @click="toggleBackground(bg.id)"
+        <!-- 背景图网格 -->
+        <div class="background-grid">
+          <div
+            v-for="bg in backgroundImages"
+            :key="bg.id"
+            class="bg-item"
+            :class="{ selected: selectedBackgrounds.includes(bg.id) }"
+            @click="toggleBackground(bg.id)"
+          >
+            <img :src="bg.url" :alt="`背景图 ${bg.id}`" />
+            <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
+              <el-icon><Check /></el-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- 按钮区域 -->
+        <div class="step2-footer">
+          <span class="selected-count">已选择：{{ selectedBackgrounds.length }} / {{ maxSelect }} 张</span>
+          <div class="action-buttons">
+            <el-button @click="handleBackToStep1">上一步</el-button>
+            <el-button
+              type="primary"
+              size="large"
+              :disabled="selectedBackgrounds.length === 0"
+              :loading="isGenerating"
+              @click="handleGenerate"
             >
-              <img :src="bg.url" :alt="`背景图 ${bg.id}`" />
-              <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
-                <el-icon><Check /></el-icon>
-              </div>
-            </div>
-          </div>
-
-          <!-- 按钮区域 -->
-          <div class="step-actions">
-            <div class="selected-count">
-              已选择：{{ selectedBackgrounds.length }} / {{ maxSelect }} 张
-            </div>
-            <div class="action-buttons">
-              <el-button @click="handleBackToStep1">上一步</el-button>
-              <el-button
-                type="primary"
-                size="large"
-                :disabled="selectedBackgrounds.length === 0"
-                :loading="isGenerating"
-                @click="handleGenerate"
-              >
-                {{ isGenerating ? '生成中...' : '生成图片' }}
-              </el-button>
-            </div>
+              {{ isGenerating ? '生成中...' : '生成图片' }}
+            </el-button>
           </div>
         </div>
       </div>
@@ -1327,19 +1323,23 @@ async function restoreTaskDetails(task: any) {
 }
 
 /* ========== 第二步：选择背景 ========== */
-.step-title {
+.step2-panel {
+  padding: var(--space-2xl);
+}
+
+.step2-header {
   text-align: center;
   margin-bottom: var(--space-xl);
 }
 
-.step-title h3 {
+.step2-header h3 {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0 0 var(--space-xs);
 }
 
-.step-title p {
+.step2-header p {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin: 0;
@@ -1348,16 +1348,16 @@ async function restoreTaskDetails(task: any) {
 .background-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
 }
 
 .bg-item {
   position: relative;
-  width: calc(20% - var(--space-md));
-  min-width: 140px;
-  max-width: 180px;
+  width: calc(19% - var(--space-md));
+  min-width: 120px;
+  max-width: 160px;
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -1375,8 +1375,6 @@ async function restoreTaskDetails(task: any) {
 
 .bg-item:hover {
   border-color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .bg-item.selected {
@@ -1396,6 +1394,19 @@ async function restoreTaskDetails(task: any) {
   align-items: center;
   justify-content: center;
   color: #fff;
+}
+
+.step2-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.selected-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .step-actions {
@@ -1563,8 +1574,8 @@ async function restoreTaskDetails(task: any) {
   }
 
   .bg-item {
-    width: calc(25% - var(--space-md));
-    min-width: 120px;
+    width: calc(24% - var(--space-md));
+    min-width: 100px;
   }
 
   .generation-grid {
@@ -1573,13 +1584,23 @@ async function restoreTaskDetails(task: any) {
 }
 
 @media (max-width: 640px) {
+  .step2-panel {
+    padding: var(--space-lg);
+  }
+
   .background-grid {
+    justify-content: center;
     gap: var(--space-sm);
   }
 
   .bg-item {
-    width: calc(33.33% - var(--space-sm));
-    min-width: 100px;
+    width: calc(48% - var(--space-sm));
+    min-width: 80px;
+  }
+
+  .step2-footer {
+    flex-direction: column;
+    gap: var(--space-md);
   }
 
   .generation-grid {
