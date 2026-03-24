@@ -556,6 +556,23 @@ async function loadTaskList() {
   }
 }
 
+// 加载任务的背景图列表
+async function loadTaskBackgrounds(tid: string) {
+  try {
+    const detail = await getTask(tid)
+    if (detail.recognized_data && detail.recognized_data.background_urls) {
+      // 从 recognized_data 中恢复背景图列表
+      const urls = detail.recognized_data.background_urls
+      backgroundImages.value = urls.map((url: string, index: number) => ({
+        id: String(index),
+        url: url
+      }))
+    }
+  } catch (error) {
+    console.error('加载背景图列表失败', error)
+  }
+}
+
 // 继续任务
 async function continueTask(task: TaskItem) {
   await restoreTaskDetails(task)
@@ -753,6 +770,8 @@ async function handleRecognize() {
       // 保存任务ID（识别成功时后端已自动创建任务）
       if (res.task_id) {
         taskId.value = res.task_id
+        // 加载任务详情以获取背景图列表
+        loadTaskBackgrounds(res.task_id)
       }
       ElMessage.success('识别完成')
     } else if (res.status === 'error') {
