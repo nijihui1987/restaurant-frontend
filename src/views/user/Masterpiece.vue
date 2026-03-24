@@ -143,6 +143,7 @@
             @click="toggleBackground(bg.id)"
           >
             <img :src="bg.url" :alt="`背景图 ${bg.id}`" />
+            <div class="bg-item-name">{{ bg.id }}</div>
             <div class="bg-select-badge" v-if="selectedBackgrounds.includes(bg.id)">
               <el-icon><Check /></el-icon>
             </div>
@@ -1371,6 +1372,21 @@ async function restoreTaskDetails(task: any) {
 .bg-item.selected {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+.bg-item-name {
+  position: absolute;
+  bottom: var(--space-xs);
+  left: var(--space-xs);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px 4px;
+  border-radius: 2px;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bg-select-badge {
