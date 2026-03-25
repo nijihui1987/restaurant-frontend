@@ -305,7 +305,7 @@
                 failed: img.status === 'failed'
               }"
             >
-              <div class="gen-image-wrapper" @click="img.status === 'success' && previewImage(img.url)">
+              <div class="gen-image-wrapper">
                 <img v-if="img.url" :src="img.url" :alt="`生成图 ${img.index + 1}`" />
                 <div v-else class="gen-placeholder gen-placeholder-failed">
                   <el-icon color="#f56c6c"><CircleCloseFilled /></el-icon>
