@@ -181,13 +181,14 @@ onMounted(() => {
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
-  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e6e6e6;
 }
 
 .balance-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 12px;
 }
 
@@ -224,8 +225,10 @@ onMounted(() => {
   background: #1a1a1a;
   border-color: #1a1a1a;
   color: #ffffff;
-  border-radius: 16px;
-  min-width: 60px;
+  border-radius: 20px;
+  min-width: 80px;
+  height: 36px;
+  font-size: 14px;
 }
 
 .recharge-btn:hover {
