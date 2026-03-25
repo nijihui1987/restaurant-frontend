@@ -57,7 +57,7 @@
         :class="{ active: route.path === '/' }"
       >
         <el-icon :size="22"><Camera /></el-icon>
-        <span class="nav-label">功能</span>
+        <span class="nav-label">开拍</span>
       </router-link>
       <router-link
         to="/tutorial"
