@@ -98,7 +98,7 @@ onMounted(() => {
 }
 
 .tutorial-content {
-  padding: 0 20px 24px;
+  padding: 0 var(--space-xl) var(--space-2xl);
   max-width: 680px;
   margin: 0 auto;
 }
@@ -110,9 +110,9 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 80px var(--space-xl);
   color: var(--color-text-secondary);
-  gap: 12px;
+  gap: var(--space-md);
 }
 
 .empty-state {
@@ -121,14 +121,14 @@ onMounted(() => {
 
 .empty-title {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .empty-desc {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
 }
 
@@ -143,42 +143,42 @@ onMounted(() => {
 
 .error-state p {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-size-base);
 }
 
 /* Markdown 样式 */
 .markdown-body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 15px;
+  font-size: var(--font-size-md);
   line-height: 1.7;
   color: var(--color-text-regular);
 }
 
 .markdown-body :deep(h1) {
-  font-size: 24px;
+  font-size: var(--font-size-3xl);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin: 0 0 24px;
-  padding-bottom: 12px;
+  margin: 0 0 var(--space-2xl);
+  padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--border-light);
 }
 
 .markdown-body :deep(h2) {
-  font-size: 18px;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin: 32px 0 16px;
+  margin: var(--space-3xl) 0 var(--space-lg);
 }
 
 .markdown-body :deep(h3) {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin: 24px 0 12px;
+  margin: var(--space-2xl) 0 var(--space-md);
 }
 
 .markdown-body :deep(p) {
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-lg);
   color: var(--color-text-regular);
 }
 
@@ -208,10 +208,10 @@ onMounted(() => {
 
 .markdown-body :deep(pre) {
   background: var(--bg-hover);
-  padding: 16px;
-  border-radius: 8px;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
   overflow-x: auto;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-lg);
 }
 
 .markdown-body :deep(pre code) {
@@ -220,8 +220,8 @@ onMounted(() => {
 }
 
 .markdown-body :deep(blockquote) {
-  margin: 0 0 16px;
-  padding: 12px 16px;
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   background: var(--bg-page);
   border-left: 4px solid var(--color-primary);
   color: var(--color-text-regular);
@@ -230,6 +230,6 @@ onMounted(() => {
 .markdown-body :deep(hr) {
   border: none;
   border-top: 1px solid var(--border-light);
-  margin: 24px 0;
+  margin: var(--space-2xl) 0;
 }
 </style>
