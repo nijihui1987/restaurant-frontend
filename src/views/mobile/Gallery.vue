@@ -10,8 +10,13 @@
           <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="delete-btn" @click.stop="deleteImage(img)">
-                <el-icon><Delete /></el-icon>
+              <div class="action-btns">
+                <div class="action-btn" @click.stop="downloadImage(img)">
+                  <el-icon><Download /></el-icon>
+                </div>
+                <div class="action-btn delete" @click.stop="deleteImage(img)">
+                  <el-icon><Delete /></el-icon>
+                </div>
               </div>
             </div>
           </div>
@@ -34,8 +39,13 @@
           <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="delete-btn" @click.stop="deleteImage(img)">
-                <el-icon><Delete /></el-icon>
+              <div class="action-btns">
+                <div class="action-btn" @click.stop="downloadImage(img)">
+                  <el-icon><Download /></el-icon>
+                </div>
+                <div class="action-btn delete" @click.stop="deleteImage(img)">
+                  <el-icon><Delete /></el-icon>
+                </div>
               </div>
             </div>
           </div>
@@ -47,8 +57,13 @@
           <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="delete-btn" @click.stop="deleteImage(img)">
-                <el-icon><Delete /></el-icon>
+              <div class="action-btns">
+                <div class="action-btn" @click.stop="downloadImage(img)">
+                  <el-icon><Download /></el-icon>
+                </div>
+                <div class="action-btn delete" @click.stop="deleteImage(img)">
+                  <el-icon><Delete /></el-icon>
+                </div>
               </div>
             </div>
           </div>
@@ -130,6 +145,29 @@ function goToMasterpiece() {
 function previewImage(img: ImageItem) {
   currentImage.value = img
   previewVisible.value = true
+}
+
+async function downloadImage(img: ImageItem) {
+  const url = img.url
+  const dishName = img.dish_name || 'image'
+
+  try {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    const blobUrl = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = `${dishName}.jpg`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
+    ElMessage.success('下载成功')
+  } catch {
+    ElMessage.error('下载失败，请长按图片保存')
+  }
 }
 
 async function downloadCurrentImage() {
@@ -269,11 +307,22 @@ onMounted(() => {
   transform: scale(0.98);
 }
 
-/* 右下角删除按钮 */
-.delete-btn {
+/* 右下角操作按钮组 */
+.action-btns {
   position: absolute;
   bottom: 8px;
   right: 8px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.image-item:active .action-btns {
+  opacity: 1;
+}
+
+.action-btn {
   width: 28px;
   height: 28px;
   background: rgba(0, 0, 0, 0.7);
@@ -283,16 +332,14 @@ onMounted(() => {
   justify-content: center;
   color: var(--bg-surface);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease;
 }
 
-.image-item:active .delete-btn {
-  opacity: 1;
-}
-
-.delete-btn .el-icon {
+.action-btn .el-icon {
   font-size: 14px;
+}
+
+.action-btn.delete {
+  background: rgba(245, 34, 45, 0.85);
 }
 
 .empty-state {
