@@ -360,11 +360,11 @@
           <p class="complete-desc">图片已存入您的图库，可随时查看和使用</p>
 
           <!-- 已购买的图片展示 -->
-          <div class="purchased-images-section" v-if="currentTaskDetail?.selected_images?.length > 0">
+          <div class="purchased-images-section" v-if="purchasedImages.length > 0">
             <h4 class="purchased-title">已购买图片</h4>
             <div class="purchased-grid">
               <div
-                v-for="(url, index) in currentTaskDetail.selected_images"
+                v-for="(url, index) in purchasedImages"
                 :key="index"
                 class="purchased-item"
               >
@@ -432,6 +432,28 @@ interface TaskItem {
 }
 
 const currentTaskDetail = ref<any>(null)
+
+// 已购买的图片列表
+const purchasedImages = computed(() => {
+  if (!currentTaskDetail.value) return []
+  // 优先使用 selected_images（用户选中的图片）
+  if (currentTaskDetail.value.selected_images?.length > 0) {
+    return currentTaskDetail.value.selected_images
+  }
+  // 备选：使用 generated_images（生成的图片）
+  if (currentTaskDetail.value.generated_images?.length > 0) {
+    return currentTaskDetail.value.generated_images
+  }
+  // 备选：使用 generated_images_detail 中的成功图片
+  const detail = currentTaskDetail.value.generated_images_detail
+  if (detail?.length > 0) {
+    const successUrls = detail
+      .filter((img: any) => img.status === 'success' && img.url)
+      .map((img: any) => img.url)
+    if (successUrls.length > 0) return successUrls
+  }
+  return []
+})
 
 // 显示的任务（限制10个）
 const displayedTasks = computed(() => {
