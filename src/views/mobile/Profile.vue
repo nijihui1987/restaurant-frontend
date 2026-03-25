@@ -90,7 +90,7 @@ const contactContent = ref('')
 const renderedContact = ref('')
 
 async function loadContactContent() {
-  const content = await getConfig('system', 'contact_author')
+  const content = await getConfig('system', 'contact-author')
   if (content) {
     contactContent.value = content
     renderedContact.value = await marked.parse(content)

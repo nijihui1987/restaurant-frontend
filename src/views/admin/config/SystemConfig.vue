@@ -344,7 +344,7 @@ const savingContact = ref(false)
 
 async function loadContactAuthor() {
   try {
-    const content = await getConfig('system', 'contact_author')
+    const content = await getConfig('system', 'contact-author')
     contactAuthorContent.value = content || ''
   } catch (error) {
     console.error('加载联系作者配置失败', error)
@@ -354,7 +354,7 @@ async function loadContactAuthor() {
 async function handleContactAuthorSave() {
   try {
     savingContact.value = true
-    await saveConfig('system', 'contact_author', contactAuthorContent.value)
+    await saveConfig('system', 'contact-author', contactAuthorContent.value)
     ElMessage.success('联系作者配置已保存')
   } catch (error) {
     ElMessage.error('保存失败')
