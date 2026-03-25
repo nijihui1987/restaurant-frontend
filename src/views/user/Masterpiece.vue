@@ -2300,8 +2300,9 @@ onMounted(async () => {
 .image-preview-dialog .el-dialog {
   background: transparent !important;
   box-shadow: none !important;
-  max-width: 90vw;
+  max-width: none !important;
   width: auto !important;
+  padding: 0 !important;
 }
 
 .image-preview-dialog .el-dialog__header {
@@ -2309,16 +2310,15 @@ onMounted(async () => {
 }
 
 .image-preview-dialog .el-dialog__body {
-  padding: 0;
+  padding: 0 !important;
   text-align: center;
+  background: transparent !important;
 }
 
 .preview-image {
   width: auto;
-  height: auto;
-  max-width: 90vw;
+  height: calc(90vw * 0.75);
   max-height: 90vh;
-  aspect-ratio: 4/3;
   object-fit: contain;
   display: block;
 }
