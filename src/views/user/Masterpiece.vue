@@ -20,17 +20,6 @@
             <span class="tab-label">创建任务</span>
           </div>
         </div>
-        <!-- 创建任务 Tab -->
-        <div
-          class="tab-item create-tab"
-          :class="{ active: activeTabId === 'create' }"
-          @click="switchToCreateTab"
-        >
-          <div class="tab-add-icon">
-            <span class="add-icon">+</span>
-            <span class="add-text">创建任务</span>
-          </div>
-        </div>
 
         <!-- 任务 Tab 列表 -->
         <div
@@ -1543,7 +1532,7 @@ onMounted(async () => {
   color: var(--color-text-primary);
   text-align: center;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
   white-space: nowrap;
   padding: 0;
   background: transparent;
