@@ -109,14 +109,14 @@ function startProcess() {
 }
 
 .intro-content {
-  padding: 24px 20px;
+  padding: var(--space-2xl) var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .page-title {
-  margin: 0 0 20px;
-  font-size: 22px;
+  margin: 0 0 var(--space-xl);
+  font-size: var(--font-size-3xl);
   font-weight: 600;
   color: var(--color-text-primary);
   text-align: center;
@@ -124,9 +124,9 @@ function startProcess() {
 
 .compare-section {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 28px 24px;
-  margin-bottom: 20px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-lg);
+  margin-bottom: var(--space-xl);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
@@ -144,11 +144,11 @@ function startProcess() {
 .compare-visual {
   width: 72px;
   height: 72px;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 12px;
+  margin: 0 auto var(--space-sm);
 }
 
 .compare-visual.before {
@@ -163,33 +163,33 @@ function startProcess() {
 
 .compare-label {
   display: block;
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: 4px;
+  margin-bottom: var(--space-xs);
 }
 
 .compare-desc {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin: 0;
 }
 
 .compare-arrow {
   color: var(--border-default);
-  padding: 0 12px;
+  padding: 0 var(--space-md);
 }
 
 .steps-section {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-xl);
 }
 
 .section-title {
-  margin: 0 0 20px;
-  font-size: 17px;
+  margin: 0 0 var(--space-xl);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
 }
@@ -197,17 +197,17 @@ function startProcess() {
 .step-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-lg);
 }
 
 .step-item {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-lg);
 }
 
 .step-num {
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--color-text-primary);
   font-variant-numeric: tabular-nums;
@@ -215,20 +215,20 @@ function startProcess() {
 }
 
 .step-text {
-  font-size: 15px;
+  font-size: var(--font-size-md);
   color: var(--color-text-regular);
 }
 
 .action-section {
   text-align: center;
-  padding: 8px 0 24px;
+  padding: var(--space-sm) 0 var(--space-2xl);
 }
 
 .start-btn {
   width: 100%;
   max-width: 280px;
   height: 52px;
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 500;
   border-radius: 26px;
   background: var(--color-text-primary);
@@ -242,8 +242,8 @@ function startProcess() {
 }
 
 .action-hint {
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 </style>
