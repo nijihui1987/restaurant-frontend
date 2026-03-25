@@ -64,16 +64,18 @@
       v-model="previewVisible"
       :show-close="false"
       :close-on-click-modal="true"
+      :modal-append-to-body="true"
+      :append-to-body="true"
       class="preview-dialog"
     >
-      <div class="preview-container" @click="previewVisible = false">
-        <img :src="currentImage?.url" :alt="currentImage?.dish_name" class="preview-image" />
-      </div>
-      <div class="preview-actions">
-        <el-button @click="downloadCurrentImage" class="action-btn">
-          <el-icon><Download /></el-icon>
-          下载高清原图
-        </el-button>
+      <div class="preview-content" @click="previewVisible = false">
+        <img :src="currentImage?.url" :alt="currentImage?.dish_name" class="preview-image" @click.stop />
+        <div class="preview-actions">
+          <el-button @click.stop="downloadCurrentImage" class="action-btn">
+            <el-icon><Download /></el-icon>
+            下载高清原图
+          </el-button>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -312,53 +314,50 @@ onMounted(() => {
 }
 
 /* 预览弹窗 */
+.preview-dialog {
+  background: transparent !important;
+}
+
 .preview-dialog :deep(.el-dialog) {
   background: transparent !important;
   box-shadow: none !important;
-  max-width: 100vw !important;
-  max-height: 100vh !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
+  max-width: 96vw !important;
+  max-height: 96vh !important;
+  margin: 2vh auto !important;
 }
 
 .preview-dialog :deep(.el-dialog__header) {
-  display: none !important;
+  display: none;
 }
 
 .preview-dialog :deep(.el-dialog__body) {
   padding: 0 !important;
-  margin: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  overflow: hidden !important;
+  background: transparent !important;
 }
 
-.preview-container {
-  width: 100vw;
-  height: 100vh;
+.preview-dialog :deep(.el-overlay) {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.preview-content {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
+  align-items: center;
+  min-height: 60vh;
   cursor: pointer;
 }
 
 .preview-image {
-  max-width: 90vw;
-  max-height: 75vh;
+  max-width: 92vw;
+  max-height: 80vh;
   object-fit: contain;
+  display: block;
   border-radius: 8px;
 }
 
 .preview-actions {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+  margin-top: 20px;
 }
 
 .action-btn {
