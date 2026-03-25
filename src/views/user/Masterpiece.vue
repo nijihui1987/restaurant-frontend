@@ -370,7 +370,7 @@
               </div>
               <div class="gen-select-btn" @click="downloadImage(url, `${currentTaskDetail?.dish_name || '菜品'}_${index + 1}.jpg`)">
                 <el-icon><Download /></el-icon>
-                下载
+                下载高清原图
               </div>
             </div>
           </div>
