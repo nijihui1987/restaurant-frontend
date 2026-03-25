@@ -2,15 +2,24 @@
   <div class="page-container">
     <!-- Tab 导航区 -->
     <div class="tab-nav" v-if="taskTabs.length > 0">
-      <!-- 任务清单标题 -->
-      <div class="task-list-header">
-        <span class="task-list-title">任务清单</span>
-      </div>
       <!-- 左箭头 -->
       <div class="tab-arrow left" v-if="showLeftArrow && !isMobile" @click="scrollTabs('left')">
         <el-icon><ArrowLeft /></el-icon>
       </div>
       <div class="tab-list" ref="tabListRef" @scroll="updateScrollArrows">
+        <!-- 创建任务 Tab -->
+        <div
+          class="tab-item create-tab"
+          :class="{ active: activeTabId === 'create' }"
+          @click="switchToCreateTab"
+        >
+          <div class="tab-add-icon">
+            <span class="add-icon">+</span>
+          </div>
+          <div class="tab-info">
+            <span class="tab-label">创建任务</span>
+          </div>
+        </div>
         <!-- 创建任务 Tab -->
         <div
           class="tab-item create-tab"
@@ -50,6 +59,10 @@
             <span class="load-text">加载更多</span>
           </div>
         </div>
+      </div>
+      <!-- 任务清单标题 -->
+      <div class="task-list-footer">
+        <span class="task-list-title">任务清单</span>
       </div>
       <!-- 右箭头 -->
       <div class="tab-arrow right" v-if="showRightArrow && !isMobile" @click="scrollTabs('right')">
@@ -1330,8 +1343,9 @@ onMounted(async () => {
 }
 
 /* 任务清单标题 */
-.task-list-header {
-  margin-bottom: var(--space-sm);
+.task-list-footer {
+  margin-top: var(--space-sm);
+  text-align: center;
 }
 
 .task-list-title {
@@ -1534,6 +1548,7 @@ onMounted(async () => {
   padding: 0;
   background: transparent;
   width: 100%;
+  max-width: 6em;
 }
 
 .tab-actions {
