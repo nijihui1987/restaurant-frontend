@@ -1532,12 +1532,13 @@ onMounted(async () => {
   color: var(--color-text-primary);
   text-align: center;
   overflow: hidden;
-  text-overflow: clip;
+  text-overflow: ellipsis;
   white-space: nowrap;
   padding: 0;
   background: transparent;
   width: 100%;
-  max-width: 6em;
+  display: block;
+  max-width: 70px;
 }
 
 .tab-actions {
