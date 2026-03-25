@@ -353,22 +353,20 @@
 
         <!-- 完成状态 -->
         <div v-else-if="currentTaskDetail?.status === 'done' || currentTaskDetail?.status === 'completed'" class="complete-section">
-          <div class="complete-icon">
-            <el-icon :size="64" color="#67c23a"><CircleCheckFilled /></el-icon>
-          </div>
-          <h2 class="complete-title">任务完成</h2>
-          <p class="complete-desc">图片已存入您的图库，可随时查看和使用</p>
-
           <!-- 已购买的图片展示 -->
           <div class="purchased-images-section" v-if="purchasedImages.length > 0">
-            <h4 class="purchased-title">已购买图片</h4>
             <div class="purchased-grid">
               <div
                 v-for="(url, index) in purchasedImages"
                 :key="index"
                 class="purchased-item"
               >
-                <img :src="url" :alt="`图片 ${index + 1}`" />
+                <img
+                  :src="url"
+                  :alt="`图片 ${index + 1}`"
+                  class="purchased-img"
+                  @click="previewImage(url)"
+                />
                 <el-button
                   class="download-btn"
                   size="small"
@@ -1344,6 +1342,11 @@ function downloadImage(url: string, filename: string) {
     })
 }
 
+function previewImage(url: string) {
+  // 使用浏览器新窗口打开图片
+  window.open(url, '_blank')
+}
+
 function goToConfig() {
   router.push('/masterpiece-config')
 }
@@ -2287,43 +2290,32 @@ onMounted(async () => {
   max-width: 600px;
 }
 
-.purchased-title {
-  font-size: var(--font-size-base);
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-md);
-  font-weight: 500;
-}
-
 .purchased-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--space-md);
 }
 
 .purchased-item {
-  position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--color-bg-page);
 }
 
-.purchased-item img {
+.purchased-img {
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
   display: block;
+  cursor: pointer;
 }
 
 .purchased-item .download-btn {
-  position: absolute;
-  bottom: var(--space-sm);
-  right: var(--space-sm);
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-}
-
-.purchased-item:hover .download-btn {
-  opacity: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 /* 生成中面板 */
