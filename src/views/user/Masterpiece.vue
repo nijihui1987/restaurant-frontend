@@ -403,7 +403,9 @@
     class="image-preview-dialog"
     @click="showPreview = false"
   >
-    <img :src="previewUrl" class="preview-image" @click.stop />
+    <div class="preview-content">
+      <img :src="previewUrl" class="preview-image" @click.stop />
+    </div>
   </el-dialog>
 </template>
 
@@ -2294,15 +2296,14 @@ onMounted(async () => {
 
 /* 图片预览弹窗 */
 .image-preview-dialog {
-  background: transparent !important;
+  background: rgba(0, 0, 0, 0.85) !important;
 }
 
 .image-preview-dialog .el-dialog {
   background: transparent !important;
   box-shadow: none !important;
-  max-width: none !important;
-  width: auto !important;
-  padding: 0 !important;
+  max-width: 95vw !important;
+  width: fit-content !important;
 }
 
 .image-preview-dialog .el-dialog__header {
@@ -2310,15 +2311,19 @@ onMounted(async () => {
 }
 
 .image-preview-dialog .el-dialog__body {
-  padding: 0 !important;
-  text-align: center;
+  padding: 20px !important;
   background: transparent !important;
 }
 
+.preview-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .preview-image {
-  width: auto;
-  height: calc(90vw * 0.75);
-  max-height: 90vh;
+  max-width: 90vw;
+  max-height: 85vh;
   object-fit: contain;
   display: block;
 }
