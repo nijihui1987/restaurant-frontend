@@ -14,9 +14,9 @@
         </div>
 
         <div class="balance-section">
-          <div class="balance-item">
+          <div class="balance-left">
             <div class="balance-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
               </svg>
             </div>
@@ -24,8 +24,8 @@
               <span class="balance-label">账户余额</span>
               <span class="balance-value">{{ Math.round(balance) }}</span>
             </div>
-            <el-button size="small" @click="showRechargeTip" class="recharge-btn">充值</el-button>
           </div>
+          <el-button size="small" @click="showRechargeTip" class="recharge-btn">充值</el-button>
         </div>
 
         <div class="info-section">
@@ -183,18 +183,20 @@ onMounted(() => {
   margin-bottom: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #e6e6e6;
-}
-
-.balance-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.balance-left {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
 .balance-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   background: #f0f0f0;
   border-radius: 50%;
   display: flex;
@@ -215,7 +217,7 @@ onMounted(() => {
 }
 
 .balance-value {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
   color: #1a1a1a;
   font-family: 'SF Mono', Monaco, monospace;
