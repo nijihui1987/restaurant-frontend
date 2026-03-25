@@ -1284,10 +1284,14 @@ async function pollTaskDetail() {
       // 停止轮询
       stopPolling()
       ElMessage.success('图片生成完成')
+      // 刷新任务列表（更新状态）
+      await loadTaskList()
     } else if (detail.status === 'failed') {
       // 停止轮询
       stopPolling()
       ElMessage.error(detail.error_message || '图片生成失败')
+      // 刷新任务列表（更新状态）
+      await loadTaskList()
     }
   } catch (error) {
     console.error('轮询失败', error)
