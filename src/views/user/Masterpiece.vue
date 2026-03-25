@@ -388,7 +388,7 @@
           <h2 class="failed-title">任务失败</h2>
           <p class="failed-desc">{{ currentTaskDetail.error_message || '未知错误' }}</p>
           <div class="failed-actions">
-            <el-button type="primary" @click="handleRetryCurrentTask">重新识别</el-button>
+            <el-button type="danger" @click="handleDeleteAndBack">删除任务</el-button>
           </div>
         </div>
       </div>
@@ -890,6 +890,20 @@ async function handleDeleteCurrentTask() {
     if (error !== 'cancel') {
       ElMessage.error('删除失败')
     }
+  }
+}
+
+async function handleDeleteAndBack() {
+  if (!taskId.value) return
+  try {
+    await cancelTask(taskId.value)
+    ElMessage.success('任务已删除')
+    // 切换到创建任务 Tab
+    switchToCreateTab()
+    // 刷新任务列表
+    loadTaskList()
+  } catch (error: any) {
+    ElMessage.error('删除失败')
   }
 }
 
