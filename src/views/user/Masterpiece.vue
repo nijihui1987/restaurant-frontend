@@ -4,7 +4,6 @@
     <div class="page-header">
       <div class="page-title-wrap">
         <h1 class="page-title">请拍摄/上传您的菜品出餐照片</h1>
-        <p class="page-tip">拍摄提示：按照精美摆盘出餐标准出餐，拍摄完整清晰的菜品，容器完整拍入画面，镜头角度不要太低或太高</p>
       </div>
       <div class="header-right" v-if="userStore.isAdmin">
         <el-button @click="goToConfig">
