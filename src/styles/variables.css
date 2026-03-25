@@ -5,57 +5,58 @@
 
 :root {
   /* 主色调覆盖 - 经典黑色系 */
-  --color-primary: #1a1a1a;
-  --color-primary-hover: #333333;
+  --color-primary: #0a0a0a;
+  --color-primary-hover: #1a1a1a;
   --color-primary-active: #000000;
 
-  /* 强调色 - 深邃的琥珀色，体现高端质感 */
-  --color-accent: #8B5A2B;
-  --color-accent-hover: #6B4423;
-  --color-accent-light: #C4956A;
+  /* 强调色 - 琥珀色，体现高端质感 */
+  --color-accent: #C4956A;
+  --color-accent-hover: #D4A57A;
+  --color-accent-dark: #8B5A2B;
 
-  /* 背景变量 */
-  --bg-page: #fafbfc;
-  --bg-surface: #ffffff;
-  --bg-hover: #f5f5f5;
-  --bg-card: #ffffff;
+  /* 背景变量 - 深色主题 */
+  --bg-page: #0a0a0a;
+  --bg-surface: #141414;
+  --bg-card: #1a1a1a;
+  --bg-hover: #242424;
+  --bg-elevated: #1e1e1e;
 
   /* 文字变量 */
-  --color-text-primary: #1a1a1a;
-  --color-text-regular: #595959;
-  --color-text-secondary: #8c8c8c;
-  --color-text-placeholder: #d9d9d9;
+  --color-text-primary: #f5f5f5;
+  --color-text-regular: #a0a0a0;
+  --color-text-secondary: #6b6b6b;
+  --color-text-placeholder: #404040;
 
   /* 边框变量 */
-  --border-default: #d9d9d9;
-  --border-light: #f0f0f0;
-  --border-focus: #1a1a1a;
+  --border-default: #2a2a2a;
+  --border-light: #1f1f1f;
+  --border-focus: #C4956A;
 
   /* 危险色 */
-  --color-danger: #ff4d4f;
-  --color-danger-hover: #ff7875;
-  --color-danger-bg: #fff1f0;
+  --color-danger: #ff6b6b;
+  --color-danger-hover: #ff8585;
+  --color-danger-bg: #2a1515;
 
   /* 状态色 */
-  --color-status-pending-bg: #fff7e6;
-  --color-status-pending-text: #d48806;
-  --color-status-done-bg: #f6ffed;
+  --color-status-pending-bg: #2a2410;
+  --color-status-pending-text: #d4a806;
+  --color-status-done-bg: #102a10;
   --color-status-done-text: #52c41a;
 
   /* Element Plus 主题色覆盖 */
-  --el-color-primary: #1a1a1a;
-  --el-color-primary-light-3: #595959;
+  --el-color-primary: #C4956A;
+  --el-color-primary-light-3: #a07850;
   --el-color-primary-light-5: #8C8C8C;
-  --el-color-primary-light-7: #B3B3B3;
-  --el-color-primary-light-8: #D4D4D4;
-  --el-color-primary-light-9: #EBEBEB;
-  --el-color-primary-dark-2: #000000;
+  --el-color-primary-light-7: #6b6b6b;
+  --el-color-primary-light-8: #4a4a4a;
+  --el-color-primary-light-9: #2a2a2a;
+  --el-color-primary-dark-2: #e0b080;
 
   /* 文字颜色 */
-  --text-primary: #1a1a1a;
-  --text-regular: #595959;
-  --text-secondary: #8C8C8C;
-  --text-tertiary: #B3B3B3;
+  --text-primary: #f5f5f5;
+  --text-regular: #a0a0a0;
+  --text-secondary: #6b6b6b;
+  --text-tertiary: #4a4a4a;
 
   /* 背景颜色 */
   --bg-white: #ffffff;
@@ -64,34 +65,35 @@
   --bg-gray-200: #EBEBEB;
 
   /* 侧边栏 */
-  --sidebar-bg: #ffffff;
-  --sidebar-hover: #FAFAFA;
-  --sidebar-active: #F0F0F0;
+  --sidebar-bg: #141414;
+  --sidebar-hover: #1e1e1e;
+  --sidebar-active: #242424;
 
   /* 边框 */
-  --border-color: #E5E5E5;
-  --border-light: #EBEBEB;
+  --border-color: #2a2a2a;
+  --border-light: #1f1f1f;
 
   /* 语义色覆盖 */
-  --color-success: #2D5A27;
-  --color-warning: #8B6914;
-  --color-danger: #A63D3D;
-  --color-info: #3D5A7A;
+  --color-success: #52c41a;
+  --color-warning: #d4a806;
+  --color-danger: #ff6b6b;
+  --color-info: #5a8fd4;
 
   /* Element Plus 语义色覆盖 */
-  --el-color-success: #2D5A27;
-  --el-color-warning: #8B6914;
-  --el-color-danger: #A63D3D;
-  --el-color-info: #3D5A7A;
+  --el-color-success: #52c41a;
+  --el-color-warning: #d4a806;
+  --el-color-danger: #ff6b6b;
+  --el-color-info: #5a8fd4;
 
   /* 字体 */
-  --font-family-base: "SF Pro Text", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-base: "SF Pro Display", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* 圆角 */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --radius-2xl: 24px;
 
   /* 字号 */
   --font-size-xs: 11px;
@@ -99,17 +101,18 @@
   --font-size-base: 14px;
   --font-size-md: 15px;
   --font-size-lg: 16px;
-  --font-size-xl: 17px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 32px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 22px;
+  --font-size-3xl: 28px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
 
-  /* 阴影 - 多层叠加营造深度 */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1), 0 16px 48px rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.12), 0 32px 64px rgba(0, 0, 0, 0.1);
+  /* 阴影 - 深色主题用更深的阴影 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6), 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.7), 0 32px 64px rgba(0, 0, 0, 0.6);
 
   /* 间距 */
   --space-xs: 4px;
@@ -120,6 +123,7 @@
   --space-2xl: 24px;
   --space-3xl: 32px;
   --space-4xl: 48px;
+  --space-5xl: 64px;
 
   /* 过渡 */
   --transition-fast: 0.15s ease;

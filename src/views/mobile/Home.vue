@@ -1,13 +1,30 @@
 <template>
   <div class="mobile-home">
     <main class="home-content">
-      <!-- 页面标题区 -->
+      <!-- Hero 区域 -->
       <section class="hero-section">
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          <span>专业菜品视觉</span>
+        </div>
         <h1 class="hero-title">
           <span class="hero-line">让每一道菜</span>
           <span class="hero-line accent">都成为作品</span>
         </h1>
-        <p class="hero-subtitle">专业菜品视觉呈现，一键生成摄影级素材</p>
+        <p class="hero-subtitle">一键将随手拍的菜品图<br/>转化为摄影级营销素材</p>
+
+        <!-- CTA 按钮 -->
+        <div class="hero-actions" v-if="!userStore.isLoggedIn">
+          <el-button type="primary" size="large" @click="goToLogin" class="cta-btn">
+            立即开始
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </el-button>
+          <p class="hero-hint">登录后可使用完整功能</p>
+        </div>
       </section>
 
       <!-- 功能入口 -->
@@ -17,14 +34,13 @@
             v-if="feature.path && feature.status !== 'blocked'"
             :to="feature.path"
             class="feature-card"
-            :style="{ animationDelay: `${index * 80}ms` }"
+            :class="{ 'feature-card--large': index === 0 }"
+            :style="{ animationDelay: `${index * 100}ms` }"
           >
             <div class="card-image">
               <img :src="feature.image" :alt="feature.title" />
-              <div class="card-overlay"></div>
-              <div class="title-box">
-                <span class="title-text">{{ feature.title }}</span>
-              </div>
+              <div class="card-gradient"></div>
+              <div class="card-number">{{ String(index + 1).padStart(2, '0') }}</div>
               <div class="coin-badge" v-if="feature.coinCost">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="coin-star">
                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
@@ -32,73 +48,42 @@
                 <span class="coin-num">{{ feature.coinCost }}</span>
               </div>
             </div>
-            <div class="card-info">
+            <div class="card-content">
               <h3 class="card-title">{{ feature.title }}</h3>
               <p class="card-desc">{{ feature.desc }}</p>
-              <div class="card-action">
-                <span class="action-text">{{ feature.actionText || '进入' }}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-arrow">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
+              <div class="card-footer">
+                <span class="card-action">
+                  {{ feature.actionText || '进入' }}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
               </div>
             </div>
           </router-link>
           <div
             v-else-if="feature.status === 'blocked'"
             class="feature-card disabled"
-            :style="{ animationDelay: `${index * 80}ms` }"
+            :style="{ animationDelay: `${index * 100}ms` }"
           >
             <div class="card-image blocked">
               <img :src="feature.image" :alt="feature.title" />
-              <div class="card-overlay dark"></div>
+              <div class="card-gradient dark"></div>
+              <div class="card-number">{{ String(index + 1).padStart(2, '0') }}</div>
               <div class="blocked-overlay">
-                <span class="blocked-text">{{ feature.blockedText || '即将上线' }}</span>
-              </div>
-              <div class="title-box">
-                <span class="title-text">{{ feature.title }}</span>
+                <span class="blocked-text">即将上线</span>
               </div>
             </div>
-            <div class="card-info">
+            <div class="card-content">
               <h3 class="card-title">{{ feature.title }}</h3>
               <p class="card-desc">{{ feature.desc }}</p>
-            </div>
-          </div>
-          <div
-            v-else
-            class="feature-card"
-            :style="{ animationDelay: `${index * 80}ms` }"
-          >
-            <div class="card-image">
-              <img :src="feature.image" :alt="feature.title" />
-              <div class="card-overlay"></div>
-              <div class="title-box">
-                <span class="title-text">{{ feature.title }}</span>
-              </div>
-              <div class="coin-badge" v-if="feature.coinCost">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="coin-star">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                </svg>
-                <span class="coin-num">{{ feature.coinCost }}</span>
-              </div>
-            </div>
-            <div class="card-info">
-              <h3 class="card-title">{{ feature.title }}</h3>
-              <p class="card-desc">{{ feature.desc }}</p>
-              <div class="card-action disabled">
-                <span class="action-text">{{ feature.actionText || '进入' }}</span>
-              </div>
             </div>
           </div>
         </template>
       </section>
 
-      <!-- 登录提示 -->
-      <section class="auth-section" v-if="!userStore.isLoggedIn">
-        <p class="auth-hint">登录后可使用完整功能</p>
-        <el-button type="primary" size="large" @click="goToLogin" class="auth-btn">
-          立即登录
-        </el-button>
-      </section>
+      <!-- 底部留白 -->
+      <div class="bottom-space"></div>
     </main>
   </div>
 </template>
@@ -113,7 +98,6 @@ const router = useRouter()
 const userStore = useUserStore()
 const featureStore = useFeatureStore()
 
-// 根据用户类型获取功能列表
 const visibleFeatures = computed(() => {
   if (userStore.isVip) {
     return featureStore.getVipFeatures()
@@ -132,34 +116,92 @@ function goToLogin() {
 
 <style scoped>
 .mobile-home {
-  min-height: calc(100vh - var(--space-4xl));
+  min-height: 100vh;
   background: var(--bg-page);
-  background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(139, 90, 43, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(139, 90, 43, 0.02) 0%, transparent 50%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 背景装饰 */
+.mobile-home::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(196, 149, 106, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 80%, rgba(196, 149, 106, 0.05) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .home-content {
-  padding: 0 var(--space-lg);
-  max-width: 1200px;
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--space-xl);
+  max-width: 900px;
   margin: 0 auto;
 }
 
 /* ==================== Hero 区域 ==================== */
 
 .hero-section {
-  padding: var(--space-3xl) 0 var(--space-2xl);
-  text-align: left;
+  padding: var(--space-5xl) 0 var(--space-4xl);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: rgba(196, 149, 106, 0.1);
+  border: 1px solid rgba(196, 149, 106, 0.2);
+  border-radius: var(--radius-full);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xl);
+  animation: fadeInDown 0.6s ease;
+}
+
+.hero-badge svg {
+  color: var(--color-accent);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-title {
-  margin: 0 0 var(--space-md);
-  font-size: var(--font-size-4xl);
+  margin: 0 0 var(--space-xl);
+  font-size: var(--font-size-5xl);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   display: flex;
   flex-direction: column;
+  animation: fadeInUp 0.6s ease 0.1s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-line {
@@ -169,13 +211,69 @@ function goToLogin() {
 
 .hero-line.accent {
   color: var(--color-accent);
+  position: relative;
+}
+
+.hero-line.accent::after {
+  content: '';
+  position: absolute;
+  bottom: 0.1em;
+  left: 0;
+  width: 100%;
+  height: 0.08em;
+  background: var(--color-accent);
+  opacity: 0.3;
+  border-radius: 0.04em;
 }
 
 .hero-subtitle {
-  margin: 0;
-  font-size: var(--font-size-md);
+  margin: 0 0 var(--space-3xl);
+  font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
+  line-height: 1.7;
   letter-spacing: 0.01em;
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.hero-actions {
+  animation: fadeInUp 0.6s ease 0.3s both;
+}
+
+.cta-btn {
+  height: 56px;
+  padding: 0 var(--space-3xl);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.cta-btn:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(196, 149, 106, 0.3);
+}
+
+.cta-btn svg {
+  transition: transform var(--transition-fast);
+}
+
+.cta-btn:hover svg {
+  transform: translateX(4px);
+}
+
+.hero-hint {
+  margin: var(--space-lg) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 /* ==================== 功能卡片 ==================== */
@@ -183,27 +281,39 @@ function goToLogin() {
 .features-section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-xl);
+  gap: var(--space-lg);
   padding-bottom: var(--space-3xl);
+}
+
+/* 第一个卡片更大 */
+.feature-card--large {
+  grid-column: span 2;
+}
+
+.feature-card--large .card-image {
+  aspect-ratio: 21 / 9;
+}
+
+.feature-card--large .card-title {
+  font-size: var(--font-size-2xl);
 }
 
 .feature-card {
   display: flex;
   flex-direction: column;
   background: var(--bg-surface);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
   opacity: 0;
-  transform: translateY(20px);
-  animation: cardEnter 0.5s ease forwards;
+  transform: translateY(30px);
+  animation: cardReveal 0.7s ease forwards;
 }
 
-@keyframes cardEnter {
+@keyframes cardReveal {
   to {
     opacity: 1;
     transform: translateY(0);
@@ -211,20 +321,20 @@ function goToLogin() {
 }
 
 .feature-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
-  border-color: var(--color-accent-light);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(196, 149, 106, 0.1);
+  transform: translateY(-6px);
 }
 
 .feature-card:active {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
 
 .card-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
 }
 
@@ -232,60 +342,54 @@ function goToLogin() {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.8s ease;
 }
 
 .feature-card:hover .card-image img {
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
-.card-overlay {
+.card-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.02) 100%
+    transparent 40%,
+    rgba(0, 0, 0, 0.6) 100%
   );
   pointer-events: none;
 }
 
-.card-overlay.dark {
+.card-gradient.dark {
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.4) 100%
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.6) 100%
   );
 }
 
-/* 标题盒子 */
-.title-box {
+.card-number {
   position: absolute;
-  bottom: var(--space-md);
-  left: var(--space-md);
-  right: var(--space-md);
+  top: var(--space-lg);
+  left: var(--space-lg);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.15);
+  letter-spacing: -0.05em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-.title-text {
-  display: inline-block;
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  color: var(--bg-surface);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  letter-spacing: 0.02em;
-}
-
-/* 积分徽章 */
 .coin-badge {
   position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
+  top: var(--space-lg);
+  right: var(--space-lg);
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
-  background: rgba(139, 90, 43, 0.9);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(196, 149, 106, 0.9);
   border-radius: var(--radius-full);
   backdrop-filter: blur(8px);
 }
@@ -297,13 +401,13 @@ function goToLogin() {
 .coin-num {
   font-size: var(--font-size-xs);
   font-weight: 600;
-  color: var(--bg-surface);
+  color: #0a0a0a;
   letter-spacing: 0.02em;
 }
 
 /* blocked 状态 */
 .card-image.blocked img {
-  filter: grayscale(30%) brightness(0.7);
+  filter: grayscale(40%) brightness(0.5);
 }
 
 .card-image.blocked {
@@ -319,18 +423,19 @@ function goToLogin() {
 }
 
 .blocked-text {
-  padding: var(--space-sm) var(--space-lg);
-  background: rgba(0, 0, 0, 0.75);
-  color: var(--bg-surface);
+  padding: var(--space-sm) var(--space-xl);
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 500;
   border-radius: var(--radius-full);
   backdrop-filter: blur(8px);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-/* 卡片信息区 */
-.card-info {
+/* 卡片内容区 */
+.card-content {
   padding: var(--space-xl);
   flex: 1;
   display: flex;
@@ -340,9 +445,9 @@ function goToLogin() {
 .card-title {
   margin: 0 0 var(--space-sm);
   font-size: var(--font-size-xl);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .card-desc {
@@ -353,12 +458,16 @@ function goToLogin() {
   flex: 1;
 }
 
-.card-action {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-sm);
+.card-footer {
   margin-top: var(--space-lg);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
   color: var(--color-accent);
   font-size: var(--font-size-sm);
   font-weight: 600;
@@ -367,109 +476,74 @@ function goToLogin() {
 }
 
 .feature-card:hover .card-action {
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
-.action-arrow {
+.card-action svg {
   transition: transform var(--transition-fast);
 }
 
-.feature-card:hover .action-arrow {
-  transform: translateX(4px);
+.feature-card:hover .card-action svg {
+  transform: translateX(3px);
 }
 
-.card-action.disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-  color: var(--color-text-placeholder);
-}
+/* ==================== 底部留白 ==================== */
 
-/* ==================== 登录提示 ==================== */
-
-.auth-section {
-  padding: var(--space-3xl) 0 var(--space-4xl);
-  text-align: center;
-}
-
-.auth-hint {
-  margin: 0 0 var(--space-xl);
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.01em;
-}
-
-.auth-btn {
-  min-width: 180px;
-  height: 52px;
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  letter-spacing: 0.03em;
-  transition: all var(--transition-normal);
-}
-
-.auth-btn:hover {
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(139, 90, 43, 0.25);
-}
-
-.auth-btn:active {
-  transform: translateY(0);
+.bottom-space {
+  height: var(--space-4xl);
 }
 
 /* ==================== 响应式适配 ==================== */
 
 @media (max-width: 640px) {
   .hero-section {
-    padding: var(--space-2xl) 0 var(--space-xl);
+    padding: var(--space-4xl) 0 var(--space-3xl);
+  }
+
+  .hero-badge {
+    margin-bottom: var(--space-lg);
   }
 
   .hero-title {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-4xl);
   }
 
   .hero-subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .cta-btn {
+    height: 52px;
+    padding: 0 var(--space-2xl);
     font-size: var(--font-size-base);
   }
 
   .features-section {
     grid-template-columns: 1fr;
-    gap: var(--space-lg);
-    padding-top: var(--space-md);
+    gap: var(--space-md);
   }
 
-  .card-image {
+  .feature-card--large {
+    grid-column: span 1;
+  }
+
+  .feature-card--large .card-image {
     aspect-ratio: 16 / 10;
   }
 
-  .title-box {
-    bottom: var(--space-lg);
-    left: var(--space-lg);
-    right: var(--space-lg);
+  .card-number {
+    font-size: var(--font-size-3xl);
+    top: var(--space-md);
+    left: var(--space-md);
   }
 
-  .title-text {
-    font-size: var(--font-size-xl);
-  }
-
-  .card-info {
+  .card-content {
     padding: var(--space-lg);
   }
 
   .card-title {
     font-size: var(--font-size-lg);
-  }
-
-  .card-desc {
-    font-size: var(--font-size-sm);
-  }
-
-  .card-action {
-    margin-top: var(--space-md);
   }
 }
 </style>
