@@ -11,7 +11,7 @@
             <h2 class="username">{{ userStore.userInfo?.username }}</h2>
             <span class="role-tag">{{ userStore.roleName }}</span>
           </div>
-          <el-button size="small" @click="showContactDialog" class="contact-btn">联系作者</el-button>
+          <el-button @click="showContactDialog" class="contact-btn">联系作者</el-button>
         </div>
 
         <div class="balance-section">
@@ -199,7 +199,9 @@ onMounted(() => {
   border: 1px solid #d4e8e2;
   color: #5a7d72;
   border-radius: 16px;
-  font-size: 13px;
+  font-size: 15px;
+  padding: 10px 20px;
+  height: auto;
 }
 
 .contact-btn:hover {
