@@ -403,7 +403,9 @@
     class="image-preview-dialog"
     @click="showPreview = false"
   >
-    <img :src="previewUrl" class="preview-image" @click.stop />
+    <div class="preview-image-wrapper">
+      <img :src="previewUrl" class="preview-image" @click.stop />
+    </div>
   </el-dialog>
 </template>
 
@@ -482,7 +484,6 @@ const showRightArrow = ref(false)
 
 // 第一步相关
 const fileInputRef = ref<HTMLInputElement | null>(null)
-const previewUrl = ref('')
 const isRecognizing = ref(false)
 const isRecognizeDone = ref(false)
 const recognizeResult = ref<Record<string, string> | null>(null)
@@ -2296,6 +2297,7 @@ onMounted(async () => {
 /* 图片预览弹窗 */
 .image-preview-dialog {
   background: rgba(0, 0, 0, 0.9) !important;
+  --el-dialog-padding-primary: 0;
 }
 
 .image-preview-dialog .el-dialog__body {
@@ -2306,9 +2308,15 @@ onMounted(async () => {
 }
 
 .preview-image {
-  max-width: 100%;
-  max-height: 80vh;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+}
+
+.preview-image-wrapper {
+  width: 80vw;
+  max-width: 80vw;
+  aspect-ratio: 4/3;
 }
 
 /* 已购买图片展示 */
