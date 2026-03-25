@@ -1480,8 +1480,8 @@ onMounted(async () => {
   position: relative;
   cursor: pointer;
   width: 160px;
-  display: flex;
-  flex-direction: column;
+  height: 150px;
+  overflow: hidden;
 }
 
 .tab-thumb {
@@ -1497,12 +1497,15 @@ onMounted(async () => {
 }
 
 .tab-status-bar {
-  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   padding: 4px 6px;
   font-size: 10px;
   text-align: center;
   background: rgba(255, 255, 255, 0.9);
-  flex-shrink: 0;
+  z-index: 2;
 }
 
 .tab-status-bar.status-failed {
