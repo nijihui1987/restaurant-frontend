@@ -1,17 +1,5 @@
 <template>
   <div class="page-container">
-    <!-- 页面标题 -->
-    <div class="page-header">
-      <div class="page-title-wrap">
-        <h1 class="page-title">请拍摄/上传您的菜品出餐照片</h1>
-      </div>
-      <div class="header-right" v-if="userStore.isAdmin">
-        <el-button @click="goToConfig">
-          <el-icon><Setting /></el-icon>
-        </el-button>
-      </div>
-    </div>
-
     <!-- Tab 导航区 -->
     <div class="tab-nav" v-if="taskTabs.length > 0">
       <!-- 左箭头 -->
@@ -89,7 +77,7 @@
               />
               <div v-if="!previewUrl" class="upload-placeholder">
                 <el-icon class="upload-icon" :size="48"><UploadFilled /></el-icon>
-                <p class="upload-text">点击或拖拽上传图片</p>
+                <p class="upload-text">请拍摄/上传您的菜品出餐照片</p>
                 <p class="upload-hint">支持 JPG、PNG 格式</p>
               </div>
               <div v-else class="preview-container">
@@ -1629,7 +1617,7 @@ onMounted(async () => {
   text-align: center;
   cursor: pointer;
   transition: all var(--transition-fast);
-  min-height: 300px;
+  aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
