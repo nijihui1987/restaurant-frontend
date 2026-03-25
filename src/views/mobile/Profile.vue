@@ -22,7 +22,7 @@
             </div>
             <div class="balance-info">
               <span class="balance-label">账户余额</span>
-              <span class="balance-value">{{ balance.toFixed(2) }}</span>
+              <span class="balance-value">{{ Math.round(balance) }}</span>
             </div>
           </div>
         </div>
@@ -170,27 +170,29 @@ onMounted(() => {
 }
 
 .balance-section {
-  background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+  background: #ffffff;
   border-radius: 12px;
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .balance-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
 }
 
 .balance-icon {
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #f0f0f0;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .balance-info {
@@ -205,9 +207,9 @@ onMounted(() => {
 }
 
 .balance-value {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
-  color: #ffffff;
+  color: #1a1a1a;
   font-family: 'SF Mono', Monaco, monospace;
 }
 
