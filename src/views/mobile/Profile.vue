@@ -170,7 +170,7 @@ onMounted(() => {
 }
 
 .balance-section {
-  background: #1a1a1a;
+  background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
