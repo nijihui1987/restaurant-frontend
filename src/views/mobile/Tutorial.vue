@@ -26,6 +26,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import { Loading, Warning, Document } from '@element-plus/icons-vue'
 import { getTutorial } from '@/api/config'
 
@@ -45,7 +46,9 @@ async function fetchTutorial() {
     const apiContent = await getTutorial()
     if (apiContent && apiContent.trim()) {
       content.value = apiContent
-      renderedContent.value = await marked.parse(content.value)
+      // XSS 防护：消毒处理 marked 解析后的 HTML
+      const html = await marked.parse(content.value)
+      renderedContent.value = DOMPurify.sanitize(html)
       return
     }
 
@@ -55,7 +58,9 @@ async function fetchTutorial() {
       const text = await response.text()
       if (text && text.trim()) {
         content.value = text
-        renderedContent.value = await marked.parse(content.value)
+        // XSS 防护：消毒处理 marked 解析后的 HTML
+        const html = await marked.parse(content.value)
+        renderedContent.value = DOMPurify.sanitize(html)
         return
       }
     }
@@ -72,7 +77,9 @@ async function fetchTutorial() {
         const text = await response.text()
         if (text && text.trim()) {
           content.value = text
-          renderedContent.value = await marked.parse(content.value)
+          // XSS 防护：消毒处理 marked 解析后的 HTML
+          const html = await marked.parse(content.value)
+          renderedContent.value = DOMPurify.sanitize(html)
           loadError.value = false
           return
         }

@@ -3,11 +3,18 @@ import { ref, computed } from 'vue'
 import { login, getUserInfo, logout as apiLogout, type User, type UserRole } from '@/api/auth'
 
 export const useUserStore = defineStore('user', () => {
-  const token = ref<string>(localStorage.getItem('token') || '')
+  // Token 从 Cookie 自动获取，不再使用 localStorage
+  const token = ref<string>('')
   const userInfo = ref<User | null>(null)
   const isLoading = ref(false)  // 标记是否正在加载用户信息
 
-  const isLoggedIn = computed(() => !!token.value)
+  // 从 Cookie 读取 access_token
+  function getTokenFromCookie(): string {
+    const match = document.cookie.match(/access_token=([^;]+)/)
+    return match ? match[1] : ''
+  }
+
+  const isLoggedIn = computed(() => !!token.value || !!getTokenFromCookie())
 
   // 角色判断
   const isAdmin = computed(() => userInfo.value?.role === 'admin')
@@ -30,9 +37,8 @@ export const useUserStore = defineStore('user', () => {
 
   async function loginAction(username: string, password: string) {
     const res = await login({ username, password })
+    // Token 通过 httpOnly Cookie 自动管理，前端不再存储
     token.value = res.access_token
-    localStorage.setItem('token', res.access_token)
-    localStorage.setItem('refresh_token', res.refresh_token)
     await fetchUserInfo()
   }
 
@@ -57,12 +63,13 @@ export const useUserStore = defineStore('user', () => {
     }
     token.value = ''
     userInfo.value = null
-    localStorage.removeItem('token')
-    localStorage.removeItem('refresh_token')
+    // Token 通过 Cookie 清理，后端会在 logout 时清除 Cookie
   }
 
   // 初始化时尝试获取用户信息
-  if (token.value) {
+  const initialToken = getTokenFromCookie()
+  if (initialToken) {
+    token.value = initialToken
     fetchUserInfo()
   }
 

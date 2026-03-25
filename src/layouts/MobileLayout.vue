@@ -224,6 +224,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('visibilitychange', handleVisibilityChange)
+  stopRateLimitTimer()
 })
 
 async function fetchAnnouncement() {

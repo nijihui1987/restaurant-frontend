@@ -11,6 +11,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "axios": "^1.13.6",
+    "dompurify": "^3.3.3",
     "element-plus": "^2.13.6",
     "marked": "^17.0.5",
     "pinia": "^3.0.4",
@@ -19,6 +20,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/marked": "^5.0.2",
     "@types/node": "^24.12.0",
     "@vitejs/plugin-vue": "^6.0.5",

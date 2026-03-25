@@ -171,7 +171,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
@@ -341,6 +341,11 @@ fetchLogo()
 loadUserBalance()
 featureStore.loadFeatures()
 loadRateLimitStatus()
+
+// 组件卸载时清理定时器
+onUnmounted(() => {
+  stopRateLimitTimer()
+})
 </script>
 
 <style scoped>

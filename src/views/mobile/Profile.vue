@@ -80,6 +80,7 @@ import { Setting } from '@element-plus/icons-vue'
 import { getBalance } from '@/api/billing'
 import { getConfig } from '@/api/config'
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -93,7 +94,9 @@ async function loadContactContent() {
   const content = await getConfig('system', 'contact-author')
   if (content) {
     contactContent.value = content
-    renderedContact.value = await marked.parse(content)
+    // XSS 防护：消毒处理 marked 解析后的 HTML
+    const html = await marked.parse(content)
+    renderedContact.value = DOMPurify.sanitize(html)
   } else {
     contactContent.value = '暂无联系方式'
     renderedContact.value = '<p>暂无联系方式</p>'

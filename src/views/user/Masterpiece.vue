@@ -409,7 +409,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock, ArrowLeft, ArrowRight, Loading, Download } from '@element-plus/icons-vue'
@@ -1401,6 +1401,14 @@ onMounted(async () => {
   await loadMasterpieceConfig()
   await loadTaskList()
   updateScrollArrows()
+})
+
+// 组件卸载时清理定时器
+onUnmounted(() => {
+  if (countdownTimer) {
+    clearInterval(countdownTimer)
+    countdownTimer = null
+  }
 })
 </script>
 

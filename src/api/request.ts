@@ -10,7 +10,9 @@ const api = axios.create({
 // 请求拦截器 - 添加 token 和修复路径
 api.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('token')
+    // 从 Cookie 读取 access_token（httpOnly Cookie 由后端自动管理）
+    const tokenMatch = document.cookie.match(/access_token=([^;]+)/)
+    const token = tokenMatch ? tokenMatch[1] : ''
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -44,10 +46,7 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      // 清除所有认证信息
-      localStorage.removeItem('token')
-      localStorage.removeItem('refresh_token')
-      // 清除 Pinia store 中的用户信息
+      // 清除 Pinia store 中的用户信息（Cookie 由后端自动清除）
       const userStore = useUserStore()
       userStore.token = ''
       userStore.userInfo = null
