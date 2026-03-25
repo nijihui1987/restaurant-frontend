@@ -5,19 +5,31 @@
     </header>
 
     <main class="gallery-content" v-loading="loading">
-      <el-tabs v-model="activeTab" class="gallery-tabs">
+      <el-tabs v-model="activeTab" class="gallery-tabs" @tab-change="onTabChange">
         <el-tab-pane label="全部" name="all">
-          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
-            <div class="image-item" v-for="img in displayImages" :key="img.id">
-              <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="action-btns">
-                <div class="action-btn" @click.stop="downloadImage(img)">
-                  <el-icon><Download /></el-icon>
-                </div>
-                <div class="action-btn delete" @click.stop="deleteImage(img)">
-                  <el-icon><Delete /></el-icon>
+          <div class="image-list" v-if="displayImages.length > 0">
+            <div class="image-item" v-for="img in displayedImages" :key="img.id">
+              <img :src="img.url" :alt="img.dish_name" class="item-image" @click="previewImage(img)" />
+              <div class="item-info">
+                <span class="dish-name">{{ img.dish_name }}</span>
+                <div class="item-actions">
+                  <el-button size="small" @click.stop="downloadImage(img)">
+                    <el-icon><Download /></el-icon>
+                    保存
+                  </el-button>
+                  <el-button size="small" type="danger" @click.stop="deleteImage(img)">
+                    <el-icon><Delete /></el-icon>
+                    删除
+                  </el-button>
                 </div>
               </div>
+            </div>
+            <div class="load-more" v-if="hasMore" @click="loadMore">
+              <span v-if="loadingMore">加载中...</span>
+              <span v-else>加载更多</span>
+            </div>
+            <div class="no-more" v-else-if="displayImages.length > 0">
+              没有更多了
             </div>
           </div>
           <div class="empty-state" v-else-if="!loading">
@@ -36,17 +48,29 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="原图" name="original">
-          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
-            <div class="image-item" v-for="img in displayImages" :key="img.id">
-              <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="action-btns">
-                <div class="action-btn" @click.stop="downloadImage(img)">
-                  <el-icon><Download /></el-icon>
-                </div>
-                <div class="action-btn delete" @click.stop="deleteImage(img)">
-                  <el-icon><Delete /></el-icon>
+          <div class="image-list" v-if="displayImages.length > 0">
+            <div class="image-item" v-for="img in displayedImages" :key="img.id">
+              <img :src="img.url" :alt="img.dish_name" class="item-image" @click="previewImage(img)" />
+              <div class="item-info">
+                <span class="dish-name">{{ img.dish_name }}</span>
+                <div class="item-actions">
+                  <el-button size="small" @click.stop="downloadImage(img)">
+                    <el-icon><Download /></el-icon>
+                    保存
+                  </el-button>
+                  <el-button size="small" type="danger" @click.stop="deleteImage(img)">
+                    <el-icon><Delete /></el-icon>
+                    删除
+                  </el-button>
                 </div>
               </div>
+            </div>
+            <div class="load-more" v-if="hasMore" @click="loadMore">
+              <span v-if="loadingMore">加载中...</span>
+              <span v-else>加载更多</span>
+            </div>
+            <div class="no-more" v-else-if="displayImages.length > 0">
+              没有更多了
             </div>
           </div>
           <div class="empty-state" v-else-if="!loading">
@@ -54,17 +78,29 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="生成图" name="generated">
-          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
-            <div class="image-item" v-for="img in displayImages" :key="img.id">
-              <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="action-btns">
-                <div class="action-btn" @click.stop="downloadImage(img)">
-                  <el-icon><Download /></el-icon>
-                </div>
-                <div class="action-btn delete" @click.stop="deleteImage(img)">
-                  <el-icon><Delete /></el-icon>
+          <div class="image-list" v-if="displayImages.length > 0">
+            <div class="image-item" v-for="img in displayedImages" :key="img.id">
+              <img :src="img.url" :alt="img.dish_name" class="item-image" @click="previewImage(img)" />
+              <div class="item-info">
+                <span class="dish-name">{{ img.dish_name }}</span>
+                <div class="item-actions">
+                  <el-button size="small" @click.stop="downloadImage(img)">
+                    <el-icon><Download /></el-icon>
+                    保存
+                  </el-button>
+                  <el-button size="small" type="danger" @click.stop="deleteImage(img)">
+                    <el-icon><Delete /></el-icon>
+                    删除
+                  </el-button>
                 </div>
               </div>
+            </div>
+            <div class="load-more" v-if="hasMore" @click="loadMore">
+              <span v-if="loadingMore">加载中...</span>
+              <span v-else>加载更多</span>
+            </div>
+            <div class="no-more" v-else-if="displayImages.length > 0">
+              没有更多了
             </div>
           </div>
           <div class="empty-state" v-else-if="!loading">
@@ -105,21 +141,45 @@ import { getGalleryImages, deleteGalleryImage, type ImageItem } from '@/api/gall
 
 const router = useRouter()
 
+const PAGE_SIZE = 5
+
 const activeTab = ref('all')
 const loading = ref(false)
+const loadingMore = ref(false)
 const allImages = ref<ImageItem[]>([])
 const originalImages = ref<ImageItem[]>([])
 const generatedImages = ref<ImageItem[]>([])
+const displayImages = ref<ImageItem[]>([])
+const displayOriginal = ref<ImageItem[]>([])
+const displayGenerated = ref<ImageItem[]>([])
+const currentPage = ref(1)
 
 // 预览相关
 const previewVisible = ref(false)
 const currentImage = ref<ImageItem | null>(null)
 
-// 根据 Tab 筛选图片
-const displayImages = computed(() => {
+// 根据 Tab 获取当前显示的图片列表
+function getCurrentDisplayList() {
+  if (activeTab.value === 'original') return displayOriginal.value
+  if (activeTab.value === 'generated') return displayGenerated.value
+  return displayImages.value
+}
+
+// 根据 Tab 获取完整图片列表
+function getFullList() {
   if (activeTab.value === 'original') return originalImages.value
   if (activeTab.value === 'generated') return generatedImages.value
   return allImages.value
+}
+
+// 计算当前显示的图片
+const displayedImages = computed(() => {
+  return getCurrentDisplayList()
+})
+
+// 是否有更多可加载
+const hasMore = computed(() => {
+  return getCurrentDisplayList().length < getFullList().length
 })
 
 // 加载图库数据
@@ -127,14 +187,61 @@ async function loadGallery() {
   loading.value = true
   try {
     const data = await getGalleryImages()
-    allImages.value = [...data.original_images, ...data.generated_images]
-    originalImages.value = data.original_images
-    generatedImages.value = data.generated_images
+    // 按时间倒序，最新的在前
+    allImages.value = [...data.original_images, ...data.generated_images].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    originalImages.value = [...data.original_images].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    generatedImages.value = [...data.generated_images].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    // 重置并加载第一页
+    currentPage.value = 1
+    displayImages.value = allImages.value.slice(0, PAGE_SIZE)
+    displayOriginal.value = originalImages.value.slice(0, PAGE_SIZE)
+    displayGenerated.value = generatedImages.value.slice(0, PAGE_SIZE)
   } catch (error) {
     console.error('Failed to load gallery:', error)
     ElMessage.error('加载图库失败')
   } finally {
     loading.value = false
+  }
+}
+
+// 加载更多
+function loadMore() {
+  if (loadingMore.value || !hasMore.value) return
+  loadingMore.value = true
+  currentPage.value++
+
+  const fullList = getFullList()
+  const currentList = getCurrentDisplayList()
+  const start = (currentPage.value - 1) * PAGE_SIZE
+  const end = start + PAGE_SIZE
+  const newItems = fullList.slice(start, end)
+
+  if (activeTab.value === 'original') {
+    displayOriginal.value = [...displayOriginal.value, ...newItems]
+  } else if (activeTab.value === 'generated') {
+    displayGenerated.value = [...displayGenerated.value, ...newItems]
+  } else {
+    displayImages.value = [...displayImages.value, ...newItems]
+  }
+
+  loadingMore.value = false
+}
+
+// Tab 切换时重置
+function onTabChange() {
+  currentPage.value = 1
+  if (activeTab.value === 'original') {
+    displayOriginal.value = originalImages.value.slice(0, PAGE_SIZE)
+  } else if (activeTab.value === 'generated') {
+    displayGenerated.value = generatedImages.value.slice(0, PAGE_SIZE)
+  } else {
+    displayImages.value = allImages.value.slice(0, PAGE_SIZE)
   }
 }
 
@@ -164,9 +271,9 @@ async function downloadImage(img: ImageItem) {
     document.body.removeChild(link)
 
     setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
-    ElMessage.success('下载成功')
+    ElMessage.success('保存成功')
   } catch {
-    ElMessage.error('下载失败，请长按图片保存')
+    ElMessage.error('保存失败，请长按图片保存')
   }
 }
 
@@ -176,7 +283,6 @@ async function downloadCurrentImage() {
   const dishName = currentImage.value.dish_name || 'image'
 
   try {
-    // 先 fetch 图片为 blob，绕过跨域限制
     const response = await fetch(url)
     const blob = await response.blob()
     const blobUrl = URL.createObjectURL(blob)
@@ -188,11 +294,10 @@ async function downloadCurrentImage() {
     link.click()
     document.body.removeChild(link)
 
-    // 释放 blob URL
     setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
-    ElMessage.success('下载成功')
+    ElMessage.success('保存成功')
   } catch {
-    ElMessage.error('下载失败，请长按图片保存')
+    ElMessage.error('保存失败，请长按图片保存')
   }
 }
 
@@ -208,6 +313,9 @@ async function deleteImage(img: ImageItem) {
     allImages.value = allImages.value.filter(i => i.id !== img.id)
     originalImages.value = originalImages.value.filter(i => i.id !== img.id)
     generatedImages.value = generatedImages.value.filter(i => i.id !== img.id)
+    displayImages.value = displayImages.value.filter(i => i.id !== img.id)
+    displayOriginal.value = displayOriginal.value.filter(i => i.id !== img.id)
+    displayGenerated.value = displayGenerated.value.filter(i => i.id !== img.id)
     ElMessage.success('删除成功')
   } catch {
     // 用户取消
@@ -280,66 +388,74 @@ onMounted(() => {
   display: none;
 }
 
-/* 2列布局，4:3比例 */
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+/* 单列图片列表 */
+.image-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .image-item {
-  aspect-ratio: 4 / 3;
-  border-radius: 8px;
+  background: var(--bg-surface);
+  border-radius: 12px;
   overflow: hidden;
-  background: var(--bg-hover);
-  position: relative;
-  cursor: pointer;
+  border: 1px solid var(--border-light);
 }
 
-.image-item img {
+.item-image {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
-  transition: transform 0.2s ease;
+  display: block;
 }
 
-.image-item:active img {
-  transform: scale(0.98);
-}
-
-/* 右下角操作按钮组 */
-.action-btns {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  display: flex;
-  gap: 6px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.image-item:active .action-btns {
-  opacity: 1;
-}
-
-.action-btn {
-  width: 28px;
-  height: 28px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 50%;
+.item-info {
+  padding: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--bg-surface);
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dish-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.item-actions .el-button {
+  height: 32px;
+  font-size: 13px;
+  padding: 0 12px;
+}
+
+.load-more {
+  text-align: center;
+  padding: 16px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
   cursor: pointer;
 }
 
-.action-btn .el-icon {
-  font-size: 14px;
+.load-more:hover {
+  color: var(--color-text-primary);
 }
 
-.action-btn.delete {
-  background: rgba(245, 34, 45, 0.85);
+.no-more {
+  text-align: center;
+  padding: 16px;
+  color: var(--color-text-placeholder);
+  font-size: 13px;
 }
 
 .empty-state {
