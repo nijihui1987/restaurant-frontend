@@ -24,6 +24,7 @@
             <div class="card-info">
               <p class="card-desc">{{ feature.desc }}</p>
               <div class="card-action">
+                <el-icon :size="14"><Camera /></el-icon>
                 <span class="action-text">{{ feature.actionText || '进入' }}</span>
               </div>
             </div>
@@ -87,6 +88,7 @@ import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useFeatureStore } from '@/stores/feature'
+import { Camera } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
