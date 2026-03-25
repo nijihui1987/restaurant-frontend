@@ -765,6 +765,7 @@ async function loadTaskDetail(tid: string) {
   try {
     await loadMasterpieceConfig()
     const detail = await getTask(tid)
+    console.log('loadTaskDetail response:', detail)
     currentTaskDetail.value = detail
     taskId.value = tid
     previewUrl.value = detail.image_url || ''
@@ -1350,10 +1351,14 @@ async function handleConsume() {
     })
     console.log('Consume success:', res)
     ElMessage.success('购买成功，图片已存入图库')
-    // 刷新任务详情
-    await loadTaskDetail(taskId.value)
-    // 刷新任务列表（更新状态）
+
+    // 先刷新任务列表（更新状态）
     await loadTaskList()
+
+    // 再刷新任务详情
+    if (taskId.value) {
+      await loadTaskDetail(taskId.value)
+    }
   } catch (error: any) {
     console.error('Consume error:', error)
     const msg = error?.response?.data?.detail || '购买失败'
