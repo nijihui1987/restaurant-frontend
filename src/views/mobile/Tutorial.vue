@@ -207,24 +207,27 @@ onMounted(() => {
 }
 
 .markdown-body :deep(pre) {
-  background: var(--bg-hover);
+  background: var(--bg-card);
   padding: var(--space-lg);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow-x: auto;
   margin: 0 0 var(--space-lg);
+  border: 1px solid var(--border-light);
 }
 
 .markdown-body :deep(pre code) {
   background: none;
   padding: 0;
+  color: var(--color-accent);
 }
 
 .markdown-body :deep(blockquote) {
   margin: 0 0 var(--space-lg);
   padding: var(--space-md) var(--space-lg);
-  background: var(--bg-page);
-  border-left: 4px solid var(--color-primary);
-  color: var(--color-text-regular);
+  background: var(--bg-card);
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-text-secondary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .markdown-body :deep(hr) {
