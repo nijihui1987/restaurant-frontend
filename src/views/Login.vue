@@ -30,7 +30,6 @@
               placeholder="请输入用户名"
               size="large"
               :prefix-icon="User"
-              class="form-input"
             />
           </div>
           <div class="form-item">
@@ -42,7 +41,6 @@
               size="large"
               :prefix-icon="Lock"
               show-password
-              class="form-input"
             />
           </div>
           <el-button
@@ -227,36 +225,33 @@ fetchLogo()
   color: var(--color-text-regular);
 }
 
-.form-input {
-  --el-input-bg-color: var(--bg-card);
-  --el-input-border-color: var(--border-default);
-  --el-input-hover-border-color: var(--color-accent);
-  --el-input-focus-border-color: var(--color-accent);
-}
-
-.form-input :deep(.el-input__wrapper) {
+.form-item :deep(.el-input__wrapper) {
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
   box-shadow: 0 0 0 1px var(--border-default);
   transition: all var(--transition-fast);
-  background: var(--bg-card);
+  background-color: var(--bg-card) !important;
 }
 
-.form-input :deep(.el-input__wrapper:hover) {
+.form-item :deep(.el-input__wrapper:hover) {
   box-shadow: 0 0 0 1px var(--color-accent);
 }
 
-.form-input :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px var(--color-accent);
+.form-item :deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px var(--color-accent) !important;
 }
 
-.form-input :deep(.el-input__inner) {
+.form-item :deep(.el-input__inner) {
   font-size: var(--font-size-md);
   color: var(--color-text-primary);
 }
 
-.form-input :deep(.el-input__inner::placeholder) {
+.form-item :deep(.el-input__inner::placeholder) {
   color: var(--color-text-placeholder);
+}
+
+.form-item :deep(.el-input__prefix) {
+  color: var(--color-text-secondary);
 }
 
 .submit-btn {
