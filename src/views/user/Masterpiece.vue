@@ -30,7 +30,7 @@
         >
           <div class="tab-thumb-wrap" @click="switchToTaskTab(task)">
             <img :src="task.image_url" class="tab-thumb" />
-            <span class="tab-status" :class="getTaskStatusClass(task.status)"></span>
+            <span class="tab-status" :class="getTaskStatusClass(task.status)">{{ getTaskStatusText(task.status) }}</span>
           </div>
           <div class="tab-info">
             <span class="tab-label">{{ task.dish_name || '未命名' }}</span>
@@ -870,12 +870,12 @@ function getTaskStatusText(status: string): string {
     'recognizing': '识别中',
     'matching': '匹配中',
     'generating': '生成中',
-    'pending_select': '进行中',
-    'pending_consume': '待消费',
+    'pending_select': '请选背景',
+    'pending_consume': '待确认',
     'enhancing': '增强中',
-    'done': '已完成',
-    'failed': '已失败',
-    'completed': '已完成'
+    'done': '生成成功',
+    'failed': '生成失败',
+    'completed': '任务完成'
   }
   return statusMap[status] || status
 }
@@ -883,11 +883,11 @@ function getTaskStatusText(status: string): string {
 function getTaskStatusClass(status: string): string {
   const classMap: Record<string, string> = {
     'generating': 'status-generating',
-    'pending_select': 'status-active',
-    'pending_consume': 'status-active',
-    'done': 'status-done',
+    'pending_select': 'status-yellow',
+    'pending_consume': 'status-yellow',
+    'done': 'status-green',
     'failed': 'status-failed',
-    'completed': 'status-done'
+    'completed': 'status-blue'
   }
   return classMap[status] || 'status-default'
 }
@@ -1497,24 +1497,40 @@ onMounted(async () => {
   position: absolute;
   top: 8px;
   left: 8px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
   z-index: 2;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .tab-status.status-failed {
   background: #f56c6c;
+  color: #fff;
 }
 
-.tab-status.status-active {
+.tab-status.status-yellow {
   background: #e6a23c;
+  color: #fff;
 }
 
-.tab-status.status-done {
+.tab-status.status-green {
   background: #67c23a;
+  color: #fff;
+}
+
+.tab-status.status-blue {
+  background: #409eff;
+  color: #fff;
+}
+
+.tab-status.status-generating {
+  background: #409eff;
+  color: #fff;
+}
+
+.tab-status.status-default {
+  background: var(--color-bg-page);
+  color: var(--color-text-secondary);
 }
 
 .tab-info {
