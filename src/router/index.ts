@@ -79,6 +79,12 @@ const router = createRouter({
           component: () => import('@/views/user/Billing.vue'),
           meta: { requiresAuth: true }
         },
+        {
+          path: 'gallery-pc',
+          name: 'gallery-pc',
+          component: () => import('@/views/user/Gallery.vue'),
+          meta: { requiresAuth: true }
+        },
         // ========== 新功能页面 ==========
         {
           path: 'masterpiece',

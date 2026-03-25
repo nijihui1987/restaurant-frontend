@@ -1,59 +1,80 @@
 <template>
-  <div class="mobile-gallery">
+  <div class="gallery-page">
     <header class="page-header">
-      <h1>我的图库</h1>
+      <h1>图库管理</h1>
     </header>
 
-    <main class="gallery-content">
+    <main class="page-content">
       <el-tabs v-model="activeTab" class="gallery-tabs">
         <el-tab-pane label="全部" name="all">
           <div class="image-grid" v-if="displayImages.length > 0">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="delete-btn" @click.stop="deleteImage(img)">
-                <el-icon><Delete /></el-icon>
+              <div class="image-info">
+                <span class="dish-name">{{ img.dish_name }}</span>
+              </div>
+              <div class="image-actions">
+                <el-button size="small" @click.stop="downloadImage(img)">
+                  <el-icon><Download /></el-icon>
+                  下载
+                </el-button>
+                <el-button size="small" type="danger" @click.stop="deleteImage(img)">
+                  <el-icon><Delete /></el-icon>
+                  删除
+                </el-button>
               </div>
             </div>
           </div>
           <div class="empty-state" v-else>
-            <div class="empty-icon">
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                <rect x="8" y="14" width="48" height="36" rx="4" stroke="currentColor" stroke-width="1.5"/>
-                <circle cx="22" cy="26" r="4" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M8 42L20 30L28 38L40 26L56 42" stroke="currentColor" stroke-width="1.5"/>
-              </svg>
-            </div>
-            <p class="empty-title">图库为空</p>
-            <p class="empty-hint">开始制作您的第一张作品</p>
-            <el-button type="primary" @click="goToMasterpiece" class="empty-btn">
-              去制作
-            </el-button>
+            <el-empty description="暂无图片">
+              <el-button type="primary" @click="goToMasterpiece">去制作</el-button>
+            </el-empty>
           </div>
         </el-tab-pane>
         <el-tab-pane label="原图" name="original">
           <div class="image-grid" v-if="displayImages.length > 0">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="delete-btn" @click.stop="deleteImage(img)">
-                <el-icon><Delete /></el-icon>
+              <div class="image-info">
+                <span class="dish-name">{{ img.dish_name }}</span>
+              </div>
+              <div class="image-actions">
+                <el-button size="small" @click.stop="downloadImage(img)">
+                  <el-icon><Download /></el-icon>
+                  下载
+                </el-button>
+                <el-button size="small" type="danger" @click.stop="deleteImage(img)">
+                  <el-icon><Delete /></el-icon>
+                  删除
+                </el-button>
               </div>
             </div>
           </div>
           <div class="empty-state" v-else>
-            <p class="empty-title">暂无原图</p>
+            <el-empty description="暂无原图" />
           </div>
         </el-tab-pane>
         <el-tab-pane label="生成图" name="generated">
           <div class="image-grid" v-if="displayImages.length > 0">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
-              <div class="delete-btn" @click.stop="deleteImage(img)">
-                <el-icon><Delete /></el-icon>
+              <div class="image-info">
+                <span class="dish-name">{{ img.dish_name }}</span>
+              </div>
+              <div class="image-actions">
+                <el-button size="small" @click.stop="downloadImage(img)">
+                  <el-icon><Download /></el-icon>
+                  下载
+                </el-button>
+                <el-button size="small" type="danger" @click.stop="deleteImage(img)">
+                  <el-icon><Delete /></el-icon>
+                  删除
+                </el-button>
               </div>
             </div>
           </div>
           <div class="empty-state" v-else>
-            <p class="empty-title">暂无生成图</p>
+            <el-empty description="暂无生成图" />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -69,11 +90,14 @@
       <div class="preview-container" @click="previewVisible = false">
         <img :src="currentImage?.url" :alt="currentImage?.dish_name" class="preview-image" />
       </div>
-      <div class="preview-actions">
-        <el-button @click="downloadCurrentImage" class="action-btn">
-          <el-icon><Download /></el-icon>
-          下载高清原图
-        </el-button>
+      <div class="preview-footer">
+        <span class="preview-dish-name">{{ currentImage?.dish_name }}</span>
+        <div class="preview-actions">
+          <el-button type="primary" @click="downloadCurrentImage">
+            <el-icon><Download /></el-icon>
+            下载高清原图
+          </el-button>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -130,11 +154,14 @@ function previewImage(img: ImageItem) {
   previewVisible.value = true
 }
 
+function downloadImage(img: ImageItem) {
+  window.open(img.url, '_blank')
+  ElMessage.success('下载成功')
+}
+
 function downloadCurrentImage() {
   if (!currentImage.value) return
-  const url = currentImage.value.url
-  const dishName = currentImage.value.dish_name || 'image'
-  window.open(url, '_blank')
+  window.open(currentImage.value.url, '_blank')
   ElMessage.success('下载成功')
 }
 
@@ -162,78 +189,66 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.mobile-gallery {
-  min-height: 100vh;
-  background: #fafbfc;
-}
-
-.page-header {
-  background: #ffffff;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
-}
-
-.page-header h1 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.gallery-content {
-  padding: 16px 20px;
-  max-width: 480px;
+.gallery-page {
+  max-width: 900px;
   margin: 0 auto;
 }
 
+.page-header {
+  margin-bottom: var(--space-xl);
+}
+
+.page-header h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
 .gallery-tabs {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
 }
 
 .gallery-tabs :deep(.el-tabs__header) {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
 }
 
 .gallery-tabs :deep(.el-tabs__item) {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 500;
-  color: #8c8c8c;
-  padding: 0 12px;
+  color: var(--color-text-secondary);
+  padding: 0 16px;
 }
 
 .gallery-tabs :deep(.el-tabs__item.is-active) {
-  color: #1a1a1a;
+  color: var(--color-primary);
 }
 
 .gallery-tabs :deep(.el-tabs__active-bar) {
-  background-color: #1a1a1a;
+  background-color: var(--color-primary);
   height: 2px;
-}
-
-.gallery-tabs :deep(.el-tabs__nav-wrap::after) {
-  display: none;
 }
 
 /* 2列布局，4:3比例 */
 .image-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 16px;
 }
 
 .image-item {
   aspect-ratio: 4 / 3;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--color-bg-hover);
   position: relative;
   cursor: pointer;
 }
@@ -245,77 +260,78 @@ onMounted(() => {
   transition: transform 0.2s ease;
 }
 
-.image-item:active img {
-  transform: scale(0.98);
+.image-item:hover img {
+  transform: scale(1.02);
 }
 
-/* 右下角删除按钮 */
-.delete-btn {
+.image-info {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 12px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
   color: #ffffff;
-  cursor: pointer;
+}
+
+.dish-name {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.image-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
-.image-item:active .delete-btn {
+.image-item:hover .image-actions {
   opacity: 1;
 }
 
-.delete-btn .el-icon {
-  font-size: 14px;
+.image-actions .el-button {
+  min-width: 60px;
+  height: 28px;
+  padding: 0 8px;
+  font-size: var(--font-size-xs);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  color: var(--color-text-primary);
 }
 
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
+.image-actions .el-button:hover {
   background: #ffffff;
-  border-radius: 16px;
-  margin-top: 16px;
 }
 
-.empty-icon {
-  color: #d9d9d9;
-  margin-bottom: 16px;
+.image-actions .el-button--danger {
+  background: rgba(245, 34, 45, 0.9);
+  color: #ffffff;
 }
 
-.empty-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0 0 4px;
+.image-actions .el-button--danger:hover {
+  background: #f5222d;
 }
 
-.empty-hint {
-  font-size: 14px;
-  color: #8c8c8c;
-  margin: 0 0 20px;
-}
-
-.empty-btn {
-  min-width: 100px;
-  height: 40px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 20px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+/* 空状态 */
+.empty-state {
+  padding: var(--space-3xl);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
 }
 
 /* 预览弹窗 */
 .preview-dialog :deep(.el-dialog) {
   background: transparent;
   box-shadow: none;
-  max-width: 100%;
+  max-width: 90%;
   padding: 0;
 }
 
@@ -328,42 +344,44 @@ onMounted(() => {
 }
 
 .preview-container {
-  width: 100vw;
-  height: 100vh;
+  width: 80vw;
+  max-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.9);
+  border-radius: var(--radius-lg);
   cursor: pointer;
 }
 
 .preview-image {
-  max-width: 95%;
-  max-height: 85%;
+  max-width: 100%;
+  max-height: 80vh;
   object-fit: contain;
 }
 
-.preview-actions {
+.preview-footer {
   position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   z-index: 10;
 }
 
-.action-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  min-width: 140px;
-  height: 44px;
-  border-radius: 22px;
-  font-size: 14px;
-  backdrop-filter: blur(10px);
+.preview-dish-name {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text-primary);
 }
 
-.action-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+.preview-actions .el-button {
+  min-width: 120px;
 }
 
 /* 删除确认框按钮样式 */
