@@ -1,5 +1,6 @@
 <template>
-  <div class="page-container">
+  <div class="masterpiece-wrapper">
+    <div class="page-container">
     <!-- Tab 导航区 -->
     <div class="tab-nav" v-if="taskTabs.length > 0">
       <!-- 左箭头 -->
@@ -404,6 +405,7 @@
       <img :src="previewUrl" class="preview-image" @click.stop />
     </div>
   </el-dialog>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -1401,6 +1403,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.masterpiece-wrapper {
+  /* Single root wrapper for Transition compatibility */
+}
+
 .page-container {
   max-width: 1200px;
 }
