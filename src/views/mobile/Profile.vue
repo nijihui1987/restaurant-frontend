@@ -7,11 +7,8 @@
     <main class="profile-content">
       <div class="profile-card">
         <div class="profile-header">
-          <div class="avatar-wrapper" @click="changeAvatar">
+          <div class="avatar-wrapper">
             <img :src="avatarUrl" alt="头像" class="avatar-img" />
-            <div class="avatar-edit">
-              <el-icon :size="14"><Camera /></el-icon>
-            </div>
           </div>
           <div class="profile-info">
             <h2 class="username">{{ userStore.userInfo?.username }}</h2>
@@ -20,22 +17,6 @@
         </div>
 
         <div class="info-section">
-          <div class="info-item">
-            <span class="info-label">显示名称</span>
-            <span class="info-value">{{ userStore.userInfo?.anonymous_name || '未设置' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">真实姓名</span>
-            <span class="info-value">{{ userStore.userInfo?.real_name || '未设置' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">公司名称</span>
-            <span class="info-value">{{ userStore.userInfo?.company_name || '未设置' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">职位</span>
-            <span class="info-value">{{ userStore.userInfo?.position || '未设置' }}</span>
-          </div>
           <div class="info-item">
             <span class="info-label">手机号</span>
             <span class="info-value">{{ userStore.userInfo?.phone || '未设置' }}</span>
@@ -48,23 +29,6 @@
             <span class="info-label">注册时间</span>
             <span class="info-value">{{ formatDate(userStore.userInfo?.created_at) }}</span>
           </div>
-        </div>
-      </div>
-
-      <div class="action-card">
-        <div class="action-item" @click="editProfile">
-          <div class="action-left">
-            <el-icon :size="20"><Edit /></el-icon>
-            <span>编辑资料</span>
-          </div>
-          <el-icon :size="18" class="action-arrow"><ArrowRight /></el-icon>
-        </div>
-        <div class="action-item" @click="changePassword">
-          <div class="action-left">
-            <el-icon :size="20"><Lock /></el-icon>
-            <span>修改密码</span>
-          </div>
-          <el-icon :size="18" class="action-arrow"><ArrowRight /></el-icon>
         </div>
       </div>
 
@@ -89,7 +53,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowRight, Edit, Lock, Camera, Setting } from '@element-plus/icons-vue'
+import { Setting } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -101,18 +65,6 @@ const avatarUrl = computed(() => {
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'
   return new Date(dateStr).toLocaleDateString('zh-CN')
-}
-
-function changeAvatar() {
-  ElMessage.info('头像上传功能开发中')
-}
-
-function editProfile() {
-  ElMessage.info('编辑资料功能开发中')
-}
-
-function changePassword() {
-  ElMessage.info('修改密码功能开发中')
 }
 
 function goToAdmin() {
@@ -149,17 +101,6 @@ async function handleLogout() {
   box-shadow: 0 1px 0 #f0f0f0;
 }
 
-.back-btn {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: #1a1a1a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .page-header h1 {
   margin: 0;
   font-size: 18px;
@@ -193,7 +134,6 @@ async function handleLogout() {
   position: relative;
   width: 64px;
   height: 64px;
-  cursor: pointer;
 }
 
 .avatar-img {
@@ -201,23 +141,6 @@ async function handleLogout() {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.avatar-edit {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 10px;
-  padding: 4px;
-  text-align: center;
-  border-radius: 0 0 32px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 22px;
 }
 
 .profile-info {
@@ -265,46 +188,6 @@ async function handleLogout() {
 .info-value {
   font-size: 14px;
   color: #1a1a1a;
-}
-
-.action-card {
-  background: #ffffff;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 16px;
-}
-
-.action-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.action-item:not(:last-child) {
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.action-item:active {
-  background: #fafbfc;
-}
-
-.action-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15px;
-  color: #1a1a1a;
-}
-
-.action-left .el-icon {
-  color: #595959;
-}
-
-.action-arrow {
-  color: #d9d9d9;
 }
 
 .logout-section {
