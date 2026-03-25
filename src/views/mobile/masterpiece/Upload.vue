@@ -182,6 +182,7 @@ async function startCooking() {
   border-radius: 16px;
   border: 1.5px dashed #d9d9d9;
   min-height: 280px;
+  max-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,6 +200,14 @@ async function startCooking() {
   border-style: solid;
   border-color: #1a1a1a;
   min-height: auto;
+  padding: 0;
+}
+
+.upload-area.has-image .preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-height: none;
 }
 
 .upload-placeholder {
