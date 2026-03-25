@@ -1263,12 +1263,12 @@ onMounted(async () => {
 }
 
 .page-header {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-sm);
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: var(--space-md) 0;
+  padding: var(--space-xs) 0;
 }
 
 .page-title-wrap {
