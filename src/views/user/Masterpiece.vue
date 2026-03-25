@@ -1480,15 +1480,15 @@ onMounted(async () => {
   position: relative;
   cursor: pointer;
   width: 160px;
-  height: 180px;
   overflow: hidden;
 }
 
 .tab-thumb {
   width: 160px;
-  height: 180px;
+  height: 150px;
   object-fit: cover;
   transition: transform var(--transition-fast);
+  display: block;
 }
 
 .tab-item:hover .tab-thumb {
