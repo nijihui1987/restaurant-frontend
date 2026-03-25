@@ -2387,14 +2387,22 @@ onMounted(async () => {
 
 .purchased-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--space-md);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
 }
 
 .purchased-item {
+  position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--color-bg-page);
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.purchased-item:hover {
+  border-color: var(--color-primary);
 }
 
 .purchased-img {
