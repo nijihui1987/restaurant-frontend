@@ -354,28 +354,22 @@
         <!-- 完成状态 -->
         <div v-else-if="currentTaskDetail?.status === 'done' || currentTaskDetail?.status === 'completed'" class="complete-section">
           <!-- 已购买的图片展示 -->
-          <div class="purchased-images-section" v-if="purchasedImages.length > 0">
-            <div class="purchased-grid">
-              <div
-                v-for="(url, index) in purchasedImages"
-                :key="index"
-                class="purchased-item"
-              >
+          <div class="generation-grid" v-if="purchasedImages.length > 0">
+            <div
+              v-for="(url, index) in purchasedImages"
+              :key="index"
+              class="gen-item"
+            >
+              <div class="gen-image-wrapper" @click="previewImage(url)">
                 <img
                   :src="url"
                   :alt="`图片 ${index + 1}`"
                   class="purchased-img"
-                  @click="previewImage(url)"
                 />
-                <el-button
-                  class="download-btn"
-                  size="small"
-                  type="primary"
-                  @click="downloadImage(url, `${currentTaskDetail?.dish_name || '菜品'}_${index + 1}.jpg`)"
-                >
-                  <el-icon><Download /></el-icon>
-                  下载
-                </el-button>
+              </div>
+              <div class="gen-select-btn" @click="downloadImage(url, `${currentTaskDetail?.dish_name || '菜品'}_${index + 1}.jpg`)">
+                <el-icon><Download /></el-icon>
+                下载
               </div>
             </div>
           </div>
@@ -2410,6 +2404,14 @@ onMounted(async () => {
   object-fit: cover;
   display: block;
   cursor: pointer;
+}
+
+.purchased-item .download-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .purchased-item .download-btn {
