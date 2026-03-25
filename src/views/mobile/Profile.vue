@@ -88,7 +88,7 @@ async function loadBalance() {
 function showRechargeTip() {
   ElMessageBox.alert('内测期间充值请联系管理员', '提示', {
     confirmButtonText: '知道了'
-  })
+  }).catch(() => {})
 }
 
 function goToAdmin() {
