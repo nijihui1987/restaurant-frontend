@@ -167,10 +167,10 @@ async function submitForm() {
 
 .page-header {
   background: var(--bg-surface);
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-lg);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -190,22 +190,22 @@ async function submitForm() {
 
 .page-header h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .recognize-content {
-  padding: 20px;
+  padding: var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .image-section {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 16px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
   text-align: center;
 }
 
@@ -214,46 +214,46 @@ async function submitForm() {
   height: auto;
   max-height: 200px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .info-section {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 24px 20px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-xl);
 }
 
 .section-header {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-xl);
 }
 
 .section-header h2 {
-  margin: 0 0 4px;
-  font-size: 17px;
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .section-hint {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
 
 .info-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-lg);
 }
 
 .form-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-sm);
 }
 
 .form-item label {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 500;
   color: var(--color-text-regular);
 }
@@ -270,20 +270,20 @@ async function submitForm() {
 }
 
 .form-item :deep(.el-input__inner) {
-  font-size: 15px;
+  font-size: var(--font-size-md);
 }
 
 .action-section {
   display: flex;
-  gap: 12px;
-  margin-top: 24px;
+  gap: var(--space-md);
+  margin-top: var(--space-2xl);
 }
 
 .cancel-btn,
 .submit-btn {
   flex: 1;
   height: 48px;
-  font-size: 15px;
+  font-size: var(--font-size-md);
   font-weight: 500;
   border-radius: 24px;
 }
