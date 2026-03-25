@@ -142,6 +142,27 @@
         </el-form>
       </div>
 
+      <div class="config-card">
+        <h2>联系作者</h2>
+        <el-form label-width="140px">
+          <el-form-item label="联系方式">
+            <el-input
+              v-model="contactAuthorContent"
+              type="textarea"
+              :rows="8"
+              placeholder="输入联系作者的 Markdown 内容，支持标题、列表、链接等格式"
+              @blur="handleContactAuthorSave"
+            />
+            <span class="form-tip">支持 Markdown 格式</span>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="small" :loading="savingContact" @click="handleContactAuthorSave">
+              保存配置
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <div class="config-card info-card">
         <h2>配置说明</h2>
         <div class="info-content">
@@ -317,6 +338,32 @@ const floatingAdConfig = ref<FloatingAdConfig>({
   enabled: false
 })
 
+// 联系作者配置
+const contactAuthorContent = ref('')
+const savingContact = ref(false)
+
+async function loadContactAuthor() {
+  try {
+    const content = await getConfig('system', 'contact_author')
+    contactAuthorContent.value = content || ''
+  } catch (error) {
+    console.error('加载联系作者配置失败', error)
+  }
+}
+
+async function handleContactAuthorSave() {
+  try {
+    savingContact.value = true
+    await saveConfig('system', 'contact_author', contactAuthorContent.value)
+    ElMessage.success('联系作者配置已保存')
+  } catch (error) {
+    ElMessage.error('保存失败')
+    await loadContactAuthor()
+  } finally {
+    savingContact.value = false
+  }
+}
+
 async function loadFloatingAdConfig() {
   try {
     const data = await getMobileFloatingAd()
@@ -363,6 +410,7 @@ onMounted(() => {
   loadLogoConfig()
   loadRateLimitConfig()
   loadFloatingAdConfig()
+  loadContactAuthor()
 })
 </script>
 
