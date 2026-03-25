@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
@@ -210,6 +210,21 @@ async function loadUserBalance() {
     }
   }
 }
+
+// 页面可见性变化时刷新积分
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    loadUserBalance()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+})
 
 async function fetchAnnouncement() {
   try {
