@@ -358,6 +358,30 @@
           </div>
           <h2 class="complete-title">任务完成</h2>
           <p class="complete-desc">图片已存入您的图库，可随时查看和使用</p>
+
+          <!-- 已购买的图片展示 -->
+          <div class="purchased-images-section" v-if="generatedImages.length > 0">
+            <h4 class="purchased-title">已购买图片</h4>
+            <div class="purchased-grid">
+              <div
+                v-for="img in generatedImages.filter(i => i.status === 'success')"
+                :key="img.index"
+                class="purchased-item"
+              >
+                <img :src="img.url" :alt="`图片 ${img.index + 1}`" />
+                <el-button
+                  class="download-btn"
+                  size="small"
+                  type="primary"
+                  @click="downloadImage(img.url, `${currentTaskDetail?.dish_name || '菜品'}_${img.index + 1}.jpg`)"
+                >
+                  <el-icon><Download /></el-icon>
+                  下载
+                </el-button>
+              </div>
+            </div>
+          </div>
+
           <div class="complete-actions">
             <el-button @click="goToGallery">前往图库</el-button>
             <el-button type="primary" @click="handleStartNew">开始新任务</el-button>
@@ -384,7 +408,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock, ArrowLeft, ArrowRight, Loading } from '@element-plus/icons-vue'
+import { UploadFilled, Check, CircleCheckFilled, Setting, InfoFilled, CircleCloseFilled, Lock, ArrowLeft, ArrowRight, Loading, Download } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { uploadFile } from '@/api/oss'
 import { recognizeImage, updateTask, generateImages, consumeTask, getTasks, getTask, cancelTask, getConfig } from '@/api/masterpiece'
@@ -1278,6 +1302,24 @@ function goToGallery() {
 
 function handleStartNew() {
   switchToCreateTab()
+}
+
+function downloadImage(url: string, filename: string) {
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const blobUrl = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(blobUrl)
+    })
+    .catch(() => {
+      ElMessage.error('下载失败')
+    })
 }
 
 function goToConfig() {
@@ -2215,6 +2257,51 @@ onMounted(async () => {
   display: flex;
   gap: var(--space-md);
   justify-content: center;
+}
+
+/* 已购买图片展示 */
+.purchased-images-section {
+  margin: var(--space-xl) auto;
+  max-width: 600px;
+}
+
+.purchased-title {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-md);
+  font-weight: 500;
+}
+
+.purchased-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-md);
+}
+
+.purchased-item {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-bg-page);
+}
+
+.purchased-item img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+.purchased-item .download-btn {
+  position: absolute;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.purchased-item:hover .download-btn {
+  opacity: 1;
 }
 
 /* 生成中面板 */
