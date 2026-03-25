@@ -303,9 +303,8 @@
                 selected: selectedGenerations.includes(img.index),
                 failed: img.status === 'failed'
               }"
-              @click="img.status === 'success' && toggleGeneration(img.index)"
             >
-              <div class="gen-image-wrapper">
+              <div class="gen-image-wrapper" @click="img.status === 'success' && previewImage(img.url)">
                 <img v-if="img.url" :src="img.url" :alt="`生成图 ${img.index + 1}`" />
                 <div v-else class="gen-placeholder gen-placeholder-failed">
                   <el-icon color="#f56c6c"><CircleCloseFilled /></el-icon>
@@ -315,7 +314,7 @@
                   <span class="watermark-text">预览水印</span>
                 </div>
               </div>
-              <div class="gen-select-badge" v-if="selectedGenerations.includes(img.index) && img.status === 'success'">
+              <div class="gen-select-badge" v-if="img.status === 'success'" @click="toggleGeneration(img.index)">
                 <el-icon><Check /></el-icon>
               </div>
             </div>
@@ -365,7 +364,7 @@
                   :src="url"
                   :alt="`图片 ${index + 1}`"
                   class="purchased-img"
-                  @click="downloadImage(url, `${currentTaskDetail?.dish_name || '菜品'}_${index + 1}.jpg`)"
+                  @click="previewImage(url)"
                 />
                 <el-button
                   class="download-btn"
@@ -378,11 +377,6 @@
                 </el-button>
               </div>
             </div>
-          </div>
-
-          <div class="complete-actions">
-            <el-button @click="goToGallery">前往图库</el-button>
-            <el-button type="primary" @click="handleStartNew">开始新任务</el-button>
           </div>
         </div>
 
@@ -400,6 +394,17 @@
       </div>
     </div>
   </div>
+
+  <!-- 图片预览弹窗 -->
+  <el-dialog
+    v-model="showPreview"
+    :show-close="false"
+    :close-on-click-modal="true"
+    class="image-preview-dialog"
+    @click="showPreview = false"
+  >
+    <img :src="previewUrl" class="preview-image" @click.stop />
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -419,6 +424,10 @@ const activeTabId = ref('create')
 const taskTabs = ref<TaskItem[]>([])
 const displayedTaskCount = ref(10)
 const isMobile = ref(false)
+
+// 图片预览
+const showPreview = ref(false)
+const previewUrl = ref('')
 
 // 任务详情
 interface TaskItem {
@@ -1340,6 +1349,11 @@ function downloadImage(url: string, filename: string) {
     .catch(() => {
       ElMessage.error('下载失败')
     })
+}
+
+function previewImage(url: string) {
+  previewUrl.value = url
+  showPreview.value = true
 }
 
 function goToConfig() {
@@ -2277,6 +2291,24 @@ onMounted(async () => {
   display: flex;
   gap: var(--space-md);
   justify-content: center;
+}
+
+/* 图片预览弹窗 */
+.image-preview-dialog {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.image-preview-dialog .el-dialog__body {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
 }
 
 /* 已购买图片展示 */
