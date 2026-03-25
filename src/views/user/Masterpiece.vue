@@ -143,14 +143,14 @@
                 <span>AI 识别结果仅供参考，如有不准确可自行修改</span>
               </div>
               <div class="result-form">
-                <div class="form-item" v-for="field in editableFields" :key="field.key">
+                <div class="form-item" v-for="field in visibleFields" :key="field.key">
                   <label class="form-label">
                     {{ field.label }}
-                    <span v-if="field.editable" class="field-badge editable">可编辑</span>
+                    <span v-if="isFieldEditable(field.key)" class="field-badge editable">可编辑</span>
                     <span v-else class="field-badge readonly">系统生成</span>
                   </label>
                   <el-input
-                    v-if="field.editable"
+                    v-if="isFieldEditable(field.key)"
                     v-model="recognizeResult[field.key]"
                     size="default"
                     :placeholder="`请输入${field.label}`"
@@ -568,7 +568,7 @@ function formatTime(seconds: number): string {
 }
 
 // 可编辑字段配置
-const editableFields = ref([
+const baseFields = [
   { key: 'dish_name', label: '菜品名称', editable: true },
   { key: 'business_type', label: '所属业态', editable: true },
   { key: 'cuisine_type', label: '所属菜系', editable: true },
@@ -576,7 +576,28 @@ const editableFields = ref([
   { key: 'cooking_method', label: '主要做法', editable: false },
   { key: 'description', label: '整体详细描述', editable: false },
   { key: 'photo_tips', label: '摄影建议', editable: false }
-])
+]
+
+// 从配置加载的字段
+const editableFieldsConfig = ref<string[]>([])
+const visibleFieldsConfig = ref<string[]>([])
+
+// 根据配置过滤显示的字段
+const editableFields = computed(() => {
+  return baseFields.filter(field => {
+    // 如果配置为空，显示所有字段
+    if (editableFieldsConfig.value.length === 0) return true
+    return editableFieldsConfig.value.includes(field.key)
+  })
+})
+
+const visibleFields = computed(() => {
+  return baseFields.filter(field => {
+    // 如果配置为空，显示所有字段
+    if (visibleFieldsConfig.value.length === 0) return true
+    return visibleFieldsConfig.value.includes(field.key)
+  })
+})
 
 const canSubmit = computed(() => {
   return recognizeResult.value && recognizeResult.value.dish_name
@@ -586,6 +607,13 @@ const isResultModified = computed(() => {
   if (!originalRecognizeResult.value || !recognizeResult.value) return false
   return JSON.stringify(originalRecognizeResult.value) !== JSON.stringify(recognizeResult.value)
 })
+
+// 判断字段是否可编辑
+function isFieldEditable(key: string): boolean {
+  // 如果配置为空，默认都可编辑
+  if (editableFieldsConfig.value.length === 0) return true
+  return editableFieldsConfig.value.includes(key)
+}
 
 // 第二步相关
 const taskId = ref<string | null>(null)
@@ -643,6 +671,8 @@ async function loadMasterpieceConfig() {
     maxSelect.value = data.select_count_max ?? 6
     subtitle.value = data.subtitle ?? ''
     watermarkEnabled.value = data.watermark_enabled ?? true
+    editableFieldsConfig.value = data.editable_fields || []
+    visibleFieldsConfig.value = data.visible_fields || []
   } catch (error) {
     console.error('加载配置失败', error)
   }
