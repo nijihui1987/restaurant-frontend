@@ -93,7 +93,7 @@ onMounted(() => {
 <style scoped>
 .tutorial-page {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
   padding-top: 16px;
 }
 
@@ -111,25 +111,25 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   padding: 80px 20px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   gap: 12px;
 }
 
 .empty-state {
-  color: #666;
+  color: var(--color-text-regular);
 }
 
 .empty-title {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .empty-desc {
   margin: 0;
   font-size: 14px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 
 .loading-icon {
@@ -151,35 +151,35 @@ onMounted(() => {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 15px;
   line-height: 1.7;
-  color: #333;
+  color: var(--color-text-regular);
 }
 
 .markdown-body :deep(h1) {
   font-size: 24px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 0 0 24px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .markdown-body :deep(h2) {
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 32px 0 16px;
 }
 
 .markdown-body :deep(h3) {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 24px 0 12px;
 }
 
 .markdown-body :deep(p) {
   margin: 0 0 16px;
-  color: #595959;
+  color: var(--color-text-regular);
 }
 
 .markdown-body :deep(ul),
@@ -190,16 +190,16 @@ onMounted(() => {
 
 .markdown-body :deep(li) {
   margin-bottom: 8px;
-  color: #595959;
+  color: var(--color-text-regular);
 }
 
 .markdown-body :deep(strong) {
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .markdown-body :deep(code) {
-  background: #f5f5f5;
+  background: var(--bg-hover);
   padding: 2px 6px;
   border-radius: 4px;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
@@ -207,7 +207,7 @@ onMounted(() => {
 }
 
 .markdown-body :deep(pre) {
-  background: #f5f5f5;
+  background: var(--bg-hover);
   padding: 16px;
   border-radius: 8px;
   overflow-x: auto;
@@ -222,14 +222,14 @@ onMounted(() => {
 .markdown-body :deep(blockquote) {
   margin: 0 0 16px;
   padding: 12px 16px;
-  background: #fafafa;
-  border-left: 4px solid #1a1a1a;
-  color: #595959;
+  background: var(--bg-page);
+  border-left: 4px solid var(--color-primary);
+  color: var(--color-text-regular);
 }
 
 .markdown-body :deep(hr) {
   border: none;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid var(--border-light);
   margin: 24px 0;
 }
 </style>

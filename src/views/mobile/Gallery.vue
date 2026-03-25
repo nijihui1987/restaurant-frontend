@@ -166,11 +166,11 @@ onMounted(() => {
 <style scoped>
 .mobile-gallery {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
 }
 
 .page-header {
-  background: #ffffff;
+  background: var(--bg-surface);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -178,14 +178,14 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
+  box-shadow: 0 1px 0 var(--border-light);
 }
 
 .page-header h1 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .gallery-content {
@@ -195,7 +195,7 @@ onMounted(() => {
 }
 
 .gallery-tabs {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 16px;
 }
@@ -207,16 +207,16 @@ onMounted(() => {
 .gallery-tabs :deep(.el-tabs__item) {
   font-size: 14px;
   font-weight: 500;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   padding: 0 12px;
 }
 
 .gallery-tabs :deep(.el-tabs__item.is-active) {
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .gallery-tabs :deep(.el-tabs__active-bar) {
-  background-color: #1a1a1a;
+  background-color: var(--color-text-primary);
   height: 2px;
 }
 
@@ -235,7 +235,7 @@ onMounted(() => {
   aspect-ratio: 4 / 3;
   border-radius: 8px;
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--bg-hover);
   position: relative;
   cursor: pointer;
 }
@@ -263,7 +263,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--bg-surface);
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -280,26 +280,26 @@ onMounted(() => {
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   margin-top: 16px;
 }
 
 .empty-icon {
-  color: #d9d9d9;
+  color: var(--color-text-placeholder);
   margin-bottom: 16px;
 }
 
 .empty-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 0 0 4px;
 }
 
 .empty-hint {
   font-size: 14px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   margin: 0 0 20px;
 }
 
@@ -309,8 +309,8 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 500;
   border-radius: 20px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 /* 预览弹窗 */
@@ -363,7 +363,7 @@ onMounted(() => {
 .action-btn {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  color: var(--bg-surface);
   min-width: 140px;
   height: 44px;
   border-radius: 22px;
@@ -377,14 +377,14 @@ onMounted(() => {
 
 /* 删除确认框按钮样式 */
 :deep(.delete-confirm-btn) {
-  background: #1a1a1a !important;
-  border-color: #1a1a1a !important;
-  color: #ffffff !important;
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--bg-surface) !important;
 }
 
 :deep(.delete-cancel-btn) {
-  background: #ffffff !important;
-  border-color: #d9d9d9 !important;
-  color: #1a1a1a !important;
+  background: var(--bg-surface) !important;
+  border-color: var(--border-default) !important;
+  color: var(--color-text-primary) !important;
 }
 </style>

@@ -212,7 +212,7 @@ onMounted(() => {
 }
 
 .gallery-tabs {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
 }
@@ -248,7 +248,7 @@ onMounted(() => {
   aspect-ratio: 4 / 3;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-bg-hover);
+  background: var(--bg-hover);
   position: relative;
   cursor: pointer;
 }
@@ -271,7 +271,7 @@ onMounted(() => {
   right: 0;
   padding: 8px 12px;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
-  color: #ffffff;
+  color: var(--bg-surface);
 }
 
 .dish-name {
@@ -308,22 +308,22 @@ onMounted(() => {
 }
 
 .image-actions .el-button:hover {
-  background: #ffffff;
+  background: var(--bg-surface);
 }
 
 .image-actions .el-button--danger {
   background: rgba(245, 34, 45, 0.9);
-  color: #ffffff;
+  color: var(--bg-surface);
 }
 
 .image-actions .el-button--danger:hover {
-  background: #f5222d;
+  background: var(--color-danger-hover);
 }
 
 /* 空状态 */
 .empty-state {
   padding: var(--space-3xl);
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
 }
 
@@ -386,14 +386,14 @@ onMounted(() => {
 
 /* 删除确认框按钮样式 */
 :deep(.delete-confirm-btn) {
-  background: #1a1a1a !important;
-  border-color: #1a1a1a !important;
-  color: #ffffff !important;
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--bg-surface) !important;
 }
 
 :deep(.delete-cancel-btn) {
-  background: #ffffff !important;
-  border-color: #d9d9d9 !important;
-  color: #1a1a1a !important;
+  background: var(--bg-surface) !important;
+  border-color: var(--border-default) !important;
+  color: var(--color-text-primary) !important;
 }
 </style>

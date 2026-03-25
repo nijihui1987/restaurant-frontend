@@ -138,11 +138,11 @@ async function startCooking() {
 <style scoped>
 .masterpiece-upload {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
 }
 
 .page-header {
-  background: #ffffff;
+  background: var(--bg-surface);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -150,7 +150,7 @@ async function startCooking() {
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
+  box-shadow: 0 1px 0 var(--border-light);
 }
 
 .back-btn {
@@ -158,7 +158,7 @@ async function startCooking() {
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +168,7 @@ async function startCooking() {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .upload-content {
@@ -178,7 +178,7 @@ async function startCooking() {
 }
 
 .upload-area {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   border: 1.5px dashed #d9d9d9;
   min-height: 280px;
@@ -193,12 +193,12 @@ async function startCooking() {
 }
 
 .upload-area:active {
-  border-color: #1a1a1a;
+  border-color: var(--color-text-primary);
 }
 
 .upload-area.has-image {
   border-style: solid;
-  border-color: #1a1a1a;
+  border-color: var(--color-text-primary);
   min-height: auto;
   padding: 0;
 }
@@ -219,24 +219,24 @@ async function startCooking() {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: #fafbfc;
+  background: var(--bg-page);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 
 .upload-text {
   font-size: 16px;
   font-weight: 500;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 0 0 8px;
 }
 
 .upload-hint {
   font-size: 13px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -254,7 +254,7 @@ async function startCooking() {
   width: 36px;
   height: 36px;
   background: rgba(0, 0, 0, 0.6);
-  color: white;
+  color: var(--bg-surface);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -269,7 +269,7 @@ async function startCooking() {
 }
 
 .tips-section {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 20px 24px;
   margin-top: 20px;
@@ -279,7 +279,7 @@ async function startCooking() {
   margin: 0 0 12px;
   font-size: 15px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .tips-list {
@@ -289,7 +289,7 @@ async function startCooking() {
 
 .tips-list li {
   font-size: 14px;
-  color: #595959;
+  color: var(--color-text-regular);
   margin-bottom: 8px;
   line-height: 1.5;
 }
@@ -310,18 +310,18 @@ async function startCooking() {
   font-size: 16px;
   font-weight: 500;
   border-radius: 26px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   transition: all 0.2s ease;
 }
 
 .submit-btn:not(:disabled):hover {
-  background: #333;
-  border-color: #333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .submit-btn:disabled {
-  background: #d9d9d9;
-  border-color: #d9d9d9;
+  background: var(--border-default);
+  border-color: var(--border-default);
 }
 </style>

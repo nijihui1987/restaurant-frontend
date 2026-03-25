@@ -114,7 +114,7 @@ function goToLogin() {
 <style scoped>
 .mobile-home {
   min-height: calc(100vh - var(--space-4xl));
-  background: var(--color-bg-page);
+  background: var(--bg-page);
 }
 
 .home-content {
@@ -135,7 +135,7 @@ function goToLogin() {
 .feature-card {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-hover) 100%);
   border-radius: var(--radius-md);
   overflow: hidden;
   text-decoration: none;
@@ -197,7 +197,7 @@ function goToLogin() {
 .title-text {
   font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(255,255,255,0.8);
 }
@@ -217,13 +217,13 @@ function goToLogin() {
 }
 
 .coin-star {
-  color: #ffffff;
+  color: var(--bg-surface);
 }
 
 .coin-num {
   font-size: 11px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--bg-surface);
 }
 
 /* blocked 状态 */
@@ -247,7 +247,7 @@ function goToLogin() {
 .blocked-text {
   padding: 6px 16px;
   background: rgba(0, 0, 0, 0.7);
-  color: #ffffff;
+  color: var(--bg-surface);
   font-size: var(--font-size-sm);
   border-radius: var(--radius-sm);
   backdrop-filter: blur(4px);

@@ -146,11 +146,11 @@ onMounted(() => {
 <style scoped>
 .mobile-profile {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
 }
 
 .page-header {
-  background: #ffffff;
+  background: var(--bg-surface);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -158,14 +158,14 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
+  box-shadow: 0 1px 0 var(--border-light);
 }
 
 .page-header h1 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .profile-content {
@@ -175,7 +175,7 @@ onMounted(() => {
 }
 
 .profile-card {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 16px;
@@ -187,7 +187,7 @@ onMounted(() => {
   justify-content: space-between;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .profile-info {
@@ -195,9 +195,9 @@ onMounted(() => {
 }
 
 .contact-btn {
-  background: #f0f9f6;
-  border: 1px solid #d4e8e2;
-  color: #5a7d72;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  color: var(--color-text-regular);
   border-radius: 16px;
   font-size: 15px;
   padding: 10px 20px;
@@ -205,21 +205,21 @@ onMounted(() => {
 }
 
 .contact-btn:hover {
-  background: #e6f4f0;
-  border-color: #c0dbd4;
+  background: var(--bg-hover);
+  border-color: var(--border-default);
 }
 
 .username {
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin: 0 0 6px;
 }
 
 .role-tag {
   display: inline-block;
-  background: #f0f0f0;
-  color: #595959;
+  background: var(--bg-hover);
+  color: var(--color-text-regular);
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 12px;
@@ -227,12 +227,12 @@ onMounted(() => {
 }
 
 .balance-section {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e6e6e6;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -247,12 +247,12 @@ onMounted(() => {
 .balance-icon {
   width: 36px;
   height: 36px;
-  background: #f0f0f0;
+  background: var(--bg-hover);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .balance-info {
@@ -263,20 +263,20 @@ onMounted(() => {
 
 .balance-label {
   font-size: 12px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 
 .balance-value {
   font-size: 22px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   font-family: 'SF Mono', Monaco, monospace;
 }
 
 .recharge-btn {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-  color: #ffffff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--bg-surface);
   border-radius: 8px;
   min-width: 70px;
   height: 36px;
@@ -284,8 +284,8 @@ onMounted(() => {
 }
 
 .recharge-btn:hover {
-  background: #333333;
-  border-color: #333333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .info-section {
@@ -301,17 +301,17 @@ onMounted(() => {
 }
 
 .info-item:not(:last-child) {
-  border-bottom: 1px solid #fafafa;
+  border-bottom: 1px solid var(--bg-page);
 }
 
 .info-label {
   font-size: 14px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 
 .info-value {
   font-size: 14px;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .logout-section {
@@ -323,8 +323,8 @@ onMounted(() => {
   height: 48px;
   font-size: 15px;
   border-radius: 24px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,8 +332,8 @@ onMounted(() => {
 }
 
 .admin-btn:hover {
-  background: #333333;
-  border-color: #333333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .logout-btn {
@@ -341,15 +341,15 @@ onMounted(() => {
   height: 48px;
   font-size: 15px;
   border-radius: 24px;
-  background: #ffffff;
-  border-color: #ff4d4f;
-  color: #ff4d4f;
+  background: var(--bg-surface);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 .logout-btn:hover {
-  background: #fff1f0;
-  border-color: #ff7875;
-  color: #ff7875;
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger-hover);
+  color: var(--color-danger-hover);
 }
 
 /* 联系作者弹窗 */
@@ -360,13 +360,13 @@ onMounted(() => {
 
 .contact-dialog :deep(.el-dialog__header) {
   padding: 16px 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .contact-dialog :deep(.el-dialog__title) {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .contact-dialog :deep(.el-dialog__body) {
@@ -378,19 +378,19 @@ onMounted(() => {
 .contact-content {
   font-size: 14px;
   line-height: 1.7;
-  color: #595959;
+  color: var(--color-text-regular);
 }
 
 .contact-content :deep(h1) {
   font-size: 18px;
   margin: 0 0 16px;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .contact-content :deep(h2) {
   font-size: 16px;
   margin: 16px 0 12px;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .contact-content :deep(p) {
@@ -408,13 +408,13 @@ onMounted(() => {
 }
 
 .contact-content :deep(code) {
-  background: #f5f5f5;
+  background: var(--bg-hover);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 13px;
 }
 
 .contact-content :deep(a) {
-  color: #4062ff;
+  color: var(--el-color-primary);
 }
 </style>
