@@ -170,7 +170,7 @@ onMounted(() => {
 }
 
 .balance-section {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  background: #1a1a1a;
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
@@ -185,12 +185,12 @@ onMounted(() => {
 .balance-icon {
   width: 40px;
   height: 40px;
-  background: rgba(64, 98, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4062ff;
+  color: #ffffff;
 }
 
 .balance-info {
@@ -201,13 +201,13 @@ onMounted(() => {
 
 .balance-label {
   font-size: 12px;
-  color: #595959;
+  color: #8c8c8c;
 }
 
 .balance-value {
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #ffffff;
   font-family: 'SF Mono', Monaco, monospace;
 }
 
