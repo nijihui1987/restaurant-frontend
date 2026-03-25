@@ -403,9 +403,7 @@
     class="image-preview-dialog"
     @click="showPreview = false"
   >
-    <div class="preview-image-wrapper">
-      <img :src="previewUrl" class="preview-image" @click.stop />
-    </div>
+    <img :src="previewUrl" class="preview-image" @click.stop />
   </el-dialog>
 </template>
 
@@ -2297,13 +2295,13 @@ onMounted(async () => {
 /* 图片预览弹窗 */
 .image-preview-dialog {
   background: transparent !important;
-  box-shadow: none !important;
 }
 
 .image-preview-dialog .el-dialog {
   background: transparent !important;
   box-shadow: none !important;
   max-width: 90vw;
+  width: auto !important;
 }
 
 .image-preview-dialog .el-dialog__header {
@@ -2312,27 +2310,15 @@ onMounted(async () => {
 
 .image-preview-dialog .el-dialog__body {
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.preview-image-wrapper {
-  width: 80vw;
-  max-width: 90vw;
-  aspect-ratio: 4/3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #000;
-  border-radius: 8px;
-  overflow: hidden;
+  text-align: center;
 }
 
 .preview-image {
-  width: 100%;
-  height: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
   object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 
 /* 已购买图片展示 */
