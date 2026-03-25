@@ -24,6 +24,7 @@
               <span class="balance-label">账户余额</span>
               <span class="balance-value">{{ Math.round(balance) }}</span>
             </div>
+            <el-button size="small" @click="showRechargeTip" class="recharge-btn">充值</el-button>
           </div>
         </div>
 
@@ -82,6 +83,12 @@ async function loadBalance() {
   if (data) {
     balance.value = data.balance
   }
+}
+
+function showRechargeTip() {
+  ElMessageBox.alert('内测期间充值请联系管理员', '提示', {
+    confirmButtonText: '知道了'
+  })
 }
 
 function goToAdmin() {
@@ -211,6 +218,19 @@ onMounted(() => {
   font-weight: 600;
   color: #1a1a1a;
   font-family: 'SF Mono', Monaco, monospace;
+}
+
+.recharge-btn {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #ffffff;
+  border-radius: 16px;
+  min-width: 60px;
+}
+
+.recharge-btn:hover {
+  background: #333333;
+  border-color: #333333;
 }
 
 .info-section {
