@@ -395,10 +395,12 @@
     v-model="showPreview"
     :show-close="false"
     :close-on-click-modal="true"
+    :modal-append-to-body="true"
+    :append-to-body="true"
     class="image-preview-dialog"
     @click="showPreview = false"
   >
-    <div class="preview-content">
+    <div class="preview-content" @click="showPreview = false">
       <img :src="previewUrl" class="preview-image" @click.stop />
     </div>
   </el-dialog>
@@ -2341,37 +2343,42 @@ onMounted(async () => {
 
 /* 图片预览弹窗 */
 .image-preview-dialog {
-  background: rgba(0, 0, 0, 0.9) !important;
+  background: transparent !important;
 }
 
-.image-preview-dialog .el-dialog {
+.image-preview-dialog :deep(.el-dialog) {
   background: transparent !important;
   box-shadow: none !important;
-  max-width: 100vw !important;
-  width: auto !important;
-  margin: 0 !important;
+  max-width: 96vw !important;
+  max-height: 96vh !important;
+  margin: 2vh auto !important;
 }
 
-.image-preview-dialog .el-dialog__header {
+.image-preview-dialog :deep(.el-dialog__header) {
   display: none;
 }
 
-.image-preview-dialog .el-dialog__body {
+.image-preview-dialog :deep(.el-dialog__body) {
   padding: 0 !important;
   background: transparent !important;
+}
+
+.image-preview-dialog :deep(.el-overlay) {
+  background: rgba(0, 0, 0, 0.9) !important;
 }
 
 .preview-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
 }
 
 .preview-image {
-  max-width: 96vw;
-  max-height: 96vh;
+  max-width: 92vw;
+  max-height: 88vh;
+  object-fit: contain;
+  display: block;
+}
   object-fit: contain;
   display: block;
 }
