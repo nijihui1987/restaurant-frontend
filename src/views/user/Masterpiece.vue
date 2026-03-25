@@ -1335,21 +1335,8 @@ function handleStartNew() {
 }
 
 function downloadImage(url: string, filename: string) {
-  fetch(url)
-    .then(response => response.blob())
-    .then(blob => {
-      const blobUrl = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = blobUrl
-      link.download = filename
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(blobUrl)
-    })
-    .catch(() => {
-      ElMessage.error('下载失败')
-    })
+  // 直接打开新窗口下载，避免跨域问题
+  window.open(url, '_blank')
 }
 
 function previewImage(url: string) {
