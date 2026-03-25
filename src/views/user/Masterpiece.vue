@@ -30,7 +30,9 @@
         >
           <div class="tab-thumb-wrap" @click="switchToTaskTab(task)">
             <img :src="task.image_url" class="tab-thumb" />
-            <span class="tab-status" :class="getTaskStatusClass(task.status)">{{ getTaskStatusText(task.status) }}</span>
+            <div class="tab-status-bar" :class="getTaskStatusClass(task.status)">
+              {{ getTaskStatusText(task.status) }}
+            </div>
           </div>
           <div class="tab-info">
             <span class="tab-label">{{ task.dish_name || '未命名' }}</span>
@@ -1493,43 +1495,36 @@ onMounted(async () => {
   transform: scale(1.02);
 }
 
-.tab-status {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 2px 6px;
-  border-radius: 4px;
+.tab-status-bar {
+  width: 100%;
+  padding: 4px 6px;
   font-size: 10px;
-  z-index: 2;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
 }
 
-.tab-status.status-failed {
-  background: #f56c6c;
-  color: #fff;
+.tab-status-bar.status-failed {
+  color: #f56c6c;
 }
 
-.tab-status.status-yellow {
-  background: #e6a23c;
-  color: #fff;
+.tab-status-bar.status-yellow {
+  color: #e6a23c;
 }
 
-.tab-status.status-green {
-  background: #67c23a;
-  color: #fff;
+.tab-status-bar.status-green {
+  color: #67c23a;
 }
 
-.tab-status.status-blue {
-  background: #409eff;
-  color: #fff;
+.tab-status-bar.status-blue {
+  color: #409eff;
 }
 
-.tab-status.status-generating {
-  background: #409eff;
-  color: #fff;
+.tab-status-bar.status-generating {
+  color: #409eff;
 }
 
-.tab-status.status-default {
-  background: var(--color-bg-page);
+.tab-status-bar.status-default {
   color: var(--color-text-secondary);
 }
 
