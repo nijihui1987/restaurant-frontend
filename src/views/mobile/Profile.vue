@@ -7,12 +7,23 @@
     <main class="profile-content">
       <div class="profile-card">
         <div class="profile-header">
-          <div class="avatar-wrapper">
-            <img :src="avatarUrl" alt="头像" class="avatar-img" />
-          </div>
           <div class="profile-info">
             <h2 class="username">{{ userStore.userInfo?.username }}</h2>
             <span class="role-tag">{{ userStore.roleName }}</span>
+          </div>
+        </div>
+
+        <div class="balance-section">
+          <div class="balance-item">
+            <div class="balance-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+              </svg>
+            </div>
+            <div class="balance-info">
+              <span class="balance-label">账户余额</span>
+              <span class="balance-value">{{ balance.toFixed(2) }}</span>
+            </div>
           </div>
         </div>
 
@@ -49,22 +60,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Setting } from '@element-plus/icons-vue'
+import { getBalance } from '@/api/billing'
 
 const router = useRouter()
 const userStore = useUserStore()
 
-const avatarUrl = computed(() => {
-  return userStore.userInfo?.avatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle fill="%23e6e6e6" cx="50" cy="50" r="50"/></svg>'
-})
+const balance = ref(0)
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'
   return new Date(dateStr).toLocaleDateString('zh-CN')
+}
+
+async function loadBalance() {
+  const data = await getBalance()
+  if (data) {
+    balance.value = data.balance
+  }
 }
 
 function goToAdmin() {
@@ -81,6 +98,10 @@ async function handleLogout() {
     // 用户取消
   }
 }
+
+onMounted(() => {
+  loadBalance()
+})
 </script>
 
 <style scoped>
@@ -122,25 +143,9 @@ async function handleLogout() {
 }
 
 .profile-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #f0f0f0;
-}
-
-.avatar-wrapper {
-  position: relative;
-  width: 64px;
-  height: 64px;
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .profile-info {
@@ -162,6 +167,48 @@ async function handleLogout() {
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
+}
+
+.balance-section {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.balance-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.balance-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(64, 98, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4062ff;
+}
+
+.balance-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.balance-label {
+  font-size: 12px;
+  color: #595959;
+}
+
+.balance-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: 'SF Mono', Monaco, monospace;
 }
 
 .info-section {
