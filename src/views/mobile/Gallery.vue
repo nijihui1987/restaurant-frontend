@@ -313,18 +313,27 @@ onMounted(() => {
 
 /* 预览弹窗 */
 .preview-dialog :deep(.el-dialog) {
-  background: transparent;
-  box-shadow: none;
-  max-width: 100%;
-  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
 }
 
 .preview-dialog :deep(.el-dialog__header) {
-  display: none;
+  display: none !important;
 }
 
 .preview-dialog :deep(.el-dialog__body) {
-  padding: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
 }
 
 .preview-container {
@@ -338,9 +347,10 @@ onMounted(() => {
 }
 
 .preview-image {
-  max-width: 95%;
-  max-height: 85%;
+  max-width: 90vw;
+  max-height: 75vh;
   object-fit: contain;
+  border-radius: 8px;
 }
 
 .preview-actions {
