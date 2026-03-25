@@ -105,7 +105,7 @@ function startProcess() {
 <style scoped>
 .masterpiece-intro {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
 }
 
 .intro-content {
@@ -118,12 +118,12 @@ function startProcess() {
   margin: 0 0 20px;
   font-size: 22px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   text-align: center;
 }
 
 .compare-section {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 28px 24px;
   margin-bottom: 20px;
@@ -152,36 +152,36 @@ function startProcess() {
 }
 
 .compare-visual.before {
-  background: #f5f5f5;
-  color: #8c8c8c;
+  background: var(--bg-hover);
+  color: var(--color-text-secondary);
 }
 
 .compare-visual.after {
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--color-text-primary);
+  color: var(--bg-surface);
 }
 
 .compare-label {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin-bottom: 4px;
 }
 
 .compare-desc {
   font-size: 12px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .compare-arrow {
-  color: #d9d9d9;
+  color: var(--border-default);
   padding: 0 12px;
 }
 
 .steps-section {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 20px;
@@ -191,7 +191,7 @@ function startProcess() {
   margin: 0 0 20px;
   font-size: 17px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .step-list {
@@ -209,14 +209,14 @@ function startProcess() {
 .step-num {
   font-size: 13px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   font-variant-numeric: tabular-nums;
   width: 28px;
 }
 
 .step-text {
   font-size: 15px;
-  color: #595959;
+  color: var(--color-text-regular);
 }
 
 .action-section {
@@ -231,19 +231,19 @@ function startProcess() {
   font-size: 16px;
   font-weight: 500;
   border-radius: 26px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
   transition: all 0.2s ease;
 }
 
 .start-btn:hover {
-  background: #333;
-  border-color: #333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .action-hint {
   font-size: 13px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   margin-top: 12px;
 }
 </style>

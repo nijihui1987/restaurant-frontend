@@ -223,11 +223,11 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 <style scoped>
 .masterpiece-queue {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
 }
 
 .page-header {
-  background: #ffffff;
+  background: var(--bg-surface);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -235,7 +235,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
+  box-shadow: 0 1px 0 var(--bg-hover);
 }
 
 .back-btn {
@@ -243,7 +243,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,7 +253,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .queue-content {
@@ -263,7 +263,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .queue-tabs {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 16px;
 }
@@ -275,16 +275,16 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 .queue-tabs :deep(.el-tabs__item) {
   font-size: 15px;
   font-weight: 500;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   padding: 0 12px;
 }
 
 .queue-tabs :deep(.el-tabs__item.is-active) {
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .queue-tabs :deep(.el-tabs__active-bar) {
-  background-color: #1a1a1a;
+  background-color: var(--color-text-primary);
   height: 2px;
 }
 
@@ -298,7 +298,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .task-item {
   padding: 16px;
-  background: #fafbfc;
+  background: var(--bg-page);
   border-radius: 12px;
   margin-bottom: 12px;
 }
@@ -317,12 +317,12 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 .task-name {
   font-size: 15px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .task-time {
   font-size: 12px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   margin: 0 0 12px;
 }
 
@@ -334,18 +334,18 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .status-badge.generating {
-  background: #f0f0f0;
-  color: #595959;
+  background: var(--bg-hover);
+  color: var(--color-text-regular);
 }
 
 .status-badge.pending {
-  background: #fff7e6;
-  color: #d48806;
+  background: var(--color-status-pending-bg);
+  color: var(--color-status-pending-text);
 }
 
 .status-badge.done {
-  background: #f6ffed;
-  color: #52c41a;
+  background: var(--color-status-done-bg);
+  color: var(--color-status-done-text);
 }
 
 .task-progress {
@@ -354,7 +354,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .progress-bar {
   height: 4px;
-  background: #e6e6e6;
+  background: var(--border-light);
   border-radius: 2px;
   overflow: hidden;
   margin-bottom: 8px;
@@ -363,7 +363,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 .progress-fill {
   width: 60%;
   height: 100%;
-  background: linear-gradient(90deg, #1a1a1a 0%, #595959 100%);
+  background: linear-gradient(90deg, var(--color-text-primary) 0%, var(--color-text-regular) 100%);
   border-radius: 2px;
   animation: progress 2s ease-in-out infinite;
 }
@@ -376,7 +376,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .progress-text {
   font-size: 13px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
   margin: 0;
   text-align: center;
 }
@@ -403,7 +403,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .selectable-image.selected {
-  border-color: #1a1a1a;
+  border-color: var(--color-text-primary);
 }
 
 .selectable-image img {
@@ -418,7 +418,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   right: 4px;
   width: 22px;
   height: 22px;
-  background: #1a1a1a;
+  background: var(--color-text-primary);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -436,14 +436,14 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   font-size: 14px;
   font-weight: 500;
   border-radius: 18px;
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
   padding: 0 20px;
 }
 
 .action-btn:disabled {
-  background: #d9d9d9;
-  border-color: #d9d9d9;
+  background: var(--border-default);
+  border-color: var(--border-default);
 }
 
 .done-images {
@@ -462,7 +462,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 .empty-state {
   text-align: center;
   padding: 40px 0;
-  color: #b3b3b3;
+  color: var(--color-text-placeholder);
 }
 
 .empty-icon {

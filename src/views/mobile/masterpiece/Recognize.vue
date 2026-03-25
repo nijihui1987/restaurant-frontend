@@ -162,11 +162,11 @@ async function submitForm() {
 <style scoped>
 .masterpiece-recognize {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
 }
 
 .page-header {
-  background: #ffffff;
+  background: var(--bg-surface);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -174,7 +174,7 @@ async function submitForm() {
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 #f0f0f0;
+  box-shadow: 0 1px 0 var(--bg-hover);
 }
 
 .back-btn {
@@ -182,7 +182,7 @@ async function submitForm() {
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -192,7 +192,7 @@ async function submitForm() {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .recognize-content {
@@ -202,7 +202,7 @@ async function submitForm() {
 }
 
 .image-section {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 16px;
@@ -218,7 +218,7 @@ async function submitForm() {
 }
 
 .info-section {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 24px 20px;
 }
@@ -231,13 +231,13 @@ async function submitForm() {
   margin: 0 0 4px;
   font-size: 17px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .section-hint {
   margin: 0;
   font-size: 13px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 
 .info-form {
@@ -255,18 +255,18 @@ async function submitForm() {
 .form-item label {
   font-size: 14px;
   font-weight: 500;
-  color: #595959;
+  color: var(--color-text-regular);
 }
 
 .form-item :deep(.el-input__wrapper) {
   border-radius: 10px;
-  box-shadow: 0 0 0 1px #e6e6e6;
+  box-shadow: 0 0 0 1px var(--border-light);
   transition: box-shadow 0.2s ease;
 }
 
 .form-item :deep(.el-input__wrapper:hover),
 .form-item :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px #1a1a1a;
+  box-shadow: 0 0 0 1px var(--color-text-primary);
 }
 
 .form-item :deep(.el-input__inner) {
@@ -289,23 +289,23 @@ async function submitForm() {
 }
 
 .cancel-btn {
-  background: #fafbfc;
-  border-color: #e6e6e6;
-  color: #595959;
+  background: var(--bg-page);
+  border-color: var(--border-light);
+  color: var(--color-text-regular);
 }
 
 .cancel-btn:hover {
-  background: #f0f0f0;
-  border-color: #d9d9d9;
+  background: var(--bg-hover);
+  border-color: var(--border-default);
 }
 
 .submit-btn {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
 }
 
 .submit-btn:hover {
-  background: #333;
-  border-color: #333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 </style>

@@ -180,7 +180,7 @@ async function startCooking() {
 .upload-area {
   background: var(--bg-surface);
   border-radius: 16px;
-  border: 1.5px dashed #d9d9d9;
+  border: 1.5px dashed var(--border-default);
   min-height: 280px;
   max-height: 400px;
   display: flex;
