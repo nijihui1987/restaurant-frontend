@@ -56,7 +56,7 @@
         class="nav-item"
         :class="{ active: route.path === '/' }"
       >
-        <el-icon :size="22"><Operation /></el-icon>
+        <el-icon :size="22"><Camera /></el-icon>
         <span class="nav-label">功能</span>
       </router-link>
       <router-link
@@ -111,7 +111,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
+import { Camera, Reading, Picture, User, Key } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
 import { getAnnouncement, getLogoConfig, getMobileFloatingAd, type FloatingAdConfig } from '@/api/config'
 import { getBalance } from '@/api/billing'
