@@ -271,9 +271,10 @@ async function downloadImage(img: ImageItem) {
     document.body.removeChild(link)
 
     setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
-    ElMessage.success('保存成功')
+    ElMessage.success('已保存')
   } catch {
-    ElMessage.error('保存失败，请长按图片保存')
+    // 降级：直接打开图片，让用户手动保存
+    window.location.href = url
   }
 }
 
@@ -295,9 +296,9 @@ async function downloadCurrentImage() {
     document.body.removeChild(link)
 
     setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
-    ElMessage.success('保存成功')
+    ElMessage.success('已保存')
   } catch {
-    ElMessage.error('保存失败，请长按图片保存')
+    window.location.href = url
   }
 }
 
