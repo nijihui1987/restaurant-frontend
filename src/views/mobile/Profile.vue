@@ -189,7 +189,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
 
 .balance-icon {
@@ -225,8 +225,8 @@ onMounted(() => {
   background: #1a1a1a;
   border-color: #1a1a1a;
   color: #ffffff;
-  border-radius: 20px;
-  min-width: 80px;
+  border-radius: 8px;
+  min-width: 70px;
   height: 36px;
   font-size: 14px;
 }
