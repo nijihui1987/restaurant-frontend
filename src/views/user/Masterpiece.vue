@@ -1589,33 +1589,33 @@ onMounted(async () => {
   left: 0;
   right: 0;
   padding: 4px 6px;
-  font-size: 10px;
+  font-size: 11px;
   text-align: center;
   z-index: 2;
 }
 
 .tab-status-bar.status-failed {
-  background: #f56c6c;
+  background: rgba(245, 108, 108, 0.9);
   color: #fff;
 }
 
 .tab-status-bar.status-yellow {
-  background: #e6a23c;
+  background: rgba(230, 162, 60, 0.9);
   color: #fff;
 }
 
 .tab-status-bar.status-green {
-  background: #67c23a;
+  background: rgba(103, 194, 58, 0.9);
   color: #fff;
 }
 
 .tab-status-bar.status-blue {
-  background: #409eff;
+  background: rgba(64, 158, 255, 0.9);
   color: #fff;
 }
 
 .tab-status-bar.status-generating {
-  background: #e6a23c;
+  background: rgba(230, 162, 60, 0.9);
   color: #fff;
 }
 
