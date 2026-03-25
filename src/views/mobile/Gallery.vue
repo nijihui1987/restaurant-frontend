@@ -336,52 +336,54 @@ onMounted(() => {
 
 .page-header {
   background: var(--bg-surface);
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-lg);
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .page-header h1 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .gallery-content {
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .gallery-tabs {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  border: 1px solid var(--border-light);
 }
 
 .gallery-tabs :deep(.el-tabs__header) {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
 }
 
 .gallery-tabs :deep(.el-tabs__item) {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 500;
   color: var(--color-text-secondary);
-  padding: 0 12px;
+  padding: 0 var(--space-md);
 }
 
 .gallery-tabs :deep(.el-tabs__item.is-active) {
-  color: var(--color-text-primary);
+  color: var(--color-accent);
 }
 
 .gallery-tabs :deep(.el-tabs__active-bar) {
-  background-color: var(--color-text-primary);
+  background-color: var(--color-accent);
   height: 2px;
 }
 
@@ -393,14 +395,20 @@ onMounted(() => {
 .image-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-lg);
 }
 
 .image-item {
-  background: var(--bg-surface);
-  border-radius: 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
+}
+
+.image-item:hover {
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-md);
 }
 
 .item-image {
@@ -411,15 +419,15 @@ onMounted(() => {
 }
 
 .item-info {
-  padding: 12px;
+  padding: var(--space-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-md);
 }
 
 .dish-name {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 500;
   color: var(--color-text-primary);
   flex: 1;
@@ -430,69 +438,79 @@ onMounted(() => {
 
 .item-actions {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   flex-shrink: 0;
 }
 
 .item-actions .el-button {
   height: 32px;
-  font-size: 13px;
-  padding: 0 12px;
+  font-size: var(--font-size-sm);
+  padding: 0 var(--space-md);
 }
 
 .load-more {
   text-align: center;
-  padding: 16px;
-  color: var(--color-text-secondary);
-  font-size: 14px;
+  padding: var(--space-xl);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
   cursor: pointer;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-fast);
 }
 
 .load-more:hover {
-  color: var(--color-text-primary);
+  background: var(--bg-hover);
+  border-color: var(--border-default);
 }
 
 .no-more {
   text-align: center;
-  padding: 16px;
-  color: var(--color-text-placeholder);
-  font-size: 13px;
+  padding: var(--space-xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: var(--space-4xl) var(--space-xl);
   background: var(--bg-surface);
-  border-radius: 16px;
-  margin-top: 16px;
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-lg);
+  border: 1px solid var(--border-light);
 }
 
 .empty-icon {
-  color: var(--color-text-placeholder);
-  margin-bottom: 16px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  opacity: 0.5;
 }
 
 .empty-title {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin: 0 0 4px;
+  margin: 0 0 var(--space-sm);
 }
 
 .empty-hint {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin: 0 0 20px;
+  margin: 0 0 var(--space-xl);
 }
 
 .empty-btn {
-  min-width: 100px;
-  height: 40px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 20px;
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  min-width: 120px;
+  height: 44px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
+  letter-spacing: 0.02em;
 }
 
 /* 预览弹窗 */
@@ -518,7 +536,7 @@ onMounted(() => {
 }
 
 .preview-dialog :deep(.el-overlay) {
-  background: rgba(0, 0, 0, 0.9) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
 }
 
 .preview-content {
@@ -535,33 +553,37 @@ onMounted(() => {
   max-height: 80vh;
   object-fit: contain;
   display: block;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
 }
 
 .preview-actions {
-  margin-top: 20px;
+  margin-top: var(--space-2xl);
 }
 
 .action-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: var(--bg-surface);
-  min-width: 140px;
-  height: 44px;
-  border-radius: 22px;
-  font-size: 14px;
-  backdrop-filter: blur(10px);
+  background: rgba(196, 149, 106, 0.2);
+  border: 1px solid rgba(196, 149, 106, 0.4);
+  color: var(--color-accent);
+  min-width: 160px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  backdrop-filter: blur(12px);
+  transition: all var(--transition-fast);
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(196, 149, 106, 0.3);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
 }
 
 /* 删除确认框按钮样式 */
 :deep(.delete-confirm-btn) {
-  background: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-  color: var(--bg-surface) !important;
+  background: var(--color-danger) !important;
+  border-color: var(--color-danger) !important;
+  color: #fff !important;
 }
 
 :deep(.delete-cancel-btn) {

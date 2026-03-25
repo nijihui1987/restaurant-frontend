@@ -167,32 +167,39 @@ async function submitForm() {
 
 .page-header {
   background: var(--bg-surface);
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 var(--bg-hover);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .back-btn {
   background: none;
   border: none;
-  padding: 4px;
+  padding: var(--space-sm);
   cursor: pointer;
   color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.back-btn:hover {
+  background: var(--bg-hover);
 }
 
 .page-header h1 {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .recognize-content {
@@ -203,10 +210,11 @@ async function submitForm() {
 
 .image-section {
   background: var(--bg-surface);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--space-lg);
   margin-bottom: var(--space-lg);
   text-align: center;
+  border: 1px solid var(--border-light);
 }
 
 .dish-image {
@@ -219,19 +227,21 @@ async function submitForm() {
 
 .info-section {
   background: var(--bg-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-2xl) var(--space-xl);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  border: 1px solid var(--border-light);
 }
 
 .section-header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .section-header h2 {
   margin: 0 0 var(--space-xs);
   font-size: var(--font-size-lg);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.01em;
 }
 
 .section-hint {
@@ -253,59 +263,62 @@ async function submitForm() {
 }
 
 .form-item label {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--color-text-regular);
+  color: var(--color-text-secondary);
 }
 
 .form-item :deep(.el-input__wrapper) {
-  border-radius: 10px;
-  box-shadow: 0 0 0 1px var(--border-light);
-  transition: box-shadow 0.2s ease;
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 1px var(--border-default);
+  background: var(--bg-card);
+  transition: all var(--transition-fast);
 }
 
 .form-item :deep(.el-input__wrapper:hover),
 .form-item :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px var(--color-text-primary);
+  box-shadow: 0 0 0 1px var(--color-accent);
 }
 
 .form-item :deep(.el-input__inner) {
   font-size: var(--font-size-md);
+  color: var(--color-text-primary);
 }
 
 .action-section {
   display: flex;
   gap: var(--space-md);
-  margin-top: var(--space-2xl);
+  margin-top: var(--space-xl);
 }
 
 .cancel-btn,
 .submit-btn {
   flex: 1;
   height: 48px;
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  border-radius: 24px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--radius-full);
 }
 
 .cancel-btn {
-  background: var(--bg-page);
-  border-color: var(--border-light);
-  color: var(--color-text-regular);
+  background: var(--bg-hover);
+  border-color: var(--border-default);
+  color: var(--color-text-primary);
 }
 
 .cancel-btn:hover {
-  background: var(--bg-hover);
+  background: var(--bg-elevated);
   border-color: var(--border-default);
 }
 
 .submit-btn {
-  background: var(--color-text-primary);
-  border-color: var(--color-text-primary);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
 }
 
 .submit-btn:hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
 }
 </style>

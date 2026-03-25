@@ -143,62 +143,74 @@ async function startCooking() {
 
 .page-header {
   background: var(--bg-surface);
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .back-btn {
   background: none;
   border: none;
-  padding: 4px;
+  padding: var(--space-sm);
   cursor: pointer;
   color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.back-btn:hover {
+  background: var(--bg-hover);
 }
 
 .page-header h1 {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .upload-content {
-  padding: var(--space-2xl) var(--space-xl);
+  padding: var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .upload-area {
   background: var(--bg-surface);
-  border-radius: var(--radius-lg);
-  border: 1.5px dashed var(--border-default);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--border-default);
   min-height: 280px;
   max-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
 }
 
+.upload-area:hover {
+  border-color: var(--color-accent);
+  background: rgba(196, 149, 106, 0.02);
+}
+
 .upload-area:active {
-  border-color: var(--color-text-primary);
+  border-color: var(--color-accent);
 }
 
 .upload-area.has-image {
   border-style: solid;
-  border-color: var(--color-text-primary);
+  border-color: var(--color-accent);
   min-height: auto;
   padding: 0;
 }
@@ -212,26 +224,27 @@ async function startCooking() {
 
 .upload-placeholder {
   text-align: center;
-  padding: 40px;
+  padding: var(--space-3xl);
 }
 
 .upload-icon {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: var(--bg-page);
+  background: var(--bg-hover);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto var(--space-lg);
-  color: var(--color-text-secondary);
+  color: var(--color-accent);
 }
 
 .upload-text {
   font-size: var(--font-size-lg);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
+  letter-spacing: -0.01em;
 }
 
 .upload-hint {
@@ -249,11 +262,11 @@ async function startCooking() {
 
 .remove-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: var(--space-md);
+  right: var(--space-md);
   width: 36px;
   height: 36px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   color: var(--bg-surface);
   border: none;
   border-radius: 50%;
@@ -261,35 +274,39 @@ async function startCooking() {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(8px);
 }
 
-.remove-btn:active {
-  background: rgba(0, 0, 0, 0.8);
+.remove-btn:hover {
+  background: rgba(0, 0, 0, 0.85);
+  transform: scale(1.05);
 }
 
 .tips-section {
   background: var(--bg-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl) var(--space-2xl);
-  margin-top: var(--space-xl);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  margin-top: var(--space-lg);
+  border: 1px solid var(--border-light);
 }
 
 .tips-title {
   margin: 0 0 var(--space-md);
-  font-size: var(--font-size-md);
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: 0.02em;
 }
 
 .tips-list {
   margin: 0;
-  padding-left: var(--space-xl);
+  padding-left: var(--space-lg);
 }
 
 .tips-list li {
-  font-size: var(--font-size-base);
-  color: var(--color-text-regular);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
   margin-bottom: var(--space-sm);
   line-height: 1.5;
 }
@@ -299,7 +316,7 @@ async function startCooking() {
 }
 
 .action-section {
-  padding: var(--space-2xl) 0 var(--space-2xl);
+  padding: var(--space-xl) 0 var(--space-2xl);
   text-align: center;
 }
 
@@ -307,21 +324,26 @@ async function startCooking() {
   width: 100%;
   max-width: 280px;
   height: 52px;
-  font-size: var(--font-size-lg);
-  font-weight: 500;
-  border-radius: 26px;
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  transition: all 0.2s ease;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-normal);
 }
 
 .submit-btn:not(:disabled):hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(196, 149, 106, 0.3);
 }
 
 .submit-btn:disabled {
-  background: var(--border-default);
+  background: var(--bg-hover);
   border-color: var(--border-default);
+  color: var(--color-text-secondary);
 }
 </style>

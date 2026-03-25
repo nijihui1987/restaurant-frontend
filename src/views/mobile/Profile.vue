@@ -158,14 +158,15 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .page-header h1 {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .profile-content {
@@ -176,17 +177,18 @@ onMounted(() => {
 
 .profile-card {
   background: var(--bg-surface);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--space-2xl);
   margin-bottom: var(--space-lg);
+  border: 1px solid var(--border-light);
 }
 
 .profile-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-xl);
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -195,43 +197,47 @@ onMounted(() => {
 }
 
 .contact-btn {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  color: var(--color-text-regular);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-md);
-  padding: var(--space-sm) var(--space-xl);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-default);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-lg);
   height: auto;
+  transition: all var(--transition-fast);
 }
 
 .contact-btn:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-default);
+  background: var(--bg-elevated);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .username {
   font-size: var(--font-size-2xl);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
+  letter-spacing: -0.02em;
 }
 
 .role-tag {
   display: inline-block;
-  background: var(--bg-hover);
-  color: var(--color-text-regular);
+  background: rgba(196, 149, 106, 0.15);
+  color: var(--color-accent);
   padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .balance-section {
-  background: var(--bg-surface);
-  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
   padding: var(--space-xl);
   margin-bottom: var(--space-xl);
-  box-shadow: var(--shadow-md);
   border: 1px solid var(--border-light);
   display: flex;
   align-items: center;
@@ -241,18 +247,18 @@ onMounted(() => {
 .balance-left {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
 }
 
 .balance-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--bg-hover);
+  width: 44px;
+  height: 44px;
+  background: rgba(196, 149, 106, 0.15);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-primary);
+  color: var(--color-accent);
 }
 
 .balance-info {
@@ -268,24 +274,29 @@ onMounted(() => {
 
 .balance-value {
   font-size: var(--font-size-3xl);
-  font-weight: 600;
-  color: var(--color-text-primary);
+  font-weight: 700;
+  color: var(--color-accent);
   font-family: 'SF Mono', Monaco, monospace;
+  letter-spacing: -0.02em;
 }
 
 .recharge-btn {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--bg-surface);
-  border-radius: var(--radius-sm);
-  min-width: 70px;
-  height: 36px;
-  font-size: var(--font-size-base);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
+  border-radius: var(--radius-full);
+  min-width: 80px;
+  height: 40px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition: all var(--transition-fast);
 }
 
 .recharge-btn:hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(196, 149, 106, 0.3);
 }
 
 .info-section {
@@ -297,11 +308,11 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-md) 0;
+  padding: var(--space-lg) 0;
 }
 
 .info-item:not(:last-child) {
-  border-bottom: 1px solid var(--bg-page);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .info-label {
@@ -312,6 +323,7 @@ onMounted(() => {
 .info-value {
   font-size: var(--font-size-base);
   color: var(--color-text-primary);
+  font-weight: 500;
 }
 
 .logout-section {
@@ -320,53 +332,64 @@ onMounted(() => {
 
 .admin-btn {
   width: 100%;
-  height: 48px;
-  font-size: var(--font-size-md);
-  border-radius: var(--radius-lg);
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  height: 52px;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-xl);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
+  letter-spacing: 0.02em;
+  transition: all var(--transition-normal);
 }
 
 .admin-btn:hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(196, 149, 106, 0.25);
 }
 
 .logout-btn {
   width: 100%;
-  height: 48px;
-  font-size: var(--font-size-md);
-  border-radius: var(--radius-lg);
+  height: 52px;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--radius-xl);
   background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+}
+
+.logout-btn:hover {
+  background: var(--bg-hover);
   border-color: var(--color-danger);
   color: var(--color-danger);
 }
 
-.logout-btn:hover {
-  background: var(--color-danger-bg);
-  border-color: var(--color-danger-hover);
-  color: var(--color-danger-hover);
-}
-
 /* 联系作者弹窗 */
 .contact-dialog :deep(.el-dialog) {
-  border-radius: var(--radius-lg);
+  background: var(--bg-surface) !important;
+  border-radius: var(--radius-xl);
   max-width: 90vw;
+  border: 1px solid var(--border-light);
 }
 
 .contact-dialog :deep(.el-dialog__header) {
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-xl);
   border-bottom: 1px solid var(--border-light);
 }
 
 .contact-dialog :deep(.el-dialog__title) {
   font-size: var(--font-size-lg);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.01em;
 }
 
 .contact-dialog :deep(.el-dialog__body) {
@@ -376,45 +399,48 @@ onMounted(() => {
 }
 
 .contact-content {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   line-height: 1.7;
   color: var(--color-text-regular);
 }
 
 .contact-content :deep(h1) {
-  font-size: 18px;
-  margin: 0 0 16px;
+  font-size: var(--font-size-xl);
+  margin: 0 0 var(--space-lg);
   color: var(--color-text-primary);
+  font-weight: 700;
 }
 
 .contact-content :deep(h2) {
-  font-size: 16px;
-  margin: var(--space-lg) 0 var(--space-md);
+  font-size: var(--font-size-lg);
+  margin: var(--space-xl) 0 var(--space-md);
   color: var(--color-text-primary);
+  font-weight: 600;
 }
 
 .contact-content :deep(p) {
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-md);
 }
 
 .contact-content :deep(ul),
 .contact-content :deep(ol) {
-  padding-left: 20px;
-  margin: 0 0 12px;
+  padding-left: var(--space-xl);
+  margin: 0 0 var(--space-md);
 }
 
 .contact-content :deep(li) {
-  margin-bottom: 4px;
+  margin-bottom: var(--space-xs);
 }
 
 .contact-content :deep(code) {
   background: var(--bg-hover);
   padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 13px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
 }
 
 .contact-content :deep(a) {
-  color: var(--el-color-primary);
+  color: var(--color-accent);
 }
 </style>
