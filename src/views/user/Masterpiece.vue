@@ -673,6 +673,7 @@ async function loadMasterpieceConfig() {
     watermarkEnabled.value = data.watermark_enabled ?? true
     editableFieldsConfig.value = data.editable_fields || []
     visibleFieldsConfig.value = data.visible_fields || []
+    coinCostPerImage.value = data.coin_cost_per_image ?? 5
   } catch (error) {
     console.error('加载配置失败', error)
   }
