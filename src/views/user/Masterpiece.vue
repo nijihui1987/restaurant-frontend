@@ -2385,8 +2385,8 @@ onMounted(async () => {
 }
 
 .purchased-grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--space-lg);
   margin-bottom: var(--space-xl);
 }
