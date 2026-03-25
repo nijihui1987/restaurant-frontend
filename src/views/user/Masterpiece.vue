@@ -2381,8 +2381,7 @@ onMounted(async () => {
 
 /* 已购买图片展示 */
 .purchased-images-section {
-  margin: var(--space-xl) auto;
-  max-width: 600px;
+  margin: var(--space-xl) 0;
 }
 
 .purchased-grid {
