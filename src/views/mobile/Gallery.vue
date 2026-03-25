@@ -132,19 +132,30 @@ function previewImage(img: ImageItem) {
   previewVisible.value = true
 }
 
-function downloadCurrentImage() {
+async function downloadCurrentImage() {
   if (!currentImage.value) return
   const url = currentImage.value.url
   const dishName = currentImage.value.dish_name || 'image'
-  // 创建下载链接触发移动端保存相册选项
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `${dishName}.jpg`
-  link.target = '_blank'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  ElMessage.success('下载成功')
+
+  try {
+    // 先 fetch 图片为 blob，绕过跨域限制
+    const response = await fetch(url)
+    const blob = await response.blob()
+    const blobUrl = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = `${dishName}.jpg`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    // 释放 blob URL
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 100)
+    ElMessage.success('下载成功')
+  } catch {
+    ElMessage.error('下载失败，请长按图片保存')
+  }
 }
 
 async function deleteImage(img: ImageItem) {
