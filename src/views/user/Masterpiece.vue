@@ -2314,11 +2314,13 @@ onMounted(async () => {
 }
 
 .preview-image {
+  width: auto;
+  height: auto;
   max-width: 90vw;
   max-height: 90vh;
+  aspect-ratio: 4/3;
   object-fit: contain;
   display: block;
-  margin: 0 auto;
 }
 
 /* 已购买图片展示 */
