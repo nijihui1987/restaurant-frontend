@@ -2341,14 +2341,15 @@ onMounted(async () => {
 
 /* 图片预览弹窗 */
 .image-preview-dialog {
-  background: rgba(0, 0, 0, 0.85) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
 }
 
 .image-preview-dialog .el-dialog {
   background: transparent !important;
   box-shadow: none !important;
-  max-width: 95vw !important;
-  width: fit-content !important;
+  max-width: 100vw !important;
+  width: auto !important;
+  margin: 0 !important;
 }
 
 .image-preview-dialog .el-dialog__header {
@@ -2356,7 +2357,7 @@ onMounted(async () => {
 }
 
 .image-preview-dialog .el-dialog__body {
-  padding: 20px !important;
+  padding: 0 !important;
   background: transparent !important;
 }
 
@@ -2364,11 +2365,13 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 .preview-image {
-  max-width: 90vw;
-  max-height: 85vh;
+  max-width: 96vw;
+  max-height: 96vh;
   object-fit: contain;
   display: block;
 }
