@@ -314,8 +314,9 @@
                   <span class="watermark-text">预览水印</span>
                 </div>
               </div>
-              <div class="gen-select-badge" v-if="img.status === 'success'" @click="toggleGeneration(img.index)">
+              <div class="gen-select-btn" v-if="img.status === 'success'" @click="toggleGeneration(img.index)">
                 <el-icon><Check /></el-icon>
+                {{ selectedGenerations.includes(img.index) ? '已选' : '选择' }}
               </div>
             </div>
           </div>
@@ -2159,17 +2160,18 @@ onMounted(async () => {
 
 .gen-item {
   position: relative;
-  aspect-ratio: 3 / 2;
   border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
   transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
 }
 
 .gen-item img {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 4/3;
   object-fit: cover;
 }
 
@@ -2184,7 +2186,7 @@ onMounted(async () => {
 .gen-image-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1;
 }
 
 .watermark-overlay {
@@ -2215,6 +2217,29 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   color: #fff;
+}
+
+.gen-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--space-sm);
+  background: var(--color-bg-page);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.gen-select-btn:hover {
+  background: var(--color-bg-surface);
+}
+
+.gen-item.selected .gen-select-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
 }
 
 .consume-section {
