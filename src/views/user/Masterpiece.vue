@@ -1614,33 +1614,33 @@ onMounted(async () => {
 }
 
 .tab-status-bar.status-failed {
-  background: rgba(245, 108, 108, 0.9);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .tab-status-bar.status-yellow {
-  background: rgba(230, 162, 60, 0.9);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .tab-status-bar.status-green {
-  background: rgba(103, 194, 58, 0.9);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .tab-status-bar.status-blue {
-  background: rgba(64, 158, 255, 0.9);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .tab-status-bar.status-generating {
-  background: rgba(230, 162, 60, 0.9);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .tab-status-bar.status-default {
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
 }
 
 .tab-info {
