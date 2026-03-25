@@ -164,7 +164,7 @@ fetchLogo()
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-page);
+  background: var(--bg-page);
   padding: var(--space-xl) var(--space-lg);
 }
 
@@ -184,8 +184,9 @@ fetchLogo()
 }
 
 .register-logo {
-  height: 48px;
-  width: auto;
+  width: 100%;
+  height: auto;
+  max-height: 80px;
   object-fit: contain;
 }
 
@@ -199,25 +200,26 @@ fetchLogo()
 .brand-name {
   font-family: var(--font-family-display);
   font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
-  letter-spacing: var(--letter-spacing-tight);
+  letter-spacing: -0.02em;
 }
 
 .brand-tagline {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: 0.05em;
 }
 
 /* ==================== 注册卡片 ==================== */
 
 .register-card {
   width: 100%;
-  background: var(--color-bg-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
 }
 
 .card-header {
@@ -227,7 +229,7 @@ fetchLogo()
 .card-title {
   margin: 0 0 var(--space-xs);
   font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
 }
 
@@ -253,63 +255,71 @@ fetchLogo()
 
 .form-label {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   color: var(--color-text-regular);
 }
 
 .optional {
-  font-weight: var(--font-weight-normal);
+  font-weight: 400;
   color: var(--color-text-placeholder);
 }
 
 .form-input {
-  --el-input-bg-color: var(--color-bg-surface);
-  --el-input-border-color: var(--color-border);
-  --el-input-hover-border-color: var(--color-border-medium);
-  --el-input-focus-border-color: var(--color-primary);
+  --el-input-bg-color: var(--bg-card);
+  --el-input-border-color: var(--border-default);
+  --el-input-hover-border-color: var(--color-accent);
+  --el-input-focus-border-color: var(--color-accent);
 }
 
 .form-input :deep(.el-input__wrapper) {
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
-  box-shadow: 0 0 0 1px var(--color-border);
+  box-shadow: 0 0 0 1px var(--border-default);
   transition: all var(--transition-fast);
+  background: var(--bg-card);
 }
 
 .form-input :deep(.el-input__wrapper:hover) {
-  box-shadow: 0 0 0 1px var(--color-border-medium);
+  box-shadow: 0 0 0 1px var(--color-accent);
 }
 
 .form-input :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-accent);
 }
 
 .form-input :deep(.el-input__inner) {
   font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+}
+
+.form-input :deep(.el-input__inner::placeholder) {
+  color: var(--color-text-placeholder);
 }
 
 .submit-btn {
   width: 100%;
   height: 48px;
   font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
+  font-weight: 600;
   border-radius: var(--radius-md);
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0a0a0a;
   margin-top: var(--space-sm);
   transition: all var(--transition-fast);
+  letter-spacing: 0.02em;
 }
 
 .submit-btn:hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(196, 149, 106, 0.3);
 }
 
 .submit-btn:active {
-  background: var(--color-primary-active);
-  border-color: var(--color-primary-active);
+  background: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
   transform: translateY(0);
 }
 
@@ -323,15 +333,15 @@ fetchLogo()
 }
 
 .login-link {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  font-weight: 500;
   text-decoration: none;
   margin-left: var(--space-xs);
   transition: color var(--transition-fast);
 }
 
 .login-link:hover {
-  color: var(--color-primary-hover);
+  color: var(--color-accent-hover);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -344,7 +354,7 @@ fetchLogo()
 .register-legal p {
   margin: 0;
   font-size: var(--font-size-xs);
-  color: var(--color-text-placeholder);
+  color: var(--color-text-secondary);
 }
 
 .legal-link {
@@ -355,6 +365,6 @@ fetchLogo()
 }
 
 .legal-link:hover {
-  color: var(--color-text-primary);
+  color: var(--color-accent);
 }
 </style>
