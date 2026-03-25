@@ -185,14 +185,6 @@
           </div>
         </div>
 
-        <!-- 调试信息 -->
-        <div class="debug-info" style="text-align:left;padding:10px;font-size:12px;color:#666;word-break:break-all;">
-          <p>status: {{ currentTaskDetail?.status }}</p>
-          <p>selected_images: {{ JSON.stringify(currentTaskDetail?.selected_images) }}</p>
-          <p>generated_images: {{ JSON.stringify(currentTaskDetail?.generated_images) }}</p>
-          <p>purchasedImages.length: {{ purchasedImages.length }}</p>
-        </div>
-
         <!-- 步骤二：选择背景图（pending_select 状态） -->
         <div v-if="currentTaskDetail?.status === 'failed'" class="failed-section">
           <div class="failed-icon">
@@ -360,7 +352,7 @@
         </div>
 
         <!-- 完成状态 -->
-        <div v-else-if="currentTaskDetail?.status === 'completed'" class="complete-section">
+        <div v-else-if="currentTaskDetail?.status === 'done' || currentTaskDetail?.status === 'completed'" class="complete-section">
           <div class="complete-icon">
             <el-icon :size="64" color="#67c23a"><CircleCheckFilled /></el-icon>
           </div>
