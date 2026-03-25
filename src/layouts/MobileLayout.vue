@@ -460,6 +460,7 @@ loadFloatingAd()
   max-height: 70vh;
   object-fit: contain;
   cursor: pointer;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes fadeIn {
