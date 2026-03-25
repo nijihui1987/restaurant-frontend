@@ -435,6 +435,7 @@ interface TaskItem {
   dish_name: string
   status: string
   created_at: string
+  generated_thumb?: string | null
 }
 
 const currentTaskDetail = ref<any>(null)
