@@ -110,6 +110,38 @@
         </el-form>
       </div>
 
+      <div class="config-card">
+        <h2>移动端浮窗广告</h2>
+        <el-form label-width="140px">
+          <el-form-item label="启用广告">
+            <el-switch v-model="floatingAdConfig.enabled" @change="handleFloatingAdChange" />
+            <span class="form-tip">关闭后移动端不再显示浮窗广告</span>
+          </el-form-item>
+          <el-form-item label="广告图片">
+            <el-input
+              v-model="floatingAdConfig.image_url"
+              placeholder="输入广告图片 URL"
+              @blur="handleFloatingAdChange"
+            >
+              <template #append>
+                <el-button @click="triggerAdUpload">上传</el-button>
+              </template>
+            </el-input>
+            <div class="ad-preview" v-if="floatingAdConfig.image_url">
+              <img :src="floatingAdConfig.image_url" alt="广告预览" />
+            </div>
+          </el-form-item>
+          <el-form-item label="点击链接">
+            <el-input
+              v-model="floatingAdConfig.link_url"
+              placeholder="输入点击后跳转的 URL（可选）"
+              @blur="handleFloatingAdChange"
+            />
+            <span class="form-tip">留空则点击只关闭广告不跳转</span>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <div class="config-card info-card">
         <h2>配置说明</h2>
         <div class="info-content">
@@ -128,7 +160,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getConfig, saveConfig, getLogoConfig, saveLogoConfig, type LogoConfig, getRateLimitConfig, updateRateLimitConfig, type RateLimitConfig } from '@/api/config'
+import { getConfig, saveConfig, getLogoConfig, saveLogoConfig, type LogoConfig, getRateLimitConfig, updateRateLimitConfig, type RateLimitConfig, getMobileFloatingAd, saveMobileFloatingAd, type FloatingAdConfig } from '@/api/config'
 import { uploadFile } from '@/api/oss'
 
 const config = ref({
@@ -277,6 +309,61 @@ async function saveRateLimitConfig() {
     savingRateLimit.value = false
   }
 }
+
+// 移动端浮窗广告配置
+const floatingAdConfig = ref<FloatingAdConfig>({
+  image_url: '',
+  link_url: '',
+  enabled: false
+})
+
+async function loadFloatingAdConfig() {
+  try {
+    const data = await getMobileFloatingAd()
+    if (data) {
+      floatingAdConfig.value = data
+    }
+  } catch (error) {
+    console.error('加载浮窗广告配置失败', error)
+  }
+}
+
+async function handleFloatingAdChange() {
+  try {
+    await saveMobileFloatingAd(floatingAdConfig.value)
+    ElMessage.success('浮窗广告配置已保存')
+  } catch (error) {
+    ElMessage.error('保存失败')
+    await loadFloatingAdConfig()
+  }
+}
+
+async function triggerAdUpload() {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  input.onchange = async (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0]
+    if (file) {
+      try {
+        const res = await uploadFile(file, 'ads')
+        floatingAdConfig.value.image_url = res.url
+        await handleFloatingAdChange()
+        ElMessage.success('广告图片上传成功')
+      } catch (error) {
+        ElMessage.error('上传失败')
+      }
+    }
+  }
+  input.click()
+}
+
+onMounted(() => {
+  loadConfig()
+  loadLogoConfig()
+  loadRateLimitConfig()
+  loadFloatingAdConfig()
+})
 </script>
 
 <style scoped>
@@ -317,6 +404,21 @@ async function saveRateLimitConfig() {
 .logo-preview img {
   max-height: 60px;
   max-width: 200px;
+  object-fit: contain;
+}
+
+.ad-preview {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.ad-preview img {
+  max-width: 300px;
+  max-height: 150px;
   object-fit: contain;
 }
 
