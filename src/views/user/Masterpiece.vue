@@ -2379,9 +2379,6 @@ onMounted(async () => {
   object-fit: contain;
   display: block;
 }
-  object-fit: contain;
-  display: block;
-}
 
 /* 已购买图片展示 */
 .purchased-images-section {
