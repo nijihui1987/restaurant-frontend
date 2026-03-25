@@ -2296,8 +2296,18 @@ onMounted(async () => {
 
 /* 图片预览弹窗 */
 .image-preview-dialog {
-  background: rgba(0, 0, 0, 0.9) !important;
-  --el-dialog-padding-primary: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.image-preview-dialog .el-dialog {
+  background: transparent !important;
+  box-shadow: none !important;
+  max-width: 90vw;
+}
+
+.image-preview-dialog .el-dialog__header {
+  display: none;
 }
 
 .image-preview-dialog .el-dialog__body {
@@ -2307,16 +2317,22 @@ onMounted(async () => {
   align-items: center;
 }
 
+.preview-image-wrapper {
+  width: 80vw;
+  max-width: 90vw;
+  aspect-ratio: 4/3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .preview-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.preview-image-wrapper {
-  width: 80vw;
-  max-width: 80vw;
-  aspect-ratio: 4/3;
 }
 
 /* 已购买图片展示 */
