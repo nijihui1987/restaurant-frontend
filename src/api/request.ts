@@ -4,7 +4,8 @@ import { useUserStore } from '@/stores/user'
 const api = axios.create({
   baseURL: '/api/v1',
   timeout: 60000,
-  maxRedirects: 0
+  maxRedirects: 0,
+  withCredentials: true  // 允许发送 Cookie
 })
 
 // 请求拦截器 - 添加 token 和修复路径
