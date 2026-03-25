@@ -341,7 +341,7 @@ onMounted(() => {
 
 .page-header h1 {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -354,13 +354,13 @@ onMounted(() => {
 
 /* 余额卡片 */
 .balance-card {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--color-text-primary);
+  color: #0a0a0a;
 }
 
 .balance-info {
@@ -371,7 +371,7 @@ onMounted(() => {
 
 .balance-label {
   font-size: var(--font-size-sm);
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .balance-amount {
@@ -388,7 +388,7 @@ onMounted(() => {
 
 .amount {
   font-size: 36px;
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
   font-family: 'SF Mono', Monaco, monospace;
 }
 
@@ -403,38 +403,37 @@ onMounted(() => {
 }
 
 .recharge-btn {
-  background: var(--color-primary);
+  background: #0a0a0a;
   border: none;
   color: #fff;
   padding: 12px 32px;
   height: auto;
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
 }
 
 .recharge-btn:hover {
-  background: var(--color-primary-light);
+  background: #1a1a1a;
 }
 
 .transfer-btn {
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-primary);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: #0a0a0a;
   padding: 12px 32px;
   height: auto;
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
 }
 
 .transfer-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: var(--color-bg-surface);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* 消费记录区域 */
 .records-section {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
+  border: 1px solid var(--border-light);
 }
 
 .section-header {
@@ -446,7 +445,7 @@ onMounted(() => {
 
 .section-header h2 {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -467,12 +466,12 @@ onMounted(() => {
 
 .tab:hover {
   color: var(--color-text-primary);
-  background: var(--color-bg-hover);
+  background: var(--bg-hover);
 }
 
 .tab.active {
-  color: var(--color-primary);
-  background: var(--color-primary-bg-light);
+  color: var(--color-accent);
+  background: rgba(196, 149, 106, 0.15);
 }
 
 /* 加载状态 */
@@ -502,7 +501,7 @@ onMounted(() => {
 }
 
 .record-item:hover {
-  background: var(--color-bg-hover);
+  background: var(--bg-hover);
 }
 
 .record-icon {
@@ -516,23 +515,23 @@ onMounted(() => {
 }
 
 .record-icon.recharge {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: rgba(196, 149, 106, 0.15);
+  color: var(--color-accent);
 }
 
 .record-icon.transfer_in {
-  background: #f6ffed;
-  color: #52c41a;
+  background: rgba(82, 196, 26, 0.15);
+  color: var(--color-success);
 }
 
 .record-icon.transfer_out {
-  background: #fff7e6;
-  color: #fa8c16;
+  background: rgba(212, 168, 6, 0.15);
+  color: var(--color-warning);
 }
 
 .record-icon.consume {
-  background: #fff1f0;
-  color: #ff4d4f;
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--color-danger);
 }
 
 .record-info {
@@ -553,12 +552,12 @@ onMounted(() => {
 
 .record-time {
   font-size: var(--font-size-xs);
-  color: var(--color-text-placeholder);
+  color: var(--color-text-secondary);
 }
 
 .record-amount {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   font-family: 'SF Mono', Monaco, monospace;
 }
 
@@ -569,7 +568,7 @@ onMounted(() => {
 
 .record-amount.transfer_out,
 .record-amount.consume {
-  color: var(--color-error);
+  color: var(--color-danger);
 }
 
 /* 分页 */

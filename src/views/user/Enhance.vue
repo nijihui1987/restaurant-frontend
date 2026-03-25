@@ -24,7 +24,7 @@
 
 .page-title {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
 }
@@ -36,8 +36,9 @@
 }
 
 .placeholder-content {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
+  border: 1px solid var(--border-light);
 }
 </style>

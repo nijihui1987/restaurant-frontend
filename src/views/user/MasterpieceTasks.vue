@@ -202,7 +202,7 @@ onMounted(() => {
 
 .page-title {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
 }
@@ -215,10 +215,11 @@ onMounted(() => {
 
 /* 筛选 tabs */
 .filter-tabs {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-xl);
+  border: 1px solid var(--border-light);
 }
 
 /* 任务列表 */
@@ -232,16 +233,18 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   cursor: pointer;
   transition: all var(--transition-fast);
+  border: 1px solid var(--border-light);
 }
 
 .task-card:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+  border-color: var(--border-default);
 }
 
 .task-image {
@@ -267,13 +270,13 @@ onMounted(() => {
 
 .task-name {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   color: var(--color-text-primary);
 }
 
 .task-time {
   font-size: var(--font-size-sm);
-  color: var(--color-text-placeholder);
+  color: var(--color-text-secondary);
 }
 
 .task-status {
@@ -281,15 +284,16 @@ onMounted(() => {
 }
 
 .task-arrow {
-  color: var(--color-text-placeholder);
+  color: var(--color-text-secondary);
   flex-shrink: 0;
 }
 
 /* 空状态 */
 .empty-state {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-3xl);
+  border: 1px solid var(--border-light);
 }
 
 /* 分页 */

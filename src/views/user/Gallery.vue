@@ -200,7 +200,7 @@ onMounted(() => {
 
 .page-header h1 {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -215,6 +215,7 @@ onMounted(() => {
   background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
+  border: 1px solid var(--border-light);
 }
 
 .gallery-tabs :deep(.el-tabs__header) {
@@ -229,11 +230,11 @@ onMounted(() => {
 }
 
 .gallery-tabs :deep(.el-tabs__item.is-active) {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .gallery-tabs :deep(.el-tabs__active-bar) {
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
   height: 2px;
 }
 
@@ -251,6 +252,7 @@ onMounted(() => {
   background: var(--bg-hover);
   position: relative;
   cursor: pointer;
+  border: 1px solid var(--border-light);
 }
 
 .image-item img {
@@ -270,8 +272,8 @@ onMounted(() => {
   left: 0;
   right: 0;
   padding: 8px 12px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
-  color: var(--bg-surface);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: #fff;
 }
 
 .dish-name {
@@ -302,22 +304,22 @@ onMounted(() => {
   height: 28px;
   padding: 0 8px;
   font-size: var(--font-size-xs);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(20, 20, 20, 0.9);
   border: none;
   color: var(--color-text-primary);
 }
 
 .image-actions .el-button:hover {
-  background: var(--bg-surface);
+  background: var(--bg-card);
 }
 
 .image-actions .el-button--danger {
-  background: rgba(245, 34, 45, 0.9);
-  color: var(--bg-surface);
+  background: rgba(255, 107, 107, 0.9);
+  color: #fff;
 }
 
 .image-actions .el-button--danger:hover {
-  background: var(--color-danger-hover);
+  background: var(--color-danger);
 }
 
 /* 空状态 */
@@ -325,6 +327,7 @@ onMounted(() => {
   padding: var(--space-3xl);
   background: var(--bg-surface);
   border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
 }
 
 /* 预览弹窗 */
@@ -349,7 +352,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   border-radius: var(--radius-lg);
   cursor: pointer;
 }
@@ -366,12 +369,13 @@ onMounted(() => {
   left: 0;
   right: 0;
   padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(20, 20, 20, 0.95);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 10;
+  border-top: 1px solid var(--border-light);
 }
 
 .preview-dish-name {
@@ -386,9 +390,9 @@ onMounted(() => {
 
 /* 删除确认框按钮样式 */
 :deep(.delete-confirm-btn) {
-  background: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-  color: var(--bg-surface) !important;
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #0a0a0a !important;
 }
 
 :deep(.delete-cancel-btn) {

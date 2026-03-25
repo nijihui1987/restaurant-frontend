@@ -1439,7 +1439,7 @@ onMounted(async () => {
 
 .page-title {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -1471,12 +1471,12 @@ onMounted(async () => {
 
 /* Tab 导航 */
 .tab-nav {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-xl);
   padding: var(--space-lg);
   margin-bottom: var(--space-lg);
   position: relative;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-light);
 }
 
 .tab-arrow {
@@ -1485,22 +1485,22 @@ onMounted(async () => {
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   transition: all var(--transition-fast);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-default);
+  color: var(--color-text-secondary);
 }
 
 .tab-arrow:hover {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
+  background: var(--color-accent);
+  color: #0a0a0a;
+  border-color: var(--color-accent);
 }
 
 .tab-arrow.left {
@@ -1532,21 +1532,19 @@ onMounted(async () => {
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-normal);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--border-light);
   overflow: hidden;
-  background: var(--color-bg-page);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  background: var(--bg-card);
 }
 
 .tab-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  border-color: var(--color-primary-light);
+  border-color: var(--color-accent);
 }
 
 .tab-item.active {
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 16px rgba(64, 158, 255, 0.2);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 16px rgba(196, 149, 106, 0.2);
 }
 
 .create-tab {
@@ -1556,7 +1554,7 @@ onMounted(async () => {
 .tab-add-icon {
   width: 160px;
   height: 180px;
-  background: linear-gradient(135deg, var(--color-bg-page) 0%, var(--color-bg-surface) 100%);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1569,8 +1567,8 @@ onMounted(async () => {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--color-bg-surface);
-  border: 2px dashed var(--color-border);
+  background: var(--bg-surface);
+  border: 2px dashed var(--border-default);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1585,15 +1583,15 @@ onMounted(async () => {
 }
 
 .create-tab:hover .tab-add-icon .add-icon {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: rgba(64, 158, 255, 0.05);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: rgba(196, 149, 106, 0.05);
 }
 
 .create-tab.active .tab-add-icon .add-icon {
-  border-color: var(--color-primary);
-  background: rgba(64, 158, 255, 0.1);
-  color: var(--color-primary);
+  border-color: var(--color-accent);
+  background: rgba(196, 149, 106, 0.1);
+  color: var(--color-accent);
 }
 
 .task-tab {
@@ -1632,33 +1630,33 @@ onMounted(async () => {
 }
 
 .tab-status-bar.status-failed {
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(255, 107, 107, 0.9);
+  color: #fff;
 }
 
 .tab-status-bar.status-yellow {
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(196, 149, 106, 0.9);
+  color: #0a0a0a;
 }
 
 .tab-status-bar.status-green {
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(82, 196, 26, 0.9);
+  color: #fff;
 }
 
 .tab-status-bar.status-blue {
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(90, 143, 212, 0.9);
+  color: #fff;
 }
 
 .tab-status-bar.status-generating {
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(196, 149, 106, 0.9);
+  color: #0a0a0a;
 }
 
 .tab-status-bar.status-default {
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(30, 30, 30, 0.9);
+  color: var(--color-text-primary);
 }
 
 .tab-info {
@@ -1666,13 +1664,13 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   width: 100%;
 }
 
 .tab-label {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   color: var(--color-text-primary);
   text-align: center;
   overflow: hidden;
@@ -1690,7 +1688,7 @@ onMounted(async () => {
   gap: var(--space-xs);
   justify-content: center;
   padding: 0 var(--space-sm) var(--space-md);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
 }
 
 .tab-actions .el-button {
@@ -1706,7 +1704,7 @@ onMounted(async () => {
 .load-more-icon {
   width: 160px;
   height: 180px;
-  background: linear-gradient(135deg, var(--color-bg-page) 0%, var(--color-bg-surface) 100%);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1719,8 +1717,8 @@ onMounted(async () => {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--color-bg-surface);
-  border: 2px dashed var(--color-border);
+  background: var(--bg-surface);
+  border: 2px dashed var(--border-default);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1735,12 +1733,12 @@ onMounted(async () => {
 }
 
 .load-more:hover .load-more-icon {
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .load-more:hover .load-more-icon .load-icon {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 /* 内容区 */
@@ -1758,11 +1756,12 @@ onMounted(async () => {
 }
 
 .step-inner {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
   display: flex;
   gap: var(--space-2xl);
+  border: 1px solid var(--border-light);
 }
 
 /* 上传区域 */
@@ -1775,7 +1774,7 @@ onMounted(async () => {
 
 .upload-zone {
   position: relative;
-  border: 2px dashed var(--color-border);
+  border: 2px dashed var(--border-default);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
   text-align: center;
@@ -1788,13 +1787,14 @@ onMounted(async () => {
 }
 
 .upload-zone:hover {
-  border-color: var(--color-primary);
-  background: var(--color-bg-hover);
+  border-color: var(--color-accent);
+  background: rgba(196, 149, 106, 0.02);
 }
 
 .upload-zone.has-image {
   padding: 0;
   border-style: solid;
+  border-color: var(--color-accent);
 }
 
 .file-input {
@@ -1862,10 +1862,10 @@ onMounted(async () => {
 .disabled-card {
   width: 100%;
   padding: var(--space-xl);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   text-align: center;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border-light);
 }
 
 .disabled-icon {
@@ -1875,7 +1875,7 @@ onMounted(async () => {
 
 .disabled-title {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-xs);
 }
@@ -1901,7 +1901,7 @@ onMounted(async () => {
 
 .result-title {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
 }
@@ -1911,18 +1911,17 @@ onMounted(async () => {
   align-items: flex-start;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border-radius: var(--radius-md);
   margin-bottom: var(--space-lg);
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  line-height: var(--line-height-normal);
 }
 
 .result-tip .el-icon {
   flex-shrink: 0;
   margin-top: 2px;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .field-badge {
@@ -1934,13 +1933,13 @@ onMounted(async () => {
 }
 
 .field-badge.editable {
-  background: rgba(64, 158, 255, 0.1);
-  color: var(--color-primary);
+  background: rgba(196, 149, 106, 0.15);
+  color: var(--color-accent);
 }
 
 .field-badge.readonly {
-  background: var(--color-bg-page);
-  color: var(--color-text-placeholder);
+  background: var(--bg-card);
+  color: var(--color-text-secondary);
 }
 
 .result-form {
@@ -1958,7 +1957,7 @@ onMounted(async () => {
 
 .form-label {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   color: var(--color-text-secondary);
 }
 
@@ -1991,25 +1990,25 @@ onMounted(async () => {
   justify-content: center;
   text-align: center;
   padding: var(--space-2xl);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
 }
 
 .error-icon {
-  color: #f56c6c;
+  color: var(--color-danger);
   margin-bottom: var(--space-lg);
 }
 
 .error-title {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
 }
 
 .error-message {
   font-size: var(--font-size-base);
-  color: #f56c6c;
+  color: var(--color-danger);
   margin: 0 0 var(--space-xs);
 }
 
@@ -2021,10 +2020,11 @@ onMounted(async () => {
 
 /* 任务详情面板 */
 .task-detail-panel {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   position: relative;
+  border: 1px solid var(--border-light);
 }
 
 .task-detail-delete {
@@ -2034,45 +2034,40 @@ onMounted(async () => {
   z-index: 10;
 }
 
-/* 删除按钮 - 黑色背景白色字 */
+/* 删除按钮 */
 .delete-btn {
-  background: #1a1a1a !important;
-  border-color: #1a1a1a !important;
-  color: #fff !important;
+  background: var(--bg-card) !important;
+  border-color: var(--border-default) !important;
+  color: var(--color-text-primary) !important;
 }
 
 .delete-btn:hover {
-  background: #333 !important;
-  border-color: #333 !important;
-  color: #fff !important;
+  background: var(--bg-hover) !important;
+  border-color: var(--color-danger) !important;
+  color: var(--color-danger) !important;
 }
 
 /* 删除确认弹窗按钮 */
 :deep(.delete-confirm-btn) {
-  background: #1a1a1a !important;
-  border-color: #1a1a1a !important;
+  background: var(--color-danger) !important;
+  border-color: var(--color-danger) !important;
   color: #fff !important;
 }
 
 :deep(.delete-confirm-btn:hover) {
-  background: #333 !important;
-  border-color: #333 !important;
+  background: var(--color-danger-hover) !important;
+  border-color: var(--color-danger-hover) !important;
 }
 
 :deep(.delete-cancel-btn) {
-  background: #fff !important;
-  border-color: #1a1a1a !important;
-  color: #1a1a1a !important;
+  background: var(--bg-surface) !important;
+  border-color: var(--border-default) !important;
+  color: var(--color-text-primary) !important;
 }
 
 :deep(.delete-cancel-btn:hover) {
-  background: #f5f5f5 !important;
-  border-color: #333 !important;
-}
-
-/* 删除确认弹窗图标 - 改为黑白 */
-:deep(.el-message-box__status) {
-  color: #1a1a1a !important;
+  background: var(--bg-hover) !important;
+  border-color: var(--color-text-secondary) !important;
 }
 
 .task-detail-topbar {
@@ -2090,7 +2085,7 @@ onMounted(async () => {
 
 .task-detail-name {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -2102,22 +2097,22 @@ onMounted(async () => {
 }
 
 .status-active {
-  background: rgba(64, 158, 255, 0.1);
-  color: var(--color-primary);
+  background: rgba(196, 149, 106, 0.15);
+  color: var(--color-accent);
 }
 
 .status-done {
-  background: rgba(103, 194, 58, 0.1);
-  color: #67c23a;
+  background: rgba(82, 196, 26, 0.15);
+  color: var(--color-success);
 }
 
 .status-failed {
-  background: rgba(245, 108, 108, 0.1);
-  color: #f56c6c;
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--color-danger);
 }
 
 .status-default {
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   color: var(--color-text-secondary);
 }
 
@@ -2133,7 +2128,7 @@ onMounted(async () => {
 
 .step-title {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-xs);
 }
@@ -2159,7 +2154,7 @@ onMounted(async () => {
   cursor: pointer;
   border: 2px solid transparent;
   transition: all var(--transition-fast);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
 }
 
 .bg-item img {
@@ -2169,12 +2164,12 @@ onMounted(async () => {
 }
 
 .bg-item:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .bg-item.selected {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(196, 149, 106, 0.2);
 }
 
 .bg-item-name {
@@ -2184,7 +2179,7 @@ onMounted(async () => {
   right: 0;
   font-size: 10px;
   color: rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
   padding: 2px 6px;
   z-index: 1;
   overflow: hidden;
@@ -2198,12 +2193,12 @@ onMounted(async () => {
   right: var(--space-xs);
   width: 24px;
   height: 24px;
-  background: var(--color-primary);
+  background: var(--color-accent);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #0a0a0a;
 }
 
 .step2-footer {
@@ -2211,7 +2206,7 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   padding-top: var(--space-lg);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--border-light);
 }
 
 .selected-count {
@@ -2244,7 +2239,7 @@ onMounted(async () => {
   transition: all var(--transition-fast);
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-page);
+  background: var(--bg-card);
 }
 
 .gen-item img {
@@ -2255,11 +2250,11 @@ onMounted(async () => {
 }
 
 .gen-item:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .gen-item.selected {
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .gen-image-wrapper {
@@ -2280,7 +2275,7 @@ onMounted(async () => {
 .watermark-text {
   color: rgba(255, 255, 255, 0.6);
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   transform: rotate(-15deg);
 }
 
@@ -2290,12 +2285,12 @@ onMounted(async () => {
   right: var(--space-sm);
   width: 28px;
   height: 28px;
-  background: var(--color-primary);
+  background: var(--color-accent);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #0a0a0a;
 }
 
 .gen-select-btn {
@@ -2304,24 +2299,24 @@ onMounted(async () => {
   justify-content: center;
   gap: 4px;
   padding: var(--space-sm);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--border-light);
 }
 
 .gen-select-btn:hover {
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
 }
 
 .gen-item.selected .gen-select-btn {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
+  background: var(--color-accent);
+  color: #0a0a0a;
+  border-color: var(--color-accent);
 }
 
 .consume-section {
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
 }
@@ -2345,13 +2340,13 @@ onMounted(async () => {
 .summary-value {
   color: var(--color-text-primary);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
 }
 
 .summary-item.highlight .summary-value {
-  color: var(--color-primary);
+  color: var(--color-accent);
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 .hd-option {
@@ -2379,13 +2374,13 @@ onMounted(async () => {
 .complete-title,
 .failed-title {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-sm);
 }
 
 .failed-title {
-  color: #f56c6c;
+  color: var(--color-danger);
 }
 
 .complete-desc,
@@ -2425,7 +2420,7 @@ onMounted(async () => {
 }
 
 .image-preview-dialog :deep(.el-overlay) {
-  background: rgba(0, 0, 0, 0.9) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
 }
 
 .preview-content {
@@ -2457,13 +2452,13 @@ onMounted(async () => {
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border: 2px solid transparent;
   transition: all var(--transition-fast);
 }
 
 .purchased-item:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .purchased-img {
@@ -2482,14 +2477,6 @@ onMounted(async () => {
   gap: 4px;
 }
 
-.purchased-item .download-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
 /* 生成中面板 */
 .generating-panel {
   padding: var(--space-xl) 0;
@@ -2498,7 +2485,7 @@ onMounted(async () => {
 .generating-progress {
   margin-bottom: var(--space-2xl);
   padding: var(--space-xl);
-  background: var(--color-bg-page);
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
 }
 
@@ -2516,13 +2503,13 @@ onMounted(async () => {
 
 /* 生成图片项 */
 .gen-item.failed {
-  border-color: #f56c6c;
-  background: rgba(245, 108, 108, 0.05);
+  border-color: var(--color-danger);
+  background: rgba(255, 107, 107, 0.05);
 }
 
 .gen-item.pending {
-  border-color: var(--color-border);
-  background: var(--color-bg-page);
+  border-color: var(--border-default);
+  background: var(--bg-card);
 }
 
 .gen-item .gen-placeholder {
@@ -2533,21 +2520,21 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  background: var(--color-bg-surface);
+  background: var(--bg-surface);
   color: var(--color-text-placeholder);
 }
 
 .gen-item .gen-placeholder.is-loading {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .gen-item .gen-placeholder-failed {
-  color: #f56c6c;
+  color: var(--color-danger);
   font-size: var(--font-size-sm);
 }
 
 .gen-item .failed-text {
-  color: #f56c6c;
+  color: var(--color-danger);
   font-size: var(--font-size-xs);
   text-align: center;
   max-width: 80%;
@@ -2561,28 +2548,28 @@ onMounted(async () => {
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 10px;
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
 }
 
 .gen-status-badge.success {
-  background: rgba(103, 194, 58, 0.9);
+  background: rgba(82, 196, 26, 0.9);
   color: #fff;
 }
 
 .gen-status-badge.failed {
-  background: rgba(245, 108, 108, 0.9);
+  background: rgba(255, 107, 107, 0.9);
   color: #fff;
 }
 
 .gen-status-badge.pending {
-  background: rgba(64, 158, 255, 0.9);
-  color: #fff;
+  background: rgba(196, 149, 106, 0.9);
+  color: #0a0a0a;
 }
 
 /* 状态样式 */
 .status-generating {
-  background: rgba(64, 158, 255, 0.1);
-  color: var(--color-primary);
+  background: rgba(196, 149, 106, 0.15);
+  color: var(--color-accent);
 }
 
 /* 响应式 */
@@ -2657,8 +2644,8 @@ onMounted(async () => {
   .tab-add-icon {
     width: 100px;
     height: 75px;
-    background: var(--color-bg-page);
-    border: 1px dashed var(--color-border);
+    background: var(--bg-card);
+    border: 1px dashed var(--border-default);
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
@@ -2702,7 +2689,7 @@ onMounted(async () => {
     left: 4px;
     width: 8px;
     height: 8px;
-    border: 1px solid #fff;
+    border: 1px solid var(--color-text-secondary);
   }
 
   .tab-info {

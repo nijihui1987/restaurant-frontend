@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-本文件为 Claude Code (claude.ai/code) 提供代码工作指导。
+本文件为 Claude Code (claude.ai/code) 提供代码工作指导。全程用中文交流
 
 # 主厨相机 - 前端
 
