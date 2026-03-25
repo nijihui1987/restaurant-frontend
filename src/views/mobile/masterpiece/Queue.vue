@@ -228,10 +228,10 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .page-header {
   background: var(--bg-surface);
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-lg);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -251,32 +251,32 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .page-header h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .queue-content {
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .queue-tabs {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
 }
 
 .queue-tabs :deep(.el-tabs__header) {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
 }
 
 .queue-tabs :deep(.el-tabs__item) {
-  font-size: 15px;
+  font-size: var(--font-size-md);
   font-weight: 500;
   color: var(--color-text-secondary);
-  padding: 0 12px;
+  padding: 0 var(--space-md);
 }
 
 .queue-tabs :deep(.el-tabs__item.is-active) {
@@ -297,10 +297,10 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .task-item {
-  padding: 16px;
+  padding: var(--space-lg);
   background: var(--bg-page);
-  border-radius: 12px;
-  margin-bottom: 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
 }
 
 .task-item:last-child {
@@ -311,23 +311,23 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: var(--space-sm);
 }
 
 .task-name {
-  font-size: 15px;
+  font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .task-time {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-md);
 }
 
 .status-badge {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 12px;
@@ -349,7 +349,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .task-progress {
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 
 .progress-bar {
@@ -357,7 +357,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   background: var(--border-light);
   border-radius: 2px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-sm);
 }
 
 .progress-fill {
@@ -375,7 +375,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .progress-text {
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin: 0;
   text-align: center;
@@ -383,9 +383,9 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .task-images {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: var(--space-sm);
   margin: 0 -4px;
   padding: 4px;
 }
@@ -394,7 +394,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   width: 76px;
   height: 76px;
   flex-shrink: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
   position: relative;
@@ -427,18 +427,18 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 }
 
 .task-actions {
-  margin-top: 12px;
+  margin-top: var(--space-md);
   text-align: center;
 }
 
 .action-btn {
   height: 36px;
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 500;
   border-radius: 18px;
   background: var(--color-text-primary);
   border-color: var(--color-text-primary);
-  padding: 0 20px;
+  padding: 0 var(--space-xl);
 }
 
 .action-btn:disabled {
@@ -448,7 +448,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
 
 .done-images {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   overflow-x: auto;
 }
 
@@ -456,7 +456,7 @@ function getStatusText(status: MasterpieceTaskStatus): string {
   width: 88px;
   height: 88px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .empty-state {
