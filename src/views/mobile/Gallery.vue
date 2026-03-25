@@ -4,10 +4,10 @@
       <h1>我的图库</h1>
     </header>
 
-    <main class="gallery-content">
+    <main class="gallery-content" v-loading="loading">
       <el-tabs v-model="activeTab" class="gallery-tabs">
         <el-tab-pane label="全部" name="all">
-          <div class="image-grid" v-if="displayImages.length > 0">
+          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
               <div class="delete-btn" @click.stop="deleteImage(img)">
@@ -15,7 +15,7 @@
               </div>
             </div>
           </div>
-          <div class="empty-state" v-else>
+          <div class="empty-state" v-else-if="!loading">
             <div class="empty-icon">
               <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
                 <rect x="8" y="14" width="48" height="36" rx="4" stroke="currentColor" stroke-width="1.5"/>
@@ -31,7 +31,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="原图" name="original">
-          <div class="image-grid" v-if="displayImages.length > 0">
+          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
               <div class="delete-btn" @click.stop="deleteImage(img)">
@@ -39,12 +39,12 @@
               </div>
             </div>
           </div>
-          <div class="empty-state" v-else>
+          <div class="empty-state" v-else-if="!loading">
             <p class="empty-title">暂无原图</p>
           </div>
         </el-tab-pane>
         <el-tab-pane label="生成图" name="generated">
-          <div class="image-grid" v-if="displayImages.length > 0">
+          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
               <div class="delete-btn" @click.stop="deleteImage(img)">
@@ -52,7 +52,7 @@
               </div>
             </div>
           </div>
-          <div class="empty-state" v-else>
+          <div class="empty-state" v-else-if="!loading">
             <p class="empty-title">暂无生成图</p>
           </div>
         </el-tab-pane>

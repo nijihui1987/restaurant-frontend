@@ -768,7 +768,6 @@ async function loadTaskDetail(tid: string) {
   try {
     await loadMasterpieceConfig()
     const detail = await getTask(tid)
-    console.log('loadTaskDetail response:', detail)
     currentTaskDetail.value = detail
     taskId.value = tid
     previewUrl.value = detail.image_url || ''
@@ -1356,7 +1355,6 @@ async function handleConsume() {
     const res = await consumeTask(taskId.value, {
       selected_indices: selectedGenerations.value
     })
-    console.log('Consume success:', res)
     ElMessage.success('购买成功，图片已存入图库')
 
     // 先刷新任务列表（更新状态）

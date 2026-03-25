@@ -4,10 +4,10 @@
       <h1>图库管理</h1>
     </header>
 
-    <main class="page-content">
+    <main class="page-content" v-loading="loading">
       <el-tabs v-model="activeTab" class="gallery-tabs">
         <el-tab-pane label="全部" name="all">
-          <div class="image-grid" v-if="displayImages.length > 0">
+          <div class="image-grid" v-if="displayImages.length > 0 && !loading">
             <div class="image-item" v-for="img in displayImages" :key="img.id">
               <img :src="img.url" :alt="img.dish_name" @click="previewImage(img)" />
               <div class="image-info">
