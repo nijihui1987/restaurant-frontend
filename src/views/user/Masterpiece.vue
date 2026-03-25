@@ -185,6 +185,14 @@
           </div>
         </div>
 
+        <!-- 调试信息 -->
+        <div class="debug-info" style="text-align:left;padding:10px;font-size:12px;color:#666;word-break:break-all;">
+          <p>status: {{ currentTaskDetail?.status }}</p>
+          <p>selected_images: {{ JSON.stringify(currentTaskDetail?.selected_images) }}</p>
+          <p>generated_images: {{ JSON.stringify(currentTaskDetail?.generated_images) }}</p>
+          <p>purchasedImages.length: {{ purchasedImages.length }}</p>
+        </div>
+
         <!-- 步骤二：选择背景图（pending_select 状态） -->
         <div v-if="currentTaskDetail?.status === 'failed'" class="failed-section">
           <div class="failed-icon">
