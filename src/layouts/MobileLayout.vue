@@ -97,6 +97,16 @@
     </nav>
 
     <LoginTipModal v-model="showLoginTip" />
+
+    <!-- 移动端浮窗广告 -->
+    <div v-if="showFloatingAd" class="floating-ad-overlay" @click="closeFloatingAd">
+      <div class="floating-ad-container" @click.stop>
+        <img v-if="floatingAdConfig?.image_url" :src="floatingAdConfig.image_url" alt="广告" class="floating-ad-image" @click="handleAdClick" />
+        <button class="floating-ad-close" @click="closeFloatingAd">
+          <el-icon><Close /></el-icon>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -104,9 +114,9 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
+import { Operation, Reading, Picture, User, Key, Close } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
-import { getAnnouncement, getLogoConfig } from '@/api/config'
+import { getAnnouncement, getLogoConfig, getMobileFloatingAd, type FloatingAdConfig } from '@/api/config'
 import { getBalance } from '@/api/billing'
 import { getRateLimitStatus } from '@/api/masterpiece'
 
@@ -126,6 +136,36 @@ const userBalance = ref(0)
 // 速率限制状态
 const rateLimitRemaining = ref(0)
 let rateLimitTimer: ReturnType<typeof setInterval> | null = null
+
+// 移动端浮窗广告
+const floatingAdConfig = ref<FloatingAdConfig | null>(null)
+const showFloatingAd = ref(false)
+const FLOATING_AD_KEY = 'floating_ad_closed'
+
+function loadFloatingAd() {
+  // 检查是否已关闭过
+  const closed = localStorage.getItem(FLOATING_AD_KEY)
+  if (closed) return
+
+  getMobileFloatingAd().then(config => {
+    if (config && config.enabled && config.image_url) {
+      floatingAdConfig.value = config
+      showFloatingAd.value = true
+    }
+  })
+}
+
+function closeFloatingAd() {
+  showFloatingAd.value = false
+  // 记录关闭状态，标记当天已关闭
+  localStorage.setItem(FLOATING_AD_KEY, new Date().toDateString())
+}
+
+function handleAdClick() {
+  if (floatingAdConfig.value?.link_url) {
+    window.location.href = floatingAdConfig.value.link_url
+  }
+}
 
 async function loadRateLimitStatus() {
   if (!userStore.isLoggedIn) {
@@ -210,6 +250,7 @@ fetchAnnouncement()
 fetchLogo()
 loadUserBalance()
 loadRateLimitStatus()
+loadFloatingAd()
 </script>
 
 <style scoped>
@@ -395,5 +436,64 @@ loadRateLimitStatus()
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+/* ==================== 移动端浮窗广告 ==================== */
+
+.floating-ad-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.floating-ad-container {
+  position: relative;
+  max-width: 85vw;
+  max-height: 70vh;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.floating-ad-image {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.floating-ad-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.floating-ad-close:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>

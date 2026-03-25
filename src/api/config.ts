@@ -251,3 +251,36 @@ export async function updateRateLimitConfig(config: Partial<RateLimitConfig>): P
     return null
   }
 }
+
+// ============ 移动端浮窗广告配置 ============
+
+export interface FloatingAdConfig {
+  image_url: string   // 广告图片 URL
+  link_url?: string   // 点击跳转链接（可选）
+  enabled: boolean     // 是否启用
+}
+
+// 获取移动端浮窗广告配置
+export async function getMobileFloatingAd(): Promise<FloatingAdConfig | null> {
+  try {
+    const res = await api.get<FloatingAdConfig>('/config/mobile/floating-ad')
+    if (!res.data?.config_value) return null
+    return JSON.parse(res.data.config_value)
+  } catch (error) {
+    console.error('Failed to get mobile floating ad:', error)
+    return null
+  }
+}
+
+// 保存移动端浮窗广告配置
+export async function saveMobileFloatingAd(config: FloatingAdConfig): Promise<boolean> {
+  try {
+    await api.put('/config/mobile/floating-ad', {
+      config_value: JSON.stringify(config)
+    })
+    return true
+  } catch (error) {
+    console.error('Failed to save mobile floating ad:', error)
+    return false
+  }
+}
