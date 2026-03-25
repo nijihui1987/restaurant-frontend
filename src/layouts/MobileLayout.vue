@@ -137,13 +137,8 @@ let rateLimitTimer: ReturnType<typeof setInterval> | null = null
 // 移动端浮窗广告
 const floatingAdConfig = ref<FloatingAdConfig | null>(null)
 const showFloatingAd = ref(false)
-const FLOATING_AD_KEY = 'floating_ad_closed'
 
 function loadFloatingAd() {
-  // 检查是否已关闭过
-  const closed = localStorage.getItem(FLOATING_AD_KEY)
-  if (closed) return
-
   getMobileFloatingAd().then(config => {
     if (config && config.enabled && config.image_url) {
       floatingAdConfig.value = config
@@ -154,8 +149,6 @@ function loadFloatingAd() {
 
 function closeFloatingAd() {
   showFloatingAd.value = false
-  // 记录关闭状态，标记当天已关闭
-  localStorage.setItem(FLOATING_AD_KEY, new Date().toDateString())
 }
 
 function handleAdClick() {
