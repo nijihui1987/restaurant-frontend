@@ -11,6 +11,7 @@
             <h2 class="username">{{ userStore.userInfo?.username }}</h2>
             <span class="role-tag">{{ userStore.roleName }}</span>
           </div>
+          <el-button size="small" @click="showContactDialog" class="contact-btn">联系作者</el-button>
         </div>
 
         <div class="balance-section">
@@ -57,6 +58,16 @@
         </el-button>
       </div>
     </main>
+
+    <!-- 联系作者弹窗 -->
+    <el-dialog
+      v-model="contactDialogVisible"
+      title="联系作者"
+      width="90%"
+      class="contact-dialog"
+    >
+      <div class="contact-content markdown-body" v-html="renderedContact"></div>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,11 +78,32 @@ import { useUserStore } from '@/stores/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Setting } from '@element-plus/icons-vue'
 import { getBalance } from '@/api/billing'
+import { getConfig } from '@/api/config'
+import { marked } from 'marked'
 
 const router = useRouter()
 const userStore = useUserStore()
 
 const balance = ref(0)
+const contactDialogVisible = ref(false)
+const contactContent = ref('')
+const renderedContact = ref('')
+
+async function loadContactContent() {
+  const content = await getConfig('system', 'contact_author')
+  if (content) {
+    contactContent.value = content
+    renderedContact.value = await marked.parse(content)
+  } else {
+    contactContent.value = '暂无联系方式'
+    renderedContact.value = '<p>暂无联系方式</p>'
+  }
+}
+
+async function showContactDialog() {
+  await loadContactContent()
+  contactDialogVisible.value = true
+}
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'
@@ -150,6 +182,9 @@ onMounted(() => {
 }
 
 .profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #f0f0f0;
@@ -157,6 +192,19 @@ onMounted(() => {
 
 .profile-info {
   flex: 1;
+}
+
+.contact-btn {
+  background: #f0f9f6;
+  border: 1px solid #d4e8e2;
+  color: #5a7d72;
+  border-radius: 16px;
+  font-size: 13px;
+}
+
+.contact-btn:hover {
+  background: #e6f4f0;
+  border-color: #c0dbd4;
 }
 
 .username {
@@ -300,5 +348,71 @@ onMounted(() => {
   background: #fff1f0;
   border-color: #ff7875;
   color: #ff7875;
+}
+
+/* 联系作者弹窗 */
+.contact-dialog :deep(.el-dialog) {
+  border-radius: 16px;
+  max-width: 90vw;
+}
+
+.contact-dialog :deep(.el-dialog__header) {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.contact-dialog :deep(.el-dialog__title) {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.contact-dialog :deep(.el-dialog__body) {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.contact-content {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #595959;
+}
+
+.contact-content :deep(h1) {
+  font-size: 18px;
+  margin: 0 0 16px;
+  color: #1a1a1a;
+}
+
+.contact-content :deep(h2) {
+  font-size: 16px;
+  margin: 16px 0 12px;
+  color: #1a1a1a;
+}
+
+.contact-content :deep(p) {
+  margin: 0 0 12px;
+}
+
+.contact-content :deep(ul),
+.contact-content :deep(ol) {
+  padding-left: 20px;
+  margin: 0 0 12px;
+}
+
+.contact-content :deep(li) {
+  margin-bottom: 4px;
+}
+
+.contact-content :deep(code) {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.contact-content :deep(a) {
+  color: #4062ff;
 }
 </style>
