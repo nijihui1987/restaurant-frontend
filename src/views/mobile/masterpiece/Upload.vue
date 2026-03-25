@@ -143,10 +143,10 @@ async function startCooking() {
 
 .page-header {
   background: var(--bg-surface);
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-lg);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -166,20 +166,20 @@ async function startCooking() {
 
 .page-header h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .upload-content {
-  padding: 24px 20px;
+  padding: var(--space-2xl) var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .upload-area {
   background: var(--bg-surface);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   border: 1.5px dashed var(--border-default);
   min-height: 280px;
   max-height: 400px;
@@ -223,19 +223,19 @@ async function startCooking() {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px;
+  margin: 0 auto var(--space-lg);
   color: var(--color-text-secondary);
 }
 
 .upload-text {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 500;
   color: var(--color-text-primary);
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-sm);
 }
 
 .upload-hint {
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin: 0;
 }
@@ -270,27 +270,27 @@ async function startCooking() {
 
 .tips-section {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 20px 24px;
-  margin-top: 20px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-2xl);
+  margin-top: var(--space-xl);
 }
 
 .tips-title {
-  margin: 0 0 12px;
-  font-size: 15px;
+  margin: 0 0 var(--space-md);
+  font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .tips-list {
   margin: 0;
-  padding-left: 20px;
+  padding-left: var(--space-xl);
 }
 
 .tips-list li {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   color: var(--color-text-regular);
-  margin-bottom: 8px;
+  margin-bottom: var(--space-sm);
   line-height: 1.5;
 }
 
@@ -299,7 +299,7 @@ async function startCooking() {
 }
 
 .action-section {
-  padding: 28px 0 24px;
+  padding: var(--space-2xl) 0 var(--space-2xl);
   text-align: center;
 }
 
@@ -307,7 +307,7 @@ async function startCooking() {
   width: 100%;
   max-width: 280px;
   height: 52px;
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 500;
   border-radius: 26px;
   background: var(--color-primary);
