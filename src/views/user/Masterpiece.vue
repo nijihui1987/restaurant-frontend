@@ -39,7 +39,7 @@
           </div>
           <div class="tab-actions">
             <el-button size="small" type="primary" @click.stop="switchToTaskTab(task)">进入</el-button>
-            <el-button size="small" @click.stop="handleDeleteTask(task)">删除</el-button>
+            <el-button size="small" class="delete-btn" @click.stop="handleDeleteTask(task)">删除</el-button>
           </div>
         </div>
 
@@ -172,7 +172,7 @@
       <div v-show="activeTabId !== 'create'" class="tab-panel task-detail-panel">
         <!-- 删除按钮 - 右上角 -->
         <div class="task-detail-delete" v-if="currentTaskDetail">
-          <el-button size="small" type="danger" plain @click="handleDeleteCurrentTask">删除任务</el-button>
+          <el-button size="small" class="delete-btn" @click="handleDeleteCurrentTask">删除任务</el-button>
         </div>
 
         <!-- 任务基本信息 -->
@@ -383,7 +383,7 @@
           <h2 class="failed-title">任务失败</h2>
           <p class="failed-desc">{{ currentTaskDetail.error_message || '未知错误' }}</p>
           <div class="failed-actions">
-            <el-button type="danger" @click="handleDeleteAndBack">删除任务</el-button>
+            <el-button class="delete-btn" @click="handleDeleteAndBack">删除任务</el-button>
           </div>
         </div>
       </div>
@@ -878,7 +878,8 @@ async function handleDeleteCurrentTask() {
       {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
-        type: 'warning',
+        confirmButtonClass: 'delete-confirm-btn',
+        cancelButtonClass: 'delete-cancel-btn',
       }
     )
     await cancelTask(taskId.value)
@@ -917,7 +918,8 @@ async function handleDeleteTask(task: TaskItem) {
       {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
-        type: 'warning',
+        confirmButtonClass: 'delete-confirm-btn',
+        cancelButtonClass: 'delete-cancel-btn',
       }
     )
     await cancelTask(task.id)
@@ -2012,6 +2014,47 @@ onMounted(async () => {
   top: var(--space-md);
   right: var(--space-md);
   z-index: 10;
+}
+
+/* 删除按钮 - 黑色背景白色字 */
+.delete-btn {
+  background: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+  color: #fff !important;
+}
+
+.delete-btn:hover {
+  background: #333 !important;
+  border-color: #333 !important;
+  color: #fff !important;
+}
+
+/* 删除确认弹窗按钮 */
+:deep(.delete-confirm-btn) {
+  background: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+  color: #fff !important;
+}
+
+:deep(.delete-confirm-btn:hover) {
+  background: #333 !important;
+  border-color: #333 !important;
+}
+
+:deep(.delete-cancel-btn) {
+  background: #fff !important;
+  border-color: #1a1a1a !important;
+  color: #1a1a1a !important;
+}
+
+:deep(.delete-cancel-btn:hover) {
+  background: #f5f5f5 !important;
+  border-color: #333 !important;
+}
+
+/* 删除确认弹窗图标 - 改为黑白 */
+:deep(.el-message-box__status) {
+  color: #1a1a1a !important;
 }
 
 .task-detail-topbar {
