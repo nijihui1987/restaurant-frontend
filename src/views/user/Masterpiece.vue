@@ -1,5 +1,9 @@
 <template>
   <div class="page-container">
+    <!-- 任务清单标题 -->
+    <div class="task-list-header" v-if="taskTabs.length > 0">
+      <span class="task-list-title">任务清单</span>
+    </div>
     <!-- Tab 导航区 -->
     <div class="tab-nav" v-if="taskTabs.length > 0">
       <!-- 左箭头 -->
@@ -1323,6 +1327,17 @@ onMounted(async () => {
   color: var(--color-text-secondary);
   margin: var(--space-xs) 0 0;
   line-height: 1.5;
+}
+
+/* 任务清单标题 */
+.task-list-header {
+  padding: var(--space-sm) 0;
+}
+
+.task-list-title {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 500;
 }
 
 /* Tab 导航 */
