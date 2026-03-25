@@ -360,20 +360,20 @@
           <p class="complete-desc">图片已存入您的图库，可随时查看和使用</p>
 
           <!-- 已购买的图片展示 -->
-          <div class="purchased-images-section" v-if="generatedImages.length > 0">
+          <div class="purchased-images-section" v-if="currentTaskDetail?.selected_images?.length > 0">
             <h4 class="purchased-title">已购买图片</h4>
             <div class="purchased-grid">
               <div
-                v-for="img in generatedImages.filter(i => i.status === 'success')"
-                :key="img.index"
+                v-for="(url, index) in currentTaskDetail.selected_images"
+                :key="index"
                 class="purchased-item"
               >
-                <img :src="img.url" :alt="`图片 ${img.index + 1}`" />
+                <img :src="url" :alt="`图片 ${index + 1}`" />
                 <el-button
                   class="download-btn"
                   size="small"
                   type="primary"
-                  @click="downloadImage(img.url, `${currentTaskDetail?.dish_name || '菜品'}_${img.index + 1}.jpg`)"
+                  @click="downloadImage(url, `${currentTaskDetail?.dish_name || '菜品'}_${index + 1}.jpg`)"
                 >
                   <el-icon><Download /></el-icon>
                   下载
