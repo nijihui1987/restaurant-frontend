@@ -265,7 +265,7 @@ async function loadUserBalance() {
 }
 
 const announcement = ref('')
-const logoUrl = ref('/images/logo.png')
+const logoUrl = ref('/images/logo4.png')
 
 // 功能图标映射
 const featureIcons: Record<string, any> = {

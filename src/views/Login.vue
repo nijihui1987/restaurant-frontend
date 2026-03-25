@@ -83,7 +83,7 @@ const userStore = useUserStore()
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
-const logoUrl = ref('/images/logo2.png')
+const logoUrl = ref('/images/logo4.png')
 
 async function fetchLogo() {
   try {

@@ -108,7 +108,7 @@ const form = ref({
   confirmPassword: ''
 })
 const loading = ref(false)
-const logoUrl = ref('/images/logo.png')
+const logoUrl = ref('/images/logo4.png')
 
 async function fetchLogo() {
   try {

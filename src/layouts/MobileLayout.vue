@@ -127,7 +127,7 @@ const showBottomNav = computed(() => {
 
 const showLoginTip = ref(false)
 const announcement = ref('')
-const logoUrl = ref('/images/logo.png')
+const logoUrl = ref('/images/logo4.png')
 const userBalance = ref(0)
 
 // 速率限制状态
