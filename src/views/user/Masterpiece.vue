@@ -854,6 +854,10 @@ async function loadTaskDetail(tid: string) {
 
 // 重置任务状态
 function resetTaskState() {
+  // 释放之前的 blob URL
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
   previewUrl.value = ''
   uploadedImageUrl.value = ''
   recognizeResult.value = null
@@ -1000,14 +1004,30 @@ async function handleFile(file: File) {
     ElMessage.warning('请上传图片文件')
     return
   }
+
+  // 先创建预览（如果之前有blob URL先释放）
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
   previewUrl.value = URL.createObjectURL(file)
 
   try {
     const res = await uploadFile(file, 'uploads')
     uploadedImageUrl.value = res.url
-  } catch (error) {
-    ElMessage.error('上传失败')
-    previewUrl.value = ''
+  } catch (error: any) {
+    console.error('上传失败:', error)
+    // 清理预览
+    if (previewUrl.value) {
+      URL.revokeObjectURL(previewUrl.value)
+      previewUrl.value = ''
+    }
+    // 清理文件输入（避免同文件无法再次触发change）
+    if (fileInputRef.value) {
+      fileInputRef.value.value = ''
+    }
+    // 显示具体错误
+    const msg = error?.response?.data?.detail || error?.message || '上传失败'
+    ElMessage.error(msg)
   }
 }
 
