@@ -229,7 +229,7 @@ loadRateLimitStatus()
 }
 
 .header-brand {
-  padding: var(--space-sm) var(--space-lg);
+  padding: calc(var(--space-sm) + 3px) var(--space-lg);
   display: flex;
   align-items: center;
   gap: 12px;
