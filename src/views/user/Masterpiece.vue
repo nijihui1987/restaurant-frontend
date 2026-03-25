@@ -3,8 +3,8 @@
     <!-- 页面标题 -->
     <div class="page-header">
       <div class="page-title-wrap">
-        <h1 class="page-title">一键变身菜品图</h1>
-        <p class="page-subtitle" v-if="subtitle">{{ subtitle }}</p>
+        <h1 class="page-title">请拍摄您的菜品</h1>
+        <p class="page-tip">拍摄提示：按照精美摆盘出餐标准出餐，拍摄完整清晰的菜品，容器完整拍入画面，镜头角度不要太低或太高</p>
       </div>
       <div class="header-right" v-if="userStore.isAdmin">
         <el-button @click="goToConfig">
@@ -1298,6 +1298,13 @@ onMounted(async () => {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin: var(--space-xs) 0 0;
+}
+
+.page-tip {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: var(--space-xs) 0 0;
+  line-height: 1.5;
 }
 
 /* Tab 导航 */
