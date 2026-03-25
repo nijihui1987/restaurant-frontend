@@ -1591,32 +1591,36 @@ onMounted(async () => {
   padding: 4px 6px;
   font-size: 10px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.9);
   z-index: 2;
 }
 
 .tab-status-bar.status-failed {
-  color: #f56c6c;
+  background: #f56c6c;
+  color: #fff;
 }
 
 .tab-status-bar.status-yellow {
-  color: #e6a23c;
+  background: #e6a23c;
+  color: #fff;
 }
 
 .tab-status-bar.status-green {
-  color: #67c23a;
+  background: #67c23a;
+  color: #fff;
 }
 
 .tab-status-bar.status-blue {
-  color: #409eff;
+  background: #409eff;
+  color: #fff;
 }
 
 .tab-status-bar.status-generating {
-  background: rgba(255, 255, 255, 0.9);
-  color: #409eff;
+  background: #e6a23c;
+  color: #fff;
 }
 
 .tab-status-bar.status-default {
+  background: rgba(255, 255, 255, 0.9);
   color: var(--color-text-secondary);
 }
 
