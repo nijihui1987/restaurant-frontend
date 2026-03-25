@@ -1525,6 +1525,7 @@ onMounted(async () => {
 }
 
 .tab-status-bar.status-generating {
+  background: rgba(255, 255, 255, 0.9);
   color: #409eff;
 }
 
