@@ -233,7 +233,7 @@
           <div class="generating-progress">
             <el-progress
               :percentage="Math.round((generationProgress?.current || 0) / (generationProgress?.total || 1) * 100)"
-              :stroke-width="8"
+              :stroke-width="16"
               status="success"
             />
             <p class="generating-message">{{ generationProgress?.message || '正在生成...' }}</p>
@@ -2174,7 +2174,7 @@ onMounted(async () => {
 .generation-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-xl);
   margin-bottom: var(--space-xl);
 }
 
@@ -2187,12 +2187,14 @@ onMounted(async () => {
   transition: all var(--transition-fast);
   display: flex;
   flex-direction: column;
+  background: var(--color-bg-page);
 }
 
 .gen-item img {
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
+  display: block;
 }
 
 .gen-item:hover {
@@ -2206,7 +2208,7 @@ onMounted(async () => {
 .gen-image-wrapper {
   position: relative;
   width: 100%;
-  flex: 1;
+  aspect-ratio: 4/3;
 }
 
 .watermark-overlay {
@@ -2413,18 +2415,22 @@ onMounted(async () => {
 
 /* 生成中面板 */
 .generating-panel {
-  padding: var(--space-lg) 0;
+  padding: var(--space-xl) 0;
 }
 
 .generating-progress {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-xl);
+  background: var(--color-bg-page);
+  border-radius: var(--radius-lg);
 }
 
 .generating-message {
   text-align: center;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
-  margin-top: var(--space-md);
+  margin-top: var(--space-lg);
+  font-weight: 500;
 }
 
 .generating-tip {
