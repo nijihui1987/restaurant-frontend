@@ -365,7 +365,7 @@
                   :src="url"
                   :alt="`图片 ${index + 1}`"
                   class="purchased-img"
-                  @click="previewImage(url)"
+                  @click="downloadImage(url, `${currentTaskDetail?.dish_name || '菜品'}_${index + 1}.jpg`)"
                 />
                 <el-button
                   class="download-btn"
@@ -1340,11 +1340,6 @@ function downloadImage(url: string, filename: string) {
     .catch(() => {
       ElMessage.error('下载失败')
     })
-}
-
-function previewImage(url: string) {
-  // 使用浏览器新窗口打开图片
-  window.open(url, '_blank')
 }
 
 function goToConfig() {
