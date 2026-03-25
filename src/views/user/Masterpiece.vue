@@ -2240,7 +2240,6 @@ onMounted(async () => {
   color: #fff;
   border-color: var(--color-primary);
 }
-}
 
 .consume-section {
   background: var(--color-bg-page);
