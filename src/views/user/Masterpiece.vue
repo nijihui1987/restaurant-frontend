@@ -873,9 +873,9 @@ function getTaskStatusText(status: string): string {
     'matching': '匹配中',
     'generating': '生成中',
     'pending_select': '请选背景',
-    'pending_consume': '待确认',
+    'pending_consume': '生成成功',
     'enhancing': '增强中',
-    'done': '生成成功',
+    'done': '任务完成',
     'failed': '生成失败',
     'completed': '任务完成'
   }
@@ -886,8 +886,8 @@ function getTaskStatusClass(status: string): string {
   const classMap: Record<string, string> = {
     'generating': 'status-generating',
     'pending_select': 'status-yellow',
-    'pending_consume': 'status-yellow',
-    'done': 'status-green',
+    'pending_consume': 'status-green',
+    'done': 'status-blue',
     'failed': 'status-failed',
     'completed': 'status-blue'
   }
