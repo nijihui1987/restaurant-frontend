@@ -29,7 +29,7 @@
           :class="{ active: activeTabId === task.id }"
         >
           <div class="tab-thumb-wrap" @click="switchToTaskTab(task)">
-            <img :src="task.image_url" class="tab-thumb" />
+            <img :src="(task.status === 'pending_consume' || task.status === 'done' || task.status === 'completed') && task.generated_thumb ? task.generated_thumb : task.image_url" class="tab-thumb" />
             <div class="tab-status-bar" :class="getTaskStatusClass(task.status)">
               {{ getTaskStatusText(task.status) }}
             </div>
@@ -649,6 +649,7 @@ async function loadTaskList() {
     taskTabs.value = (data.tasks || []).map((t: any) => ({
       id: t.id,
       image_url: t.image_url,
+      generated_thumb: t.generated_thumb || null,
       dish_name: t.dish_name,
       status: t.status,
       created_at: t.created_at
@@ -765,6 +766,14 @@ async function loadTaskDetail(tid: string) {
         status: img.status,
         error: img.error
       }))
+      // 同步生成图缩略图到任务列表
+      const firstGenerated = detail.generated_images_detail.find((img: any) => img.status === 'success')
+      if (firstGenerated) {
+        const taskIndex = taskTabs.value.findIndex(t => t.id === tid)
+        if (taskIndex !== -1) {
+          taskTabs.value[taskIndex].generated_thumb = firstGenerated.url
+        }
+      }
     } else {
       generatedImages.value = []
     }
