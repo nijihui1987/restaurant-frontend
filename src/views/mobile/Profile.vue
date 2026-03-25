@@ -151,10 +151,10 @@ onMounted(() => {
 
 .page-header {
   background: var(--bg-surface);
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-lg);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -163,22 +163,22 @@ onMounted(() => {
 
 .page-header h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .profile-content {
-  padding: 20px;
+  padding: var(--space-xl);
   max-width: 480px;
   margin: 0 auto;
 }
 
 .profile-card {
   background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 16px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-lg);
 }
 
 .profile-header {
@@ -198,9 +198,9 @@ onMounted(() => {
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
   color: var(--color-text-regular);
-  border-radius: 16px;
-  font-size: 15px;
-  padding: 10px 20px;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-md);
+  padding: var(--space-sm) var(--space-xl);
   height: auto;
 }
 
@@ -210,27 +210,27 @@ onMounted(() => {
 }
 
 .username {
-  font-size: 18px;
+  font-size: var(--font-size-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-sm);
 }
 
 .role-tag {
   display: inline-block;
   background: var(--bg-hover);
   color: var(--color-text-regular);
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
   font-weight: 500;
 }
 
 .balance-section {
   background: var(--bg-surface);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-light);
   display: flex;
@@ -241,7 +241,7 @@ onMounted(() => {
 .balance-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .balance-icon {
@@ -262,12 +262,12 @@ onMounted(() => {
 }
 
 .balance-label {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
 
 .balance-value {
-  font-size: 22px;
+  font-size: var(--font-size-3xl);
   font-weight: 600;
   color: var(--color-text-primary);
   font-family: 'SF Mono', Monaco, monospace;
@@ -277,10 +277,10 @@ onMounted(() => {
   background: var(--color-primary);
   border-color: var(--color-primary);
   color: var(--bg-surface);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   min-width: 70px;
   height: 36px;
-  font-size: 14px;
+  font-size: var(--font-size-base);
 }
 
 .recharge-btn:hover {
@@ -297,7 +297,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: var(--space-md) 0;
 }
 
 .info-item:not(:last-child) {
@@ -305,30 +305,30 @@ onMounted(() => {
 }
 
 .info-label {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
 }
 
 .info-value {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   color: var(--color-text-primary);
 }
 
 .logout-section {
-  padding: 8px 0;
+  padding: var(--space-sm) 0;
 }
 
 .admin-btn {
   width: 100%;
   height: 48px;
-  font-size: 15px;
-  border-radius: 24px;
+  font-size: var(--font-size-md);
+  border-radius: var(--radius-lg);
   background: var(--color-primary);
   border-color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .admin-btn:hover {
@@ -339,8 +339,8 @@ onMounted(() => {
 .logout-btn {
   width: 100%;
   height: 48px;
-  font-size: 15px;
-  border-radius: 24px;
+  font-size: var(--font-size-md);
+  border-radius: var(--radius-lg);
   background: var(--bg-surface);
   border-color: var(--color-danger);
   color: var(--color-danger);
@@ -354,23 +354,23 @@ onMounted(() => {
 
 /* 联系作者弹窗 */
 .contact-dialog :deep(.el-dialog) {
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   max-width: 90vw;
 }
 
 .contact-dialog :deep(.el-dialog__header) {
-  padding: 16px 20px;
+  padding: var(--space-lg) var(--space-xl);
   border-bottom: 1px solid var(--border-light);
 }
 
 .contact-dialog :deep(.el-dialog__title) {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .contact-dialog :deep(.el-dialog__body) {
-  padding: 20px;
+  padding: var(--space-xl);
   max-height: 60vh;
   overflow-y: auto;
 }
@@ -389,7 +389,7 @@ onMounted(() => {
 
 .contact-content :deep(h2) {
   font-size: 16px;
-  margin: 16px 0 12px;
+  margin: var(--space-lg) 0 var(--space-md);
   color: var(--color-text-primary);
 }
 
