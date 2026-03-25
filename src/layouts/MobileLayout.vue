@@ -102,9 +102,6 @@
     <div v-if="showFloatingAd" class="floating-ad-overlay" @click="closeFloatingAd">
       <div class="floating-ad-container" @click.stop>
         <img v-if="floatingAdConfig?.image_url" :src="floatingAdConfig.image_url" alt="广告" class="floating-ad-image" @click="handleAdClick" />
-        <button class="floating-ad-close" @click="closeFloatingAd">
-          <el-icon><Close /></el-icon>
-        </button>
       </div>
     </div>
   </div>
@@ -114,7 +111,7 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { Operation, Reading, Picture, User, Key, Close } from '@element-plus/icons-vue'
+import { Operation, Reading, Picture, User, Key } from '@element-plus/icons-vue'
 import LoginTipModal from '@/components/LoginTipModal.vue'
 import { getAnnouncement, getLogoConfig, getMobileFloatingAd, type FloatingAdConfig } from '@/api/config'
 import { getBalance } from '@/api/billing'
@@ -162,6 +159,7 @@ function closeFloatingAd() {
 }
 
 function handleAdClick() {
+  closeFloatingAd()
   if (floatingAdConfig.value?.link_url) {
     window.location.href = floatingAdConfig.value.link_url
   }
@@ -469,27 +467,6 @@ loadFloatingAd()
   max-height: 70vh;
   object-fit: contain;
   cursor: pointer;
-}
-
-.floating-ad-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-
-.floating-ad-close:hover {
-  background: rgba(0, 0, 0, 0.7);
 }
 
 @keyframes fadeIn {
